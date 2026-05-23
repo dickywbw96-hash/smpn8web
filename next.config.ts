@@ -23,11 +23,12 @@ const nextConfig: NextConfig = {
     }
 
     webpackConfig.resolve.alias = {
-      ...webpackConfig.resolve.alias,
-      'graphql/execution/values.js': false,
-      'graphql/language/index.js': false,
-      'graphql': false,
-    }
+  ...webpackConfig.resolve.alias,
+  'graphql/execution/values.js': false,
+  'graphql/language/index.js': false,
+  'graphql': false,
+  'pg': require.resolve('@payloadcms/db-postgres/node_modules/pg'),
+}
 
     if (isServer) {
       webpackConfig.externals = [
