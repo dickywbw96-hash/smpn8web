@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       '.mjs': ['.mts', '.mjs'],
     }
 
-    webpackConfig.resolve.alias = {
+webpackConfig.resolve.alias = {
   ...webpackConfig.resolve.alias,
   'graphql/execution/values.js': false,
   'graphql/language/index.js': false,
