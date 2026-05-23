@@ -5,10 +5,5 @@
   "env": {
     "NEXT_DISABLE_ESLINT": "1"
   },
-  "regions": ["sin1"],
-  "functions": {
-    "src/app/**": {
-      "maxDuration": 30
-    }
-  }
+  "regions": ["sin1"]
 }
