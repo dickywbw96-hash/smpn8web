@@ -51,6 +51,11 @@ export default buildConfig({
     ],
   }),
 
+    // ── GraphQL ────────────────────────────────────────
+  graphQL: {
+    disable: true,
+  },
+
   // ── Secret ─────────────────────────────────────────
   secret: process.env.PAYLOAD_SECRET || 'payload-secret-GANTI-DI-PRODUCTION',
 
