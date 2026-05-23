@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-   typescript: {
+  typescript: {
     ignoreBuildErrors: true,
   },
   images: {
@@ -20,6 +20,13 @@ const nextConfig: NextConfig = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
+    }
+
+    webpackConfig.resolve.fallback = {
+      ...webpackConfig.resolve.fallback,
+      fs: false,
+      path: false,
+      os: false,
     }
 
     return webpackConfig
