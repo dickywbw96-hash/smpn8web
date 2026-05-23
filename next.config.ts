@@ -27,17 +27,22 @@ webpackConfig.resolve.alias = {
   'graphql/execution/values.js': false,
   'graphql/language/index.js': false,
   'graphql': false,
-  'pg': require.resolve('@payloadcms/db-postgres/node_modules/pg'),
 }
 
-    if (isServer) {
-      webpackConfig.externals = [
-        ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
-        'graphql',
-        'pino',
-        'pino-pretty',
-      ]
-    }
+if (isServer) {
+  webpackConfig.externals = [
+    ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
+    ({ request, context }: any, callback: any) => {
+      if (request === 'pg' || request === 'pg-native') {
+        return callback(null, `commonjs ${request}`)
+      }
+      callback()
+    },
+    'graphql',
+    'pino',
+    'pino-pretty',
+  ]
+}
 
     return webpackConfig
   },
