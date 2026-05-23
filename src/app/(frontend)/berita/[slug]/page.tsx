@@ -42,7 +42,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
   const badge = BADGE_STYLE[post.category] ?? { bg: '#f3f4f6', color: '#374151' }
   const catLabel = CATEGORY_LABELS[post.category] ?? post.category
   const related = relatedPosts.filter((p) => p.slug !== post.slug).slice(0, 3)
-  const author = post.author as any
+  const author = (post as any).author
 
   return (
     <>

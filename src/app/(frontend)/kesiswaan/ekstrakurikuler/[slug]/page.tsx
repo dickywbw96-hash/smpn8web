@@ -11,13 +11,15 @@ export async function generateStaticParams() {
   return list.map((e) => ({ slug: e.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const ekskul = await getEkstrakurikulerBySlug(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const ekskul = await getEkstrakurikulerBySlug(slug)
   return { title: ekskul?.name ?? 'Ekstrakurikuler' }
 }
 
-export default async function EkstrakurikulerDetailPage({ params }: { params: { slug: string } }) {
-  const ekskul = await getEkstrakurikulerBySlug(params.slug)
+export default async function EkstrakurikulerDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const ekskul = await getEkstrakurikulerBySlug(slug)
   if (!ekskul) notFound()
 
   return (
@@ -86,28 +88,30 @@ export default async function EkstrakurikulerDetailPage({ params }: { params: { 
           { label: 'Ekstrakurikuler', href: '/kesiswaan/ekstrakurikuler' },
           { label: ekskul.name },
         ]}
-        accent="⭐"
       />
 
       <section className="ekskul-detail">
         <div className="container">
           <div className="ekskul-detail-grid">
-            {/* Sidebar info */}
+            {/* Info Card */}
             <div className="ekskul-info-card">
-              <div className="ekskul-cover">
-                {ekskul.gallery?.[0]?.image ? (
-                  <Image src={getImageUrl(ekskul.gallery[0].image)} alt={ekskul.name} fill sizes="400px" style={{ objectFit: 'cover' }} />
-                ) : (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', background: 'linear-gradient(135deg,var(--blue-100),var(--blue-200))' }}>🎯</div>
-                )}
-              </div>
-              <h3 style={{ fontFamily: 'Playfair Display,serif', color: 'var(--blue-900)', marginBottom: '1rem', fontSize: '1.2rem' }}>{ekskul.name}</h3>
+              {ekskul.coverImage && (
+                <div className="ekskul-cover">
+                  <Image
+                    src={getImageUrl(ekskul.coverImage)}
+                    alt={ekskul.name}
+                    fill
+                    sizes="400px"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+              )}
               <div className="ekskul-meta-row">
-                <span className="ekskul-meta-label">👩‍🏫 Pembina</span>
+                <span className="ekskul-meta-label">Pembina</span>
                 <span className="ekskul-meta-val">{ekskul.pembina}</span>
               </div>
               <div className="ekskul-meta-row">
-                <span className="ekskul-meta-label">📌 Status</span>
+                <span className="ekskul-meta-label">Status</span>
                 <span style={{ background: 'var(--blue-100)', color: 'var(--blue-700)', padding: '.2rem .7rem', borderRadius: '100px', fontSize: '.75rem', fontWeight: 700 }}>
                   {ekskul.isActive ? 'Aktif' : 'Tidak Aktif'}
                 </span>
@@ -119,21 +123,19 @@ export default async function EkstrakurikulerDetailPage({ params }: { params: { 
               <span className="section-label">Tentang Ekskul</span>
               <h2 className="section-title" style={{ marginBottom: '1.5rem' }}>{ekskul.name}</h2>
 
-              {/* Deskripsi dari richText — render sebagai HTML sederhana */}
               <div className="prose" style={{ marginBottom: '2.5rem' }}>
                 <p style={{ color: 'var(--gray-500)', fontStyle: 'italic' }}>
                   Deskripsi kegiatan ekstrakurikuler {ekskul.name} akan ditampilkan di sini.
                 </p>
               </div>
 
-              {/* Galeri */}
               {ekskul.gallery && ekskul.gallery.length > 0 && (
                 <>
                   <h3 style={{ fontFamily: 'Playfair Display,serif', color: 'var(--blue-900)', marginBottom: '1rem', fontSize: '1.2rem' }}>
-                    📸 Galeri Foto
+                    Galeri Foto
                   </h3>
                   <div className="gallery-grid">
-                    {ekskul.gallery.map((g, i) => (
+                    {ekskul.gallery.map((g: any, i: number) => (
                       <div key={i} className="gallery-item">
                         <Image src={getImageUrl(g.image)} alt={g.caption ?? `Foto ${i + 1}`} fill sizes="200px" />
                       </div>
