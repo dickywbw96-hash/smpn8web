@@ -22,14 +22,16 @@ webpack: (webpackConfig, { isServer }) => {
     '.mjs': ['.mts', '.mjs'],
   }
 
-  if (isServer) {
-    webpackConfig.externals = [
-      ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
-      'pg',
-      'pg-native',
-      'graphql',
-    ]
-  }
+if (isServer) {
+  webpackConfig.externals = [
+    ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
+    'pg',
+    'pg-native',
+    'graphql',
+    'pino',
+    'pino-pretty',
+  ]
+}
 
   return webpackConfig
 },
