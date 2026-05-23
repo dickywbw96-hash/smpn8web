@@ -15,29 +15,24 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (webpackConfig, { isServer }) => {
-    webpackConfig.resolve.extensionAlias = {
-      '.cjs': ['.cts', '.cjs'],
-      '.js': ['.ts', '.tsx', '.js', '.jsx'],
-      '.mjs': ['.mts', '.mjs'],
-    }
+webpack: (webpackConfig, { isServer }) => {
+  webpackConfig.resolve.extensionAlias = {
+    '.cjs': ['.cts', '.cjs'],
+    '.js': ['.ts', '.tsx', '.js', '.jsx'],
+    '.mjs': ['.mts', '.mjs'],
+  }
 
-    webpackConfig.resolve.fallback = {
-      ...webpackConfig.resolve.fallback,
-      fs: false,
-      path: false,
-      os: false,
-    }
+  if (isServer) {
+    webpackConfig.externals = [
+      ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
+      'pg',
+      'pg-native',
+      'graphql',
+    ]
+  }
 
-    if (!isServer) {
-      webpackConfig.externals = [
-        ...(webpackConfig.externals || []),
-        '@payloadcms/graphql',
-      ]
-    }
-
-    return webpackConfig
-  },
+  return webpackConfig
+},
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
