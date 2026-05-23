@@ -32,8 +32,6 @@ const nextConfig: NextConfig = {
     if (isServer) {
       webpackConfig.externals = [
         ...(Array.isArray(webpackConfig.externals) ? webpackConfig.externals : []),
-        'pg',
-        'pg-native',
         'graphql',
         'pino',
         'pino-pretty',
