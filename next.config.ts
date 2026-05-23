@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (webpackConfig) => {
+  webpack: (webpackConfig, { isServer }) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
@@ -27,6 +27,13 @@ const nextConfig: NextConfig = {
       fs: false,
       path: false,
       os: false,
+    }
+
+    if (!isServer) {
+      webpackConfig.externals = [
+        ...(webpackConfig.externals || []),
+        '@payloadcms/graphql',
+      ]
     }
 
     return webpackConfig
