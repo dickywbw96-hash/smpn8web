@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push('/login')
   }
 
-  if (pathname === '/admin/login') return <>{children}</>
+  if (pathname === '/login') return <>{children}</>
   if (loading) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb' }}>
       <div style={{ color: '#6b7280' }}>Memuat...</div>
