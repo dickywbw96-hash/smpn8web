@@ -24,7 +24,12 @@ export default function AdminLoginPage() {
       return
     }
 
-    // Cek apakah user ada di tabel users kita
+    // Tunggu session ter-set dulu
+    await supabase.auth.setSession({
+      access_token: data.session!.access_token,
+      refresh_token: data.session!.refresh_token,
+    })
+
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('role, is_active')
@@ -38,7 +43,7 @@ export default function AdminLoginPage() {
       return
     }
 
-    router.push('/admin/dashboard')
+    router.push('/dashboard') // fix: hapus /admin/
   }
 
   return (
