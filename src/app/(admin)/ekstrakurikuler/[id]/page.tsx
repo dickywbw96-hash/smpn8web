@@ -50,7 +50,7 @@ export default function EditEkskulPage() {
       .select('*, ekstrakurikuler_gallery(*), ekstrakurikuler_achievements(*)')
       .eq('id', id)
       .single()
-    if (!data) { router.push('/admin/ekstrakurikuler'); return }
+    if (!data) { router.push('/ekstrakurikuler'); return }
 
     setForm({
       name: data.name ?? '',
@@ -135,7 +135,7 @@ export default function EditEkskulPage() {
     }
 
     setSaving(false)
-    router.push('/admin/ekstrakurikuler')
+    router.push('/ekstrakurikuler')
   }
 
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
@@ -143,7 +143,7 @@ export default function EditEkskulPage() {
   return (
     <div style={{ padding: '2rem', maxWidth: '900px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <Link href="/admin/ekstrakurikuler" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
+        <Link href="/ekstrakurikuler" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>
           {isNew ? 'Tambah Ekstrakurikuler' : 'Edit Ekstrakurikuler'}
         </h1>

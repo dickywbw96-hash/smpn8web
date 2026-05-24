@@ -118,14 +118,14 @@ export default function NewPostPage() {
       )
     }
 
-    router.push('/admin/posts')
+    router.push('/posts')
   }
 
   return (
     <div style={{ padding: '2rem', maxWidth: '900px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <Link href="/admin/posts" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
+        <Link href="/posts" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Tambah Berita Baru</h1>
         </div>

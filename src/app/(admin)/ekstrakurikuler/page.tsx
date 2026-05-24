@@ -41,7 +41,7 @@ export default function EkstrakurikulerPage() {
       await supabase.from('ekstrakurikuler').delete().eq('id', id)
       fetchItems()
     } else {
-      await supabase.from('delete_requests').insert({ table_name: 'ekstrakurikuler', record_id: id, requested_by: userId, status: 'pending' })
+      await supabase.from('delete_requests').insert({ collection_slug: 'ekstrakurikuler', doc_id: id, requested_by: userId, status: 'pending' })
       alert('Permintaan hapus telah dikirim.')
     }
   }
@@ -67,7 +67,7 @@ export default function EkstrakurikulerPage() {
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Ekstrakurikuler</h1>
           <p style={{ color: '#6b7280', fontSize: '0.875rem', margin: '0.25rem 0 0' }}>{items.length} ekstrakurikuler terdaftar</p>
         </div>
-        <Link href="/admin/ekstrakurikuler/new" style={btnPrimary}>+ Tambah Ekskul</Link>
+        <Link href="/ekstrakurikuler/new" style={btnPrimary}>+ Tambah Ekskul</Link>
       </div>
 
       <div style={{ marginBottom: '1.25rem' }}>
@@ -108,7 +108,7 @@ export default function EkstrakurikulerPage() {
                   {item.is_active ? 'Aktif' : 'Nonaktif'}
                 </span>
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
-                  <Link href={`/admin/ekstrakurikuler/${item.id}`} style={btnEdit}>Edit</Link>
+                  <Link href={`/ekstrakurikuler/${item.id}`} style={btnEdit}>Edit</Link>
                   <button onClick={() => toggleActive(item.id, !item.is_active)} style={btnSecondary}>
                     {item.is_active ? 'Nonaktifkan' : 'Aktifkan'}
                   </button>

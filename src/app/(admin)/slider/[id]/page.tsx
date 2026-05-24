@@ -26,7 +26,7 @@ export default function EditSliderPage() {
 
   async function fetchItem() {
     const { data } = await supabase.from('slider_dashboard').select('*').eq('id', id).single()
-    if (!data) { router.push('/admin/slider'); return }
+    if (!data) { router.push('/slider'); return }
     setForm({
       title: data.title ?? '',
       description: data.description ?? '',
@@ -59,7 +59,7 @@ export default function EditSliderPage() {
       is_active: form.is_active,
     }).eq('id', id)
     setSaving(false)
-    router.push('/admin/slider')
+    router.push('/slider')
   }
 
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
@@ -67,7 +67,7 @@ export default function EditSliderPage() {
   return (
     <div style={{ padding: '2rem', maxWidth: '600px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <Link href="/admin/slider" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
+        <Link href="/slider" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Edit Slider</h1>
       </div>
 
@@ -113,7 +113,7 @@ export default function EditSliderPage() {
           <button onClick={handleSave} disabled={saving} style={btnPrimary}>
             {saving ? 'Menyimpan...' : '💾 Simpan Perubahan'}
           </button>
-          <Link href="/admin/slider" style={btnSecondary}>Batal</Link>
+          <Link href="/slider" style={btnSecondary}>Batal</Link>
         </div>
       </div>
     </div>

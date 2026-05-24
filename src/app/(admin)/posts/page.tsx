@@ -75,8 +75,8 @@ export default function PostsPage() {
       fetchPosts()
     } else {
       await supabase.from('delete_requests').insert({
-        table_name: 'posts',
-        record_id: id,
+        collection_slug: 'posts',
+        doc_id: id,
         requested_by: userId,
         status: 'pending',
       })
@@ -94,7 +94,7 @@ export default function PostsPage() {
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Manajemen Berita</h1>
           <p style={{ color: '#6b7280', fontSize: '0.875rem', margin: '0.25rem 0 0' }}>{totalCount} total berita</p>
         </div>
-        <Link href="/admin/posts/new" style={{
+        <Link href="/posts/new" style={{
           padding: '0.625rem 1.25rem',
           background: '#0d2a5e',
           color: 'white',
@@ -174,7 +174,7 @@ export default function PostsPage() {
                 </td>
                 <td style={tdStyle}>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <Link href={`/admin/posts/${post.id}`} style={btnEdit}>Edit</Link>
+                    <Link href={`/posts/${post.id}`} style={btnEdit}>Edit</Link>
                     <button onClick={() => handleDelete(post.id)} style={btnDelete}>
                       {role === 'admin' ? 'Hapus' : 'Request Hapus'}
                     </button>

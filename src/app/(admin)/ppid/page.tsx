@@ -48,7 +48,7 @@ export default function PPIDPage() {
       await supabase.from('ppid').delete().eq('id', id)
       fetchItems()
     } else {
-      await supabase.from('delete_requests').insert({ table_name: 'ppid', record_id: id, requested_by: userId, status: 'pending' })
+      await supabase.from('delete_requests').insert({ collection_slug: 'ppid', doc_id: id, requested_by: userId, status: 'pending' })
       alert('Permintaan hapus dikirim.')
     }
   }
@@ -71,7 +71,7 @@ export default function PPIDPage() {
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Dokumen PPID</h1>
           <p style={{ color: '#6b7280', fontSize: '0.875rem', margin: '0.25rem 0 0' }}>{items.length} dokumen</p>
         </div>
-        <Link href="/admin/ppid/new" style={btnPrimary}>+ Tambah Dokumen</Link>
+        <Link href="/ppid/new" style={btnPrimary}>+ Tambah Dokumen</Link>
       </div>
 
       <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
@@ -123,7 +123,7 @@ export default function PPIDPage() {
                 </td>
                 <td style={tdStyle}>
                   <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                    <Link href={`/admin/ppid/${item.id}`} style={btnEdit}>Edit</Link>
+                    <Link href={`/ppid/${item.id}`} style={btnEdit}>Edit</Link>
                     <button onClick={() => togglePublish(item.id, !item.is_published)} style={btnSecondary}>
                       {item.is_published ? 'Sembunyikan' : 'Publikasikan'}
                     </button>

@@ -41,10 +41,10 @@ export default function AdminDashboard() {
   }
 
   const cards = [
-    { label: 'Total Berita', value: stats.posts, icon: '📰', href: '/admin/posts', color: '#1a5cc8' },
-    { label: 'Ekstrakurikuler', value: stats.ekskul, icon: '⚽', href: '/admin/ekstrakurikuler', color: '#16a34a' },
-    { label: 'Dokumen PPID', value: stats.ppid, icon: '📋', href: '/admin/ppid', color: '#b45309' },
-    { label: 'Slider Aktif', value: stats.slider, icon: '🖼️', href: '/admin/slider', color: '#7c3aed' },
+    { label: 'Total Berita', value: stats.posts, icon: '📰', href: '/posts', color: '#1a5cc8' },
+    { label: 'Ekstrakurikuler', value: stats.ekskul, icon: '⚽', href: '/ekstrakurikuler', color: '#16a34a' },
+    { label: 'Dokumen PPID', value: stats.ppid, icon: '📋', href: '/ppid', color: '#b45309' },
+    { label: 'Slider Aktif', value: stats.slider, icon: '🖼️', href: '/slider', color: '#7c3aed' },
   ]
 
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
 
       {/* Notifikasi permintaan hapus */}
       {stats.pendingDelete > 0 && (
-        <Link href="/admin/delete-requests" style={{ textDecoration: 'none' }}>
+        <Link href="/delete-requests" style={{ textDecoration: 'none' }}>
           <div style={{
             background: '#fef3c7',
             border: '1px solid #f59e0b',
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
       <div style={{ background: 'white', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#030f2b' }}>Berita Terbaru</h2>
-          <Link href="/admin/posts/new" style={{
+          <Link href="/posts/new" style={{
             padding: '0.5rem 1rem',
             background: '#0d2a5e',
             color: 'white',
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
             {recentPosts.map(post => (
               <tr key={post.id} style={{ borderBottom: '1px solid #f9fafb' }}>
                 <td style={{ padding: '0.75rem 0.5rem', fontSize: '0.875rem', color: '#111827' }}>
-                  <Link href={`/admin/posts/${post.id}`} style={{ color: '#0d2a5e', textDecoration: 'none', fontWeight: 500 }}>
+                  <Link href={`/posts/${post.id}`} style={{ color: '#0d2a5e', textDecoration: 'none', fontWeight: 500 }}>
                     {post.title}
                   </Link>
                 </td>

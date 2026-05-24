@@ -65,7 +65,7 @@ export default function EditPostPage() {
       .eq('id', id)
       .single()
 
-    if (!data) { router.push('/admin/posts'); return }
+    if (!data) { router.push('/posts'); return }
 
     setForm({
       title: data.title ?? '',
@@ -162,7 +162,7 @@ export default function EditPostPage() {
     }
 
     setSaving(false)
-    router.push('/admin/posts')
+    router.push('/posts')
   }
 
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
@@ -170,7 +170,7 @@ export default function EditPostPage() {
   return (
     <div style={{ padding: '2rem', maxWidth: '900px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <Link href="/admin/posts" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
+        <Link href="/posts" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Edit Berita</h1>
       </div>
 

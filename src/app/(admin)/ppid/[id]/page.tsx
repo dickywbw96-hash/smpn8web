@@ -45,7 +45,7 @@ export default function EditPPIDPage() {
       .select('*, ppid_attachments(*), ppid_images(*)')
       .eq('id', id)
       .single()
-    if (!data) { router.push('/admin/ppid'); return }
+    if (!data) { router.push('/ppid'); return }
     setForm({
       title: data.title ?? '',
       category: data.category ?? PPID_CATEGORIES[0],
@@ -116,7 +116,7 @@ export default function EditPPIDPage() {
     }
 
     setSaving(false)
-    router.push('/admin/ppid')
+    router.push('/ppid')
   }
 
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
@@ -124,7 +124,7 @@ export default function EditPPIDPage() {
   return (
     <div style={{ padding: '2rem', maxWidth: '900px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <Link href="/admin/ppid" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
+        <Link href="/ppid" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>
           {isNew ? 'Tambah Dokumen PPID' : 'Edit Dokumen PPID'}
         </h1>

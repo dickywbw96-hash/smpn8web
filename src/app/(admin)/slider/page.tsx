@@ -162,7 +162,7 @@ export default function SliderPage() {
               </div>
               {/* Actions */}
               <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                <Link href={`/admin/slider/${item.id}`} style={btnEdit}>Edit</Link>
+                <Link href={`/slider/${item.id}`} style={btnEdit}>Edit</Link>
                 <button onClick={() => toggleActive(item.id, !item.is_active)} style={btnSecondary}>
                   {item.is_active ? 'Nonaktifkan' : 'Aktifkan'}
                 </button>

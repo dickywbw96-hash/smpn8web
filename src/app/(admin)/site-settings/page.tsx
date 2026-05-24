@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { uploadFile } from '@/lib/supabase'
+import ThemePicker from '@/components/admin/ThemePicker'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -96,7 +97,7 @@ export default function SiteSettingsPage() {
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
   const [logoUploading, setLogoUploading] = useState(false)
   const [photoUploading, setPhotoUploading] = useState(false)
-  const [activeTab, setActiveTab] = useState<'umum' | 'kontak' | 'kepala' | 'visi' | 'seo'>('umum')
+  const [activeTab, setActiveTab] = useState<'tema' | 'umum' | 'kontak' | 'kepala' | 'visi' | 'seo'>('tema')
 
   useEffect(() => { fetchSettings() }, [])
 
@@ -138,14 +139,9 @@ export default function SiteSettingsPage() {
   async function handleSave() {
     setSaving(true)
     try {
-      // Upsert site_settings
-      const { error } = await supabase.from('site_settings').upsert({
-        id: 1, // single row
-        ...form,
-      })
+      const { error } = await supabase.from('site_settings').upsert({ id: 1, ...form })
       if (error) throw error
 
-      // Save missions
       await supabase.from('site_settings_mission').delete().neq('id', '00000000-0000-0000-0000-000000000000')
       if (missions.length > 0) {
         await supabase.from('site_settings_mission').insert(
@@ -153,7 +149,6 @@ export default function SiteSettingsPage() {
         )
       }
 
-      // Save taglines
       await supabase.from('site_settings_taglines').delete().neq('id', '00000000-0000-0000-0000-000000000000')
       if (taglines.length > 0) {
         await supabase.from('site_settings_taglines').insert(
@@ -170,7 +165,6 @@ export default function SiteSettingsPage() {
     }
   }
 
-  // Mission helpers
   function addMission() { setMissions(prev => [...prev, { point: '', order_index: prev.length }]) }
   function updateMission(i: number, val: string) { setMissions(prev => prev.map((m, idx) => idx === i ? { ...m, point: val } : m)) }
   function removeMission(i: number) { setMissions(prev => prev.filter((_, idx) => idx !== i)) }
@@ -183,12 +177,12 @@ export default function SiteSettingsPage() {
     })
   }
 
-  // Tagline helpers
   function addTagline() { setTaglines(prev => [...prev, { text: '', order_index: prev.length }]) }
   function updateTagline(i: number, val: string) { setTaglines(prev => prev.map((t, idx) => idx === i ? { ...t, text: val } : t)) }
   function removeTagline(i: number) { setTaglines(prev => prev.filter((_, idx) => idx !== i)) }
 
   const tabs: { key: typeof activeTab; label: string }[] = [
+    { key: 'tema', label: '🎨 Tema Website' },
     { key: 'umum', label: '🏫 Umum' },
     { key: 'kontak', label: '📞 Kontak & Sosmed' },
     { key: 'kepala', label: '👤 Kepala Sekolah' },
@@ -199,7 +193,7 @@ export default function SiteSettingsPage() {
   if (loading) return <div style={{ padding: '2rem', color: '#6b7280' }}>Memuat...</div>
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '860px' }}>
+    <div style={{ padding: '2rem', maxWidth: '900px' }}>
       {/* Toast */}
       {toast && (
         <div style={{
@@ -219,21 +213,23 @@ export default function SiteSettingsPage() {
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b' }}>Pengaturan Website</h1>
           <p style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem' }}>Konfigurasi informasi dan tampilan website sekolah</p>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          style={{
-            padding: '0.6rem 1.5rem', background: saving ? '#93c5fd' : '#0d2a5e',
-            color: 'white', border: 'none', borderRadius: '8px',
-            cursor: saving ? 'not-allowed' : 'pointer', fontWeight: 700, fontSize: '0.875rem',
-          }}
-        >
-          {saving ? 'Menyimpan...' : '💾 Simpan Semua'}
-        </button>
+        {activeTab !== 'tema' && (
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            style={{
+              padding: '0.6rem 1.5rem', background: saving ? '#93c5fd' : '#0d2a5e',
+              color: 'white', border: 'none', borderRadius: '8px',
+              cursor: saving ? 'not-allowed' : 'pointer', fontWeight: 700, fontSize: '0.875rem',
+            }}
+          >
+            {saving ? 'Menyimpan...' : '💾 Simpan Semua'}
+          </button>
+        )}
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.5rem', background: 'white', padding: '0.4rem', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.5rem', background: 'white', padding: '0.4rem', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', flexWrap: 'wrap' }}>
         {tabs.map(tab => (
           <button
             key={tab.key}
@@ -250,6 +246,17 @@ export default function SiteSettingsPage() {
           </button>
         ))}
       </div>
+
+      {/* ── Tab: Tema Website ── */}
+      {activeTab === 'tema' && (
+        <div style={SECTION_STYLE}>
+          <SectionTitle>🎨 Tema Tampilan Website</SectionTitle>
+          <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1.25rem' }}>
+            Pilih tema yang akan diterapkan ke seluruh halaman publik website. Perubahan langsung tersimpan otomatis.
+          </p>
+          <ThemePicker />
+        </div>
+      )}
 
       {/* ── Tab: Umum ── */}
       {activeTab === 'umum' && (
@@ -279,10 +286,7 @@ export default function SiteSettingsPage() {
                   <img src={form.school_logo_url} alt="Logo" style={{ width: '60px', height: '60px', objectFit: 'contain', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '4px' }} />
                 )}
                 <div>
-                  <label style={{
-                    display: 'inline-block', padding: '0.5rem 1rem', background: '#f3f4f6',
-                    border: '1px solid #e5e7eb', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
-                  }}>
+                  <label style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
                     {logoUploading ? 'Mengupload...' : '📁 Pilih File'}
                     <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleUpload(e, 'school_logo_url')} />
                   </label>
@@ -329,9 +333,7 @@ export default function SiteSettingsPage() {
               <input style={INPUT_STYLE} value={form.ticker_text} onChange={e => set('ticker_text', e.target.value)} placeholder="Selamat datang di SMPN 8 Probolinggo..." />
             </Field>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <label style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-                <input type="checkbox" checked={form.ticker_enabled} onChange={e => set('ticker_enabled', e.target.checked)} style={{ width: '40px', height: '22px', accentColor: '#0d2a5e' }} />
-              </label>
+              <input type="checkbox" checked={form.ticker_enabled} onChange={e => set('ticker_enabled', e.target.checked)} style={{ width: '18px', height: '18px', accentColor: '#0d2a5e' }} />
               <span style={{ fontSize: '0.875rem', color: '#374151' }}>Tampilkan ticker</span>
             </div>
 
@@ -358,38 +360,20 @@ export default function SiteSettingsPage() {
           <div style={SECTION_STYLE}>
             <SectionTitle>Kontak</SectionTitle>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1rem' }}>
-              <Field label="Telepon">
-                <input style={INPUT_STYLE} value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)} placeholder="0335-..." />
-              </Field>
-              <Field label="WhatsApp">
-                <input style={INPUT_STYLE} value={form.contact_whatsapp} onChange={e => set('contact_whatsapp', e.target.value)} placeholder="628..." />
-              </Field>
-              <Field label="Email">
-                <input style={INPUT_STYLE} value={form.contact_email} onChange={e => set('contact_email', e.target.value)} placeholder="smpn8@..." />
-              </Field>
-              <Field label="Website">
-                <input style={INPUT_STYLE} value={form.contact_website} onChange={e => set('contact_website', e.target.value)} placeholder="https://..." />
-              </Field>
+              <Field label="Telepon"><input style={INPUT_STYLE} value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)} placeholder="0335-..." /></Field>
+              <Field label="WhatsApp"><input style={INPUT_STYLE} value={form.contact_whatsapp} onChange={e => set('contact_whatsapp', e.target.value)} placeholder="628..." /></Field>
+              <Field label="Email"><input style={INPUT_STYLE} value={form.contact_email} onChange={e => set('contact_email', e.target.value)} placeholder="smpn8@..." /></Field>
+              <Field label="Website"><input style={INPUT_STYLE} value={form.contact_website} onChange={e => set('contact_website', e.target.value)} placeholder="https://..." /></Field>
             </div>
           </div>
           <div style={SECTION_STYLE}>
             <SectionTitle>Media Sosial</SectionTitle>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1rem' }}>
-              <Field label="Facebook">
-                <input style={INPUT_STYLE} value={form.social_facebook} onChange={e => set('social_facebook', e.target.value)} placeholder="https://facebook.com/..." />
-              </Field>
-              <Field label="Instagram">
-                <input style={INPUT_STYLE} value={form.social_instagram} onChange={e => set('social_instagram', e.target.value)} placeholder="https://instagram.com/..." />
-              </Field>
-              <Field label="YouTube">
-                <input style={INPUT_STYLE} value={form.social_youtube} onChange={e => set('social_youtube', e.target.value)} placeholder="https://youtube.com/..." />
-              </Field>
-              <Field label="Twitter / X">
-                <input style={INPUT_STYLE} value={form.social_twitter} onChange={e => set('social_twitter', e.target.value)} placeholder="https://x.com/..." />
-              </Field>
-              <Field label="TikTok">
-                <input style={INPUT_STYLE} value={form.social_tiktok} onChange={e => set('social_tiktok', e.target.value)} placeholder="https://tiktok.com/@..." />
-              </Field>
+              <Field label="Facebook"><input style={INPUT_STYLE} value={form.social_facebook} onChange={e => set('social_facebook', e.target.value)} placeholder="https://facebook.com/..." /></Field>
+              <Field label="Instagram"><input style={INPUT_STYLE} value={form.social_instagram} onChange={e => set('social_instagram', e.target.value)} placeholder="https://instagram.com/..." /></Field>
+              <Field label="YouTube"><input style={INPUT_STYLE} value={form.social_youtube} onChange={e => set('social_youtube', e.target.value)} placeholder="https://youtube.com/..." /></Field>
+              <Field label="Twitter / X"><input style={INPUT_STYLE} value={form.social_twitter} onChange={e => set('social_twitter', e.target.value)} placeholder="https://x.com/..." /></Field>
+              <Field label="TikTok"><input style={INPUT_STYLE} value={form.social_tiktok} onChange={e => set('social_tiktok', e.target.value)} placeholder="https://tiktok.com/@..." /></Field>
             </div>
           </div>
         </div>
@@ -400,14 +384,9 @@ export default function SiteSettingsPage() {
         <div style={SECTION_STYLE}>
           <SectionTitle>Data Kepala Sekolah</SectionTitle>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1rem' }}>
-            <Field label="Nama Kepala Sekolah">
-              <input style={INPUT_STYLE} value={form.principal_name} onChange={e => set('principal_name', e.target.value)} />
-            </Field>
-            <Field label="NIP">
-              <input style={INPUT_STYLE} value={form.principal_nip} onChange={e => set('principal_nip', e.target.value)} />
-            </Field>
+            <Field label="Nama Kepala Sekolah"><input style={INPUT_STYLE} value={form.principal_name} onChange={e => set('principal_name', e.target.value)} /></Field>
+            <Field label="NIP"><input style={INPUT_STYLE} value={form.principal_nip} onChange={e => set('principal_nip', e.target.value)} /></Field>
           </div>
-
           <Field label="Foto Kepala Sekolah">
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               {form.principal_photo_url && (
@@ -422,14 +401,8 @@ export default function SiteSettingsPage() {
               </div>
             </div>
           </Field>
-
           <Field label="Sambutan / Pesan Kepala Sekolah">
-            <textarea
-              style={{ ...INPUT_STYLE, minHeight: '200px', resize: 'vertical', lineHeight: 1.6 }}
-              value={form.principal_message}
-              onChange={e => set('principal_message', e.target.value)}
-              placeholder="Tuliskan sambutan kepala sekolah..."
-            />
+            <textarea style={{ ...INPUT_STYLE, minHeight: '200px', resize: 'vertical', lineHeight: 1.6 }} value={form.principal_message} onChange={e => set('principal_message', e.target.value)} placeholder="Tuliskan sambutan kepala sekolah..." />
           </Field>
         </div>
       )}
@@ -440,15 +413,9 @@ export default function SiteSettingsPage() {
           <div style={SECTION_STYLE}>
             <SectionTitle>Visi Sekolah</SectionTitle>
             <Field label="Pernyataan Visi">
-              <textarea
-                style={{ ...INPUT_STYLE, minHeight: '100px', resize: 'vertical', lineHeight: 1.6 }}
-                value={form.vision}
-                onChange={e => set('vision', e.target.value)}
-                placeholder="Tuliskan visi sekolah..."
-              />
+              <textarea style={{ ...INPUT_STYLE, minHeight: '100px', resize: 'vertical', lineHeight: 1.6 }} value={form.vision} onChange={e => set('vision', e.target.value)} placeholder="Tuliskan visi sekolah..." />
             </Field>
           </div>
-
           <div style={SECTION_STYLE}>
             <SectionTitle>Misi Sekolah</SectionTitle>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.75rem' }}>
@@ -457,12 +424,7 @@ export default function SiteSettingsPage() {
             {missions.map((m, i) => (
               <div key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', alignItems: 'flex-start' }}>
                 <div style={{ width: '28px', height: '28px', background: '#0d2a5e', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, marginTop: '0.3rem' }}>{i + 1}</div>
-                <textarea
-                  style={{ ...INPUT_STYLE, flex: 1, minHeight: '60px', resize: 'vertical' }}
-                  value={m.point}
-                  onChange={e => updateMission(i, e.target.value)}
-                  placeholder={`Poin misi ${i + 1}...`}
-                />
+                <textarea style={{ ...INPUT_STYLE, flex: 1, minHeight: '60px', resize: 'vertical' }} value={m.point} onChange={e => updateMission(i, e.target.value)} placeholder={`Poin misi ${i + 1}...`} />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   <button onClick={() => moveMission(i, -1)} disabled={i === 0} style={{ padding: '0.3rem 0.5rem', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '4px', cursor: i === 0 ? 'not-allowed' : 'pointer', fontSize: '0.7rem', opacity: i === 0 ? 0.4 : 1 }}>▲</button>
                   <button onClick={() => moveMission(i, 1)} disabled={i === missions.length - 1} style={{ padding: '0.3rem 0.5rem', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '4px', cursor: i === missions.length - 1 ? 'not-allowed' : 'pointer', fontSize: '0.7rem', opacity: i === missions.length - 1 ? 0.4 : 1 }}>▼</button>
@@ -470,7 +432,7 @@ export default function SiteSettingsPage() {
                 </div>
               </div>
             ))}
-            {missions.length === 0 && <p style={{ fontSize: '0.8rem', color: '#9ca3af', fontStyle: 'italic' }}>Belum ada poin misi. Klik tombol di atas untuk menambah.</p>}
+            {missions.length === 0 && <p style={{ fontSize: '0.8rem', color: '#9ca3af', fontStyle: 'italic' }}>Belum ada poin misi.</p>}
           </div>
         </div>
       )}
@@ -483,12 +445,7 @@ export default function SiteSettingsPage() {
             <input style={INPUT_STYLE} value={form.seo_meta_title} onChange={e => set('seo_meta_title', e.target.value)} placeholder="SMPN 8 Probolinggo - ..." />
           </Field>
           <Field label="Meta Description">
-            <textarea
-              style={{ ...INPUT_STYLE, minHeight: '80px', resize: 'vertical' }}
-              value={form.seo_meta_description}
-              onChange={e => set('seo_meta_description', e.target.value)}
-              placeholder="Deskripsi singkat website sekolah..."
-            />
+            <textarea style={{ ...INPUT_STYLE, minHeight: '80px', resize: 'vertical' }} value={form.seo_meta_description} onChange={e => set('seo_meta_description', e.target.value)} placeholder="Deskripsi singkat website sekolah..." />
           </Field>
           <Field label="OG Image URL (gambar preview sosmed)">
             <input style={INPUT_STYLE} value={form.seo_og_image_url} onChange={e => set('seo_og_image_url', e.target.value)} placeholder="https://..." />
@@ -502,20 +459,14 @@ export default function SiteSettingsPage() {
         </div>
       )}
 
-      {/* Save button bottom */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          style={{
-            padding: '0.75rem 2rem', background: saving ? '#93c5fd' : '#0d2a5e',
-            color: 'white', border: 'none', borderRadius: '8px',
-            cursor: saving ? 'not-allowed' : 'pointer', fontWeight: 700, fontSize: '0.875rem',
-          }}
-        >
-          {saving ? 'Menyimpan...' : '💾 Simpan Semua'}
-        </button>
-      </div>
+      {/* Save button bottom — hanya tampil di tab selain tema */}
+      {activeTab !== 'tema' && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+          <button onClick={handleSave} disabled={saving} style={{ padding: '0.75rem 2rem', background: saving ? '#93c5fd' : '#0d2a5e', color: 'white', border: 'none', borderRadius: '8px', cursor: saving ? 'not-allowed' : 'pointer', fontWeight: 700, fontSize: '0.875rem' }}>
+            {saving ? 'Menyimpan...' : '💾 Simpan Semua'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

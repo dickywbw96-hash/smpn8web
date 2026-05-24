@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useField } from '@payloadcms/ui'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 import { themes } from '@/lib/themes'
 import type { Theme, ThemeId } from '@/lib/themes'
 
@@ -26,47 +26,16 @@ const css = `
 }
 .tp-btn:hover { border-color: #1d4ed8; transform: translateY(-2px); }
 .tp-btn.active { border-color: #1d4ed8; box-shadow: 0 0 0 3px rgba(29,78,216,0.15); }
-.tp-swatch {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin: 0 auto 8px;
-  overflow: hidden;
-}
+.tp-swatch { width: 36px; height: 36px; border-radius: 50%; margin: 0 auto 8px; overflow: hidden; }
 .tp-swatch-inner { width: 100%; height: 100%; border-radius: 50%; }
 .tp-name { font-size: 11px; font-weight: 600; color: #1e293b; line-height: 1.3; margin-bottom: 2px; }
 .tp-desc { font-size: 10px; color: #64748b; line-height: 1.3; }
-.tp-active-badge {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 2px 8px;
-  background: #1d4ed8;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: 600;
-}
-.tp-preview {
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.tp-preview-label {
-  padding: 8px 12px;
-  background: #f8fafc;
-  font-size: 11px;
-  color: #64748b;
-  border-bottom: 1px solid #e2e8f0;
-}
+.tp-active-badge { display: inline-block; margin-top: 6px; padding: 2px 8px; background: #1d4ed8; color: #fff; border-radius: 10px; font-size: 9px; font-weight: 600; }
+.tp-preview { border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.tp-preview-label { padding: 8px 12px; background: #f8fafc; font-size: 11px; color: #64748b; border-bottom: 1px solid #e2e8f0; }
 .tp-preview-label strong { color: #1e3a8a; }
 .tp-mockup { font-size: 0; }
-.tp-nav {
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.tp-nav { padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
 .tp-nav-logo { font-size: 11px; font-weight: 600; }
 .tp-nav-links { display: flex; gap: 10px; }
 .tp-nav-link { font-size: 9px; opacity: 0.85; }
@@ -91,25 +60,66 @@ const css = `
 `
 
 export default function ThemePicker() {
-  const { value, setValue } = useField<string>({ path: 'activeTheme' })
-  const [selected, setSelected] = useState<ThemeId>((value as ThemeId) ?? 'klasik-formal')
+  const [selected, setSelected] = useState<ThemeId>('klasik-formal')
+  const [saving, setSaving] = useState(false)
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (value) setSelected(value as ThemeId)
-  }, [value])
+    async function fetchTheme() {
+      const { data } = await supabase.from('site_settings').select('active_theme').single()
+      if (data?.active_theme) setSelected(data.active_theme as ThemeId)
+      setLoading(false)
+    }
+    fetchTheme()
+  }, [])
 
-  function handleSelect(id: ThemeId) {
-    setSelected(id)
-    setValue(id)
+  function showToast(msg: string, type: 'success' | 'error' = 'success') {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3000)
   }
 
-  const activeTheme: Theme = themes.find((t: Theme) => t.id === selected) ?? themes[0]
+  async function handleSelect(id: ThemeId) {
+    setSelected(id)
+    setSaving(true)
+    const { error } = await supabase
+      .from('site_settings')
+      .update({ active_theme: id })
+      .eq('id', 1)
+    setSaving(false)
+    if (error) showToast('Gagal menyimpan tema', 'error')
+    else showToast(`Tema "${themes.find(t => t.id === id)?.name}" berhasil diterapkan!`)
+  }
+
+  const activeTheme: Theme = themes.find(t => t.id === selected) ?? themes[0]
   const v = activeTheme.variables
+
+  if (loading) return <div style={{ padding: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>Memuat tema...</div>
 
   return (
     <div className="tp-wrap">
       <style>{css}</style>
 
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          position: 'fixed', top: '1.5rem', right: '1.5rem', zIndex: 9999,
+          padding: '0.75rem 1.25rem', borderRadius: '10px', fontWeight: 600, fontSize: '0.875rem',
+          background: toast.type === 'success' ? '#dcfce7' : '#fee2e2',
+          color: toast.type === 'success' ? '#16a34a' : '#dc2626',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        }}>
+          {toast.type === 'success' ? '✅' : '❌'} {toast.msg}
+        </div>
+      )}
+
+      {saving && (
+        <div style={{ fontSize: '0.8rem', color: '#6b7280', marginBottom: '0.75rem' }}>
+          Menyimpan tema...
+        </div>
+      )}
+
+      {/* Grid tema */}
       <div className="tp-grid">
         {themes.map((t: Theme) => (
           <button
@@ -134,81 +144,47 @@ export default function ThemePicker() {
         ))}
       </div>
 
+      {/* Preview */}
       <div className="tp-preview">
         <div className="tp-preview-label">
           Preview: <strong>{activeTheme.name}</strong> — {activeTheme.description}
         </div>
-
         <div className="tp-mockup">
-          <div
-            className="tp-nav"
-            style={{ background: v['--color-nav-bg'], borderBottom: v['--nav-border'], fontFamily: v['--font-heading'] }}
-          >
-            <span className="tp-nav-logo" style={{ color: v['--color-nav-text'] }}>
-              ⚑ SMPN 8 Probolinggo
-            </span>
+          <div className="tp-nav" style={{ background: v['--color-nav-bg'], borderBottom: v['--nav-border'], fontFamily: v['--font-heading'] }}>
+            <span className="tp-nav-logo" style={{ color: v['--color-nav-text'] }}>⚑ SMPN 8 Probolinggo</span>
             <div className="tp-nav-links">
-              {(['Home', 'Profil', 'Berita', 'PPID', 'SPMB'] as string[]).map((m: string) => (
+              {['Home', 'Profil', 'Berita', 'PPID', 'SPMB'].map(m => (
                 <span key={m} className="tp-nav-link" style={{ color: v['--color-nav-text'] }}>{m}</span>
               ))}
             </div>
           </div>
-
-          <div
-            className="tp-ticker"
-            style={{ background: v['--color-ticker-bg'], color: v['--color-ticker-text'], fontFamily: v['--font-body'] }}
-          >
+          <div className="tp-ticker" style={{ background: v['--color-ticker-bg'], color: v['--color-ticker-text'], fontFamily: v['--font-body'] }}>
             ✦ Selamat datang di website resmi SMP Negeri 8 Probolinggo ✦
           </div>
-
-          <div
-            className="tp-hero"
-            style={{ background: v['--color-hero-bg'], fontFamily: v['--font-heading'] }}
-          >
-            <div className="tp-hero-tag" style={{ color: v['--color-accent'] }}>
-              SEKOLAH ADIWIYATA · BERPRESTASI
-            </div>
-            <div className="tp-hero-title" style={{ color: v['--color-hero-text'] }}>
-              Guru Berkualitas,<br />Sekolah Berprestasi
-            </div>
-            <div className="tp-hero-sub" style={{ color: v['--color-hero-text'] }}>
-              Mewujudkan generasi unggul, berkarakter, dan berwawasan lingkungan.
-            </div>
-            <span
-              className="tp-hero-btn"
-              style={{ background: v['--color-btn-bg'], color: v['--color-btn-text'], borderRadius: v['--radius-btn'] }}
-            >
+          <div className="tp-hero" style={{ background: v['--color-hero-bg'], fontFamily: v['--font-heading'] }}>
+            <div className="tp-hero-tag" style={{ color: v['--color-accent'] }}>SEKOLAH ADIWIYATA · BERPRESTASI</div>
+            <div className="tp-hero-title" style={{ color: v['--color-hero-text'] }}>Guru Berkualitas,<br />Sekolah Berprestasi</div>
+            <div className="tp-hero-sub" style={{ color: v['--color-hero-text'] }}>Mewujudkan generasi unggul, berkarakter, dan berwawasan lingkungan.</div>
+            <span className="tp-hero-btn" style={{ background: v['--color-btn-bg'], color: v['--color-btn-text'], borderRadius: v['--radius-btn'] }}>
               Lihat Profil Sekolah
             </span>
           </div>
-
           <div className="tp-cards" style={{ background: v['--color-bg-secondary'] }}>
-            {(['Sekolah Adiwiyata', 'Berprestasi', 'Guru Berkualitas'] as string[]).map((c: string) => (
-              <div
-                key={c}
-                className="tp-card-item"
-                style={{ background: v['--color-bg'], borderRadius: v['--radius-card'] }}
-              >
+            {['Sekolah Adiwiyata', 'Berprestasi', 'Guru Berkualitas'].map(c => (
+              <div key={c} className="tp-card-item" style={{ background: v['--color-bg'], borderRadius: v['--radius-card'] }}>
                 <div className="tp-card-title" style={{ color: v['--color-primary'], fontFamily: v['--font-heading'] }}>{c}</div>
                 <div className="tp-card-text" style={{ color: v['--color-text-muted'] }}>Keunggulan sekolah kami</div>
               </div>
             ))}
           </div>
-
           <div style={{ background: v['--color-bg'] }}>
-            <div className="tp-section-title" style={{ color: v['--color-primary'], fontFamily: v['--font-heading'] }}>
-              Berita Terkini
-            </div>
+            <div className="tp-section-title" style={{ color: v['--color-primary'], fontFamily: v['--font-heading'] }}>Berita Terkini</div>
             <div className="tp-news">
-              {([
+              {[
                 { tag: 'Prestasi', title: 'Juara 1 Olimpiade Sains Kota Probolinggo' },
                 { tag: 'Kegiatan', title: 'Peringatan Hari Pendidikan Nasional 2025' },
-              ] as { tag: string; title: string }[]).map((n: { tag: string; title: string }) => (
-                <div
-                  key={n.tag}
-                  className="tp-news-card"
-                  style={{ background: v['--color-bg-secondary'], borderRadius: v['--radius-card'] }}
-                >
+              ].map(n => (
+                <div key={n.tag} className="tp-news-card" style={{ background: v['--color-bg-secondary'], borderRadius: v['--radius-card'] }}>
                   <div className="tp-news-img" style={{ background: v['--color-primary-light'] }} />
                   <div className="tp-news-body">
                     <div className="tp-news-tag" style={{ color: v['--color-primary'] }}>{n.tag}</div>
@@ -218,14 +194,14 @@ export default function ThemePicker() {
               ))}
             </div>
           </div>
-
-          <div
-            className="tp-footer"
-            style={{ background: v['--color-footer-bg'], color: v['--color-footer-text'], fontFamily: v['--font-body'] }}
-          >
+          <div className="tp-footer" style={{ background: v['--color-footer-bg'], color: v['--color-footer-text'], fontFamily: v['--font-body'] }}>
             © 2025 SMP Negeri 8 Probolinggo · Jl. Raya Semampir, Probolinggo
           </div>
         </div>
+      </div>
+
+      <div style={{ fontSize: '0.8rem', color: '#6b7280', background: '#f0f9ff', padding: '0.75rem 1rem', borderRadius: '8px' }}>
+        💡 Tema yang dipilih langsung tersimpan dan diterapkan ke seluruh halaman publik website.
       </div>
     </div>
   )
