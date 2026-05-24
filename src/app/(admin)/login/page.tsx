@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { getUserData } from './actions'  // ← tambah ini
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -13,33 +12,35 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   async function handleLogin(e: React.FormEvent) {
-  e.preventDefault()
-  setLoading(true)
-  setError('')
+    e.preventDefault()
+    setLoading(true)
+    setError('')
 
-  const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
-  console.log('AUTH RESULT:', { data, authError })
+    if (authError || !data.user) {
+      setError('Email atau password salah.')
+      setLoading(false)
+      return
+    }
 
-  if (authError || !data.user) {
-    setError('Email atau password salah.')
-    setLoading(false)
-    return
+    const res = await fetch('/api/get-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: data.user.id }),
+    })
+
+    const userData = res.ok ? await res.json() : null
+
+    if (!userData || !userData.is_active) {
+      await supabase.auth.signOut()
+      setError('Akun tidak ditemukan atau tidak aktif.')
+      setLoading(false)
+      return
+    }
+
+    router.push('/dashboard')
   }
-
-  const userData = await getUserData(data.user.id)
-
-  console.log('USER DATA:', userData)
-
-  if (!userData || !userData.is_active) {
-    await supabase.auth.signOut()
-    setError('Akun tidak ditemukan atau tidak aktif.')
-    setLoading(false)
-    return
-  }
-
-  router.push('/dashboard')
-}
 
   return (
     <div style={{
