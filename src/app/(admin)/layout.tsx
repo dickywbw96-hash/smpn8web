@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const { data: { session } } = await supabase.auth.getSession()
 
     if (!session) {
-      router.push('/admin/login')
+      router.push('/login')
       return
     }
 
@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     if (!userData || !userData.is_active) {
       await supabase.auth.signOut()
-      router.push('/admin/login')
+      router.push('/login')
       return
     }
 
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   async function handleLogout() {
     await supabase.auth.signOut()
-    router.push('/admin/login')
+    router.push('/login')
   }
 
   if (pathname === '/admin/login') return <>{children}</>
