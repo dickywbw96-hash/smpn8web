@@ -24,11 +24,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       return
     }
 
-    const { data: userData } = await supabase
-      .from('users')
-      .select('name, role, is_active')
-      .eq('id', session.user.id)
-      .single()
+    const res = await fetch('/api/get-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: session.user.id }),
+    })
+
+    const userData = res.ok ? await res.json() : null
 
     if (!userData || !userData.is_active) {
       await supabase.auth.signOut()
@@ -54,14 +56,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 
   const menuItems = [
-    { href: '/admin/dashboard', label: '🏠 Dashboard', roles: ['admin', 'editor'] },
-    { href: '/admin/posts', label: '📰 Berita', roles: ['admin', 'editor'] },
-    { href: '/admin/slider', label: '🖼️ Slider', roles: ['admin', 'editor'] },
-    { href: '/admin/ekstrakurikuler', label: '⚽ Ekstrakurikuler', roles: ['admin', 'editor'] },
-    { href: '/admin/ppid', label: '📋 PPID', roles: ['admin', 'editor'] },
-    { href: '/admin/site-settings', label: '⚙️ Pengaturan', roles: ['admin'] },
-    { href: '/admin/users', label: '👥 Kelola User', roles: ['admin'] },
-    { href: '/admin/delete-requests', label: '🗑️ Permintaan Hapus', roles: ['admin'] },
+    { href: '/dashboard', label: '🏠 Dashboard', roles: ['admin', 'editor'] },
+    { href: '/posts', label: '📰 Berita', roles: ['admin', 'editor'] },
+    { href: '/slider', label: '🖼️ Slider', roles: ['admin', 'editor'] },
+    { href: '/ekstrakurikuler', label: '⚽ Ekstrakurikuler', roles: ['admin', 'editor'] },
+    { href: '/ppid', label: '📋 PPID', roles: ['admin', 'editor'] },
+    { href: '/site-settings', label: '⚙️ Pengaturan', roles: ['admin'] },
+    { href: '/users', label: '👥 Kelola User', roles: ['admin'] },
+    { href: '/delete-requests', label: '🗑️ Permintaan Hapus', roles: ['admin'] },
   ]
 
   return (
