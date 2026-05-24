@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import type { Post } from '@/lib/payload'
-import { getImageUrl, formatDateShort, CATEGORY_LABELS } from '@/lib/payload'
+import type { Post } from '@/lib/db'
+import { getImageUrl, formatDateShort, CATEGORY_LABELS } from '@/lib/db'
 
 interface Props {
   posts: Post[]

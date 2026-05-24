@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import PageHero from '@/components/ui/PageHero'
-import { getPPIDByCategory, formatDate, getImageUrl } from '@/lib/payload'
+import { getPPIDByCategory, formatDate, getImageUrl } from '@/lib/db'
 
 const PPID_MENU = [
   { label: 'Tentang PPID',              href: '/ppid/tentang',            icon: 'ℹ️' },

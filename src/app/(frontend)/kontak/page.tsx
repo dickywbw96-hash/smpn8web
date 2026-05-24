@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
-import { getSiteSettings } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/db'
 
 export const metadata: Metadata = { title: 'Kontak' }
 export const revalidate = 300

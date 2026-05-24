@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getSiteSettings, getImageUrl } from '@/lib/payload'
+import { getSiteSettings, getImageUrl } from '@/lib/db'
 import { getThemeById, themeToCSS } from '@/lib/themes'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'

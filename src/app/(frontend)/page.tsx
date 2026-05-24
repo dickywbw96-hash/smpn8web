@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getSiteSettings, getSliderItems, getLatestPosts } from '@/lib/payload'
+import { getSiteSettings, getSliderItems, getLatestPosts } from '@/lib/db'
 import HeroSlider from '@/components/home/HeroSlider'
 import VisiMisiSection from '@/components/home/VisiMisiSection'
 import BeritaSection from '@/components/home/BeritaSection'

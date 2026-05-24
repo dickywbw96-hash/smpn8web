@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import PageHero from '@/components/ui/PageHero'
-import { getEkstrakurikulerBySlug, getEkstrakurikulerList, getImageUrl } from '@/lib/payload'
+import { getEkstrakurikulerBySlug, getEkstrakurikulerList, getImageUrl } from '@/lib/db'
 
 export const revalidate = 300
 

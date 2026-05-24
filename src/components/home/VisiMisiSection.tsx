@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import type { SiteSettings } from '@/lib/payload'
-import { getImageUrl } from '@/lib/payload'
+import type { SiteSettings } from '@/lib/db'
+import { getImageUrl } from '@/lib/db'
 
 export default function VisiMisiSection({ settings }: { settings?: SiteSettings | null }) {
   if (!settings) return null

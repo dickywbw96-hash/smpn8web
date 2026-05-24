@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { SliderItem, SiteSettings } from '@/lib/payload'
-import { getImageUrl } from '@/lib/payload'
+import type { SliderItem, SiteSettings } from '@/lib/db'
+import { getImageUrl } from '@/lib/db'
 
 interface Props {
   slides: SliderItem[]

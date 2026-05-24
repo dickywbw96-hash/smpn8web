@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { SiteSettings } from '@/lib/payload'
+import type { SiteSettings } from '@/lib/db'
 
 const QUICK_LINKS = [
   { label: 'Profil Sekolah',   href: '/profil' },

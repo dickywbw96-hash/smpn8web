@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
 import VisiMisiSection from '@/components/home/VisiMisiSection'
-import { getSiteSettings } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/db'
 
 export const metadata: Metadata = { title: 'Visi & Misi' }
 export const revalidate = 300

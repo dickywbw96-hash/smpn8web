@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
-import { getSiteSettings, getImageUrl } from '@/lib/payload'
+import { getSiteSettings, getImageUrl } from '@/lib/db'
 import Image from 'next/image'
 
 export const metadata: Metadata = { title: 'Profil Sekolah' }

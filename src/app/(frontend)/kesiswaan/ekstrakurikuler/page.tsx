@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import PageHero from '@/components/ui/PageHero'
-import { getEkstrakurikulerList, getImageUrl } from '@/lib/payload'
+import { getEkstrakurikulerList, getImageUrl } from '@/lib/db'
 
 export const metadata: Metadata = { title: 'Ekstrakurikuler' }
 export const revalidate = 300

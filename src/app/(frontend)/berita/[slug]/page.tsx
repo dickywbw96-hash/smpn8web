@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPostBySlug, getPosts, getImageUrl, formatDate, CATEGORY_LABELS } from '@/lib/payload'
+import { getPostBySlug, getPosts, getImageUrl, formatDate, CATEGORY_LABELS } from '@/lib/db'
 
 export const revalidate = 60
 
