@@ -133,7 +133,7 @@ export interface User {
 
 // ── Site Settings ─────────────────────────────────────────────────────────────
 
-export async function getSiteSettings(): Promise<SiteSettings | null> {
+export async function getSiteSettings(): Promise<any | null> {
   const { data, error } = await supabase.from('site_settings').select('*').single()
   if (error || !data) return null
 
@@ -147,7 +147,24 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
     .select('*')
     .order('order_index')
 
-  return { ...data, mission: mission ?? [], taglines: taglines ?? [] }
+  // Map snake_case DB fields ke camelCase yang dipakai frontend
+  return {
+    ...data,
+    // camelCase aliases
+    schoolName: data.school_name,
+    schoolLogo: data.school_logo_url,
+    tickerText: data.ticker_text,
+    tickerEnabled: data.ticker_enabled,
+    activeTheme: data.active_theme,
+    heroTaglines: taglines ?? [],
+    seo: {
+      metaTitle: data.seo_meta_title,
+      metaDescription: data.seo_meta_description,
+      ogImage: data.seo_og_image_url,
+    },
+    mission: mission ?? [],
+    taglines: taglines ?? [],
+  }
 }
 
 // ── Slider ────────────────────────────────────────────────────────────────────
