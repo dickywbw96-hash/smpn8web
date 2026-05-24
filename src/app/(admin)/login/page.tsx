@@ -13,30 +13,33 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+  e.preventDefault()
+  setLoading(true)
+  setError('')
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+  const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
-    if (authError || !data.user) {
-      setError('Email atau password salah.')
-      setLoading(false)
-      return
-    }
+  console.log('AUTH RESULT:', { data, authError })
 
-    // getUserData jalan di server — bisa baca SUPABASE_SERVICE_ROLE_KEY
-    const userData = await getUserData(data.user.id)
-
-    if (!userData || !userData.is_active) {
-      await supabase.auth.signOut()
-      setError('Akun tidak ditemukan atau tidak aktif.')
-      setLoading(false)
-      return
-    }
-
-    router.push('/dashboard')
+  if (authError || !data.user) {
+    setError('Email atau password salah.')
+    setLoading(false)
+    return
   }
+
+  const userData = await getUserData(data.user.id)
+
+  console.log('USER DATA:', userData)
+
+  if (!userData || !userData.is_active) {
+    await supabase.auth.signOut()
+    setError('Akun tidak ditemukan atau tidak aktif.')
+    setLoading(false)
+    return
+  }
+
+  router.push('/dashboard')
+}
 
   return (
     <div style={{
