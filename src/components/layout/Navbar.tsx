@@ -280,7 +280,7 @@ export default function Navbar({ logoUrl }: { logoUrl?: string }) {
           {/* Logo */}
           <Link href="/" className="nav-logo">
             {logoUrl ? (
-              <Image src={logoUrl} alt="Logo SMPN 8" width={44} height={44} className="nav-logo-img" />
+              <img src={logoUrl} alt="Logo SMPN 8" width={44} height={44} className="nav-logo-img" />
             ) : (
               <div style={{
                 width: 44, height: 44, borderRadius: '50%',

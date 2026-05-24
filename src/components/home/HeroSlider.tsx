@@ -39,11 +39,11 @@ export default function HeroSlider({ slides, taglines = [], schoolName = 'SMP Ne
   if (!slides.length) return <HeroFallback taglines={taglines} schoolName={schoolName} />
 
   const slide = slides[current]
-  const linkHref = slide.linkTo?.type === 'post' && slide.linkTo.post?.slug
-    ? `/berita/${slide.linkTo.post.slug}`
-    : slide.linkTo?.type === 'custom' && slide.linkTo.url
-    ? slide.linkTo.url
-    : null
+const linkHref = slide.link_type === 'post' && slide.link_post_id
+  ? `/berita/${slide.link_post_id}`   // ganti jika perlu resolve slug-nya
+  : slide.link_type === 'custom' && slide.link_url
+  ? slide.link_url
+  : null
 
   return (
     <>
@@ -221,7 +221,7 @@ export default function HeroSlider({ slides, taglines = [], schoolName = 'SMP Ne
         {/* Background image */}
         <div className={`hero-img${isAnimating ? ' fading' : ''}`}>
           <Image
-            src={getImageUrl(slide.image)}
+            src={getImageUrl(slide.image_url)}
             alt={slide.title}
             fill
             priority

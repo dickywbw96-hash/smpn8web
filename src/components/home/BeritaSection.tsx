@@ -21,7 +21,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
     <Link href={`/berita/${post.slug}`} className={`news-card${featured ? ' featured' : ''}`}>
       <div className="news-img-wrap">
         <Image
-          src={getImageUrl(post.featuredImage)}
+          src={getImageUrl(post.featured_image_url)}
           alt={post.title}
           fill
           sizes={featured ? '(max-width:768px) 100vw, 50vw' : '(max-width:768px) 100vw, 33vw'}
@@ -33,7 +33,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
         </span>
       </div>
       <div className="news-body">
-        <div className="news-date">{formatDateShort(post.publishedAt)}</div>
+        <div className="news-date">{formatDateShort(post.published_at)}</div>
         <h3 className="news-title">{post.title}</h3>
         <p className="news-excerpt">{post.excerpt}</p>
         <span className="news-read-more">Baca selengkapnya →</span>
