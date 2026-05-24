@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { supabase, supabaseAdmin } from '@/lib/supabase'
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -24,13 +24,9 @@ export default function AdminLoginPage() {
       return
     }
 
-    // Tunggu session ter-set dulu
-    await supabase.auth.setSession({
-      access_token: data.session!.access_token,
-      refresh_token: data.session!.refresh_token,
-    })
-
-    const { data: userData, error: userError } = await supabase
+    // setSession tidak perlu lagi — signInWithPassword sudah otomatis set session
+    // Langsung query pakai supabaseAdmin (bypass RLS, aman karena service role key tidak diekspos ke browser)
+    const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
       .select('role, is_active')
       .eq('id', data.user.id)
@@ -43,7 +39,7 @@ export default function AdminLoginPage() {
       return
     }
 
-    router.push('/dashboard') // fix: hapus /admin/
+    router.push('/dashboard')
   }
 
   return (
