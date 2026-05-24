@@ -4,16 +4,14 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
-const PPID_CATEGORIES = [
-  'Informasi Berkala',
-  'Informasi Serta Merta',
-  'Informasi Setiap Saat',
-  'Informasi Dikecualikan',
-  'Profil',
-  'Program Kerja',
-  'Keuangan',
-  'Regulasi',
-]
+const PPID_STRUCTURE: Record<string, string[]> = {
+  'Tentang PPID': ['Profil PPID', 'SK', 'Tugas dan Fungsi', 'Maklumat Pelayanan Publik', 'Jam Layanan'],
+  'Alur Permohonan Informasi': [],
+  'MoU': [],
+  'SOP PPID': [],
+  'Daftar Informasi Publik': [],
+}
+const PPID_CATEGORIES = Object.keys(PPID_STRUCTURE)
 
 export default function PPIDPage() {
   const [items, setItems] = useState<any[]>([])
@@ -64,8 +62,20 @@ export default function PPIDPage() {
     return matchCat && matchSearch
   })
 
+  // Kelompokkan per kategori sesuai urutan PPID_STRUCTURE
+  const grouped = PPID_CATEGORIES.reduce((acc, cat) => {
+    const catItems = filtered.filter(i => i.category === cat)
+    if (catItems.length > 0) acc[cat] = catItems
+    return acc
+  }, {} as Record<string, any[]>)
+
+  // Item yang tidak termasuk kategori manapun
+  const uncategorized = filtered.filter(i => !PPID_CATEGORIES.includes(i.category))
+  if (uncategorized.length > 0) grouped['Lainnya'] = uncategorized
+
   return (
     <div style={{ padding: '2rem' }}>
+      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#030f2b', margin: 0 }}>Dokumen PPID</h1>
@@ -74,6 +84,7 @@ export default function PPIDPage() {
         <Link href="/ppid/new" style={btnPrimary}>+ Tambah Dokumen</Link>
       </div>
 
+      {/* Filter */}
       <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <input
           type="text"
@@ -88,53 +99,69 @@ export default function PPIDPage() {
         </select>
       </div>
 
-      <div style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e5e7eb' }}>
-              <th style={thStyle}>Judul</th>
-              <th style={thStyle}>Kategori</th>
-              <th style={thStyle}>No. Dokumen</th>
-              <th style={thStyle}>Status</th>
-              <th style={thStyle}>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: '#9ca3af' }}>Memuat...</td></tr>
-            ) : filtered.length === 0 ? (
-              <tr><td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: '#9ca3af' }}>Tidak ada dokumen</td></tr>
-            ) : filtered.map(item => (
-              <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                <td style={{ ...tdStyle, maxWidth: '320px' }}>
-                  <div style={{ fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</div>
-                  {item.document_date && <div style={{ fontSize: '0.775rem', color: '#9ca3af', marginTop: '0.2rem' }}>{new Date(item.document_date).toLocaleDateString('id-ID')}</div>}
-                </td>
-                <td style={tdStyle}>
-                  <span style={{ fontSize: '0.775rem', background: '#f0fdf4', color: '#15803d', padding: '0.2rem 0.5rem', borderRadius: '4px', fontWeight: 600 }}>
-                    {item.category}
-                  </span>
-                </td>
-                <td style={{ ...tdStyle, color: '#6b7280', fontSize: '0.8rem' }}>{item.document_number || '-'}</td>
-                <td style={tdStyle}>
-                  <span style={{ padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 600, background: item.is_published ? '#dcfce7' : '#f3f4f6', color: item.is_published ? '#16a34a' : '#6b7280' }}>
-                    {item.is_published ? 'Dipublikasikan' : 'Draft'}
-                  </span>
-                </td>
-                <td style={tdStyle}>
-                  <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                    <Link href={`/ppid/${item.id}`} style={btnEdit}>Edit</Link>
-                    <button onClick={() => togglePublish(item.id, !item.is_published)} style={btnSecondary}>
-                      {item.is_published ? 'Sembunyikan' : 'Publikasikan'}
-                    </button>
-                    <button onClick={() => handleDelete(item.id)} style={btnDelete}>Hapus</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Konten */}
+      {loading ? (
+        <div style={{ padding: '3rem', textAlign: 'center', color: '#9ca3af' }}>Memuat...</div>
+      ) : filtered.length === 0 ? (
+        <div style={{ padding: '3rem', textAlign: 'center', color: '#9ca3af' }}>Tidak ada dokumen</div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {Object.entries(grouped).map(([cat, catItems]) => (
+            <div key={cat} style={{ background: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+              {/* Header Kategori */}
+              <div style={{ padding: '0.75rem 1rem', background: '#f0f4ff', borderBottom: '2px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontWeight: 700, color: '#0d2a5e', fontSize: '0.9rem' }}>{cat}</span>
+                <span style={{ fontSize: '0.75rem', color: '#6b7280', background: '#e5e7eb', borderRadius: '100px', padding: '0.1rem 0.5rem' }}>{catItems.length} dok</span>
+              </div>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e5e7eb' }}>
+                    <th style={thStyle}>Judul</th>
+                    <th style={thStyle}>Sub-kategori</th>
+                    <th style={thStyle}>No. Dokumen</th>
+                    <th style={thStyle}>Status</th>
+                    <th style={thStyle}>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {catItems.map(item => (
+                    <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                      <td style={{ ...tdStyle, maxWidth: '300px' }}>
+                        <div style={{ fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</div>
+                        {item.document_date && (
+                          <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.2rem' }}>
+                            {new Date(item.document_date).toLocaleDateString('id-ID')}
+                          </div>
+                        )}
+                      </td>
+                      <td style={tdStyle}>
+                        {item.subcategory
+                          ? <span style={{ fontSize: '0.775rem', background: '#f0fdf4', color: '#15803d', padding: '0.2rem 0.5rem', borderRadius: '4px', fontWeight: 600 }}>{item.subcategory}</span>
+                          : <span style={{ color: '#d1d5db' }}>—</span>}
+                      </td>
+                      <td style={{ ...tdStyle, color: '#6b7280', fontSize: '0.8rem' }}>{item.document_number || '—'}</td>
+                      <td style={tdStyle}>
+                        <span style={{ padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 600, background: item.is_published ? '#dcfce7' : '#f3f4f6', color: item.is_published ? '#16a34a' : '#6b7280' }}>
+                          {item.is_published ? 'Dipublikasikan' : 'Draft'}
+                        </span>
+                      </td>
+                      <td style={tdStyle}>
+                        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                          <Link href={`/ppid/${item.id}`} style={btnEdit}>Edit</Link>
+                          <button onClick={() => togglePublish(item.id, !item.is_published)} style={btnSecondary}>
+                            {item.is_published ? 'Sembunyikan' : 'Publikasikan'}
+                          </button>
+                          <button onClick={() => handleDelete(item.id)} style={btnDelete}>Hapus</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

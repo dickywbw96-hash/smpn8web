@@ -5,10 +5,14 @@ import { useRouter, useParams } from 'next/navigation'
 import { supabase, uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
-const PPID_CATEGORIES = [
-  'Informasi Berkala', 'Informasi Serta Merta', 'Informasi Setiap Saat',
-  'Informasi Dikecualikan', 'Profil', 'Program Kerja', 'Keuangan', 'Regulasi',
-]
+const PPID_STRUCTURE: Record<string, string[]> = {
+  'Tentang PPID': ['Profil PPID', 'SK', 'Tugas dan Fungsi', 'Maklumat Pelayanan Publik', 'Jam Layanan'],
+  'Alur Permohonan Informasi': [],
+  'MoU': [],
+  'SOP PPID': [],
+  'Daftar Informasi Publik': [],
+}
+const PPID_CATEGORIES = Object.keys(PPID_STRUCTURE)
 
 export default function EditPPIDPage() {
   const router = useRouter()
@@ -18,10 +22,12 @@ export default function EditPPIDPage() {
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [imageUploading, setImageUploading] = useState(false)
+  const [attachUploading, setAttachUploading] = useState(false)
 
   const [form, setForm] = useState({
     title: '',
     category: PPID_CATEGORIES[0],
+    subcategory: '',
     document_number: '',
     document_date: '',
     version: '',
@@ -33,11 +39,20 @@ export default function EditPPIDPage() {
   const [deletedAttachmentIds, setDeletedAttachmentIds] = useState<string[]>([])
   const [images, setImages] = useState<{ id?: string; image_url: string; caption: string }[]>([])
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([])
-  const [attachUploading, setAttachUploading] = useState(false)
+
+  // Opsi sub-kategori berdasarkan kategori aktif
+  const subcategoryOptions = PPID_STRUCTURE[form.category] ?? []
 
   useEffect(() => {
     if (!isNew) fetchData()
   }, [id])
+
+  // Reset subcategory kalau ganti kategori dan sub tidak tersedia
+  useEffect(() => {
+    if (!subcategoryOptions.includes(form.subcategory)) {
+      setForm(f => ({ ...f, subcategory: '' }))
+    }
+  }, [form.category])
 
   async function fetchData() {
     const { data } = await supabase
@@ -49,6 +64,7 @@ export default function EditPPIDPage() {
     setForm({
       title: data.title ?? '',
       category: data.category ?? PPID_CATEGORIES[0],
+      subcategory: data.subcategory ?? '',
       document_number: data.document_number ?? '',
       document_date: data.document_date ?? '',
       version: data.version ?? '',
@@ -84,6 +100,7 @@ export default function EditPPIDPage() {
     const payload = {
       title: form.title,
       category: form.category,
+      subcategory: form.subcategory || null,
       document_number: form.document_number || null,
       document_date: form.document_date || null,
       version: form.version || null,
@@ -132,7 +149,8 @@ export default function EditPPIDPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.5rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Info */}
+
+          {/* Info Utama */}
           <div style={card}>
             <label style={labelStyle}>Judul Dokumen *</label>
             <input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} placeholder="Judul dokumen..." />
@@ -141,6 +159,17 @@ export default function EditPPIDPage() {
             <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} style={selectStyle}>
               {PPID_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
+
+            {/* Sub-kategori — hanya muncul untuk "Tentang PPID" */}
+            {subcategoryOptions.length > 0 && (
+              <>
+                <label style={{ ...labelStyle, marginTop: '0.75rem' }}>Sub-kategori</label>
+                <select value={form.subcategory} onChange={e => setForm(f => ({ ...f, subcategory: e.target.value }))} style={selectStyle}>
+                  <option value="">— Pilih Sub-kategori —</option>
+                  {subcategoryOptions.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </>
+            )}
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
               <div>
@@ -217,9 +246,9 @@ export default function EditPPIDPage() {
         </div>
 
         {/* Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div>
           <div style={card}>
-            <button onClick={handleSave} disabled={saving} style={btnPrimary}>
+            <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, opacity: saving ? 0.7 : 1 }}>
               {saving ? 'Menyimpan...' : isNew ? '🚀 Simpan' : '💾 Simpan Perubahan'}
             </button>
             <div style={{ marginTop: '0.75rem' }}>

@@ -1,131 +1,323 @@
-import Link from 'next/link'
-import PageHero from '@/components/ui/PageHero'
-import { getPPIDByCategory, formatDate, getImageUrl } from '@/lib/db'
+'use client'
 
-const PPID_MENU = [
-  { label: 'Tentang PPID',              href: '/ppid/tentang',            icon: 'ℹ️' },
-  { label: 'Alur Permohonan Informasi', href: '/ppid/alur-permohonan',    icon: '🔄' },
-  { label: 'MoU',                       href: '/ppid/mou',                 icon: '🤝' },
-  { label: 'SOP PPID',                  href: '/ppid/sop',                 icon: '📋' },
-  { label: 'Daftar Informasi Publik',   href: '/ppid/daftar-informasi',   icon: '📂' },
-]
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import PPIDLayout from '@/components/ppid/PPIDLayout'
 
-const CAT_META: Record<string, { title: string; subtitle: string; icon: string }> = {
-  tentang:           { title: 'Tentang PPID',              subtitle: 'Informasi umum mengenai PPID SMP Negeri 8 Probolinggo.', icon: 'ℹ️' },
-  alur_permohonan:   { title: 'Alur Permohonan Informasi', subtitle: 'Prosedur dan alur pengajuan permohonan informasi publik.',  icon: '🔄' },
-  mou:               { title: 'MoU',                        subtitle: 'Daftar Memorandum of Understanding sekolah.',             icon: '🤝' },
-  sop:               { title: 'SOP PPID',                   subtitle: 'Standar Operasional Prosedur PPID.',                      icon: '📋' },
-  daftar_informasi:  { title: 'Daftar Informasi Publik',   subtitle: 'Dokumen-dokumen informasi publik yang tersedia.',          icon: '📂' },
+const CATEGORY_MAP: Record<string, string> = {
+  tentang: 'Tentang PPID',
+  alur_permohonan: 'Alur Permohonan Informasi',
+  mou: 'MoU',
+  sop: 'SOP PPID',
+  daftar_informasi: 'Daftar Informasi Publik',
 }
 
-export default async function PPIDSubPage({
-  category,
-  currentHref,
-}: {
+const TENTANG_SUBS = [
+  'Profil PPID',
+  'SK',
+  'Tugas dan Fungsi',
+  'Maklumat Pelayanan Publik',
+  'Jam Layanan',
+]
+
+interface Attachment {
+  id: string
+  file_url: string
+  file_label: string
+  file_description: string
+}
+
+interface ImageItem {
+  id: string
+  image_url: string
+  caption: string
+}
+
+interface PPIDItem {
+  id: string
+  title: string
+  category: string
+  subcategory?: string
+  document_number?: string
+  document_date?: string
+  content?: string
+  content_html?: string
+  order_index: number
+  is_published: boolean
+  ppid_attachments: Attachment[]
+  ppid_images: ImageItem[]
+}
+
+interface PPIDSubPageProps {
   category: string
   currentHref: string
-}) {
-  const meta = CAT_META[category] ?? { title: 'PPID', subtitle: '', icon: '📂' }
-  const docs = await getPPIDByCategory(category)
+}
+
+export default function PPIDSubPage({ category, currentHref }: PPIDSubPageProps) {
+  const [items, setItems] = useState<PPIDItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [activeSub, setActiveSub] = useState<string>('')
+
+  const dbCategory = CATEGORY_MAP[category] ?? category
+  const isTentang = category === 'tentang'
+
+  useEffect(() => {
+    async function fetchItems() {
+      const { data } = await supabase
+        .from('ppid')
+        .select('*, ppid_attachments(*), ppid_images(*)')
+        .eq('category', dbCategory)
+        .eq('is_published', true)
+        .order('order_index')
+      setItems((data as PPIDItem[]) ?? [])
+      setLoading(false)
+    }
+    fetchItems()
+  }, [category])
+
+  useEffect(() => {
+    if (isTentang && items.length > 0 && !activeSub) {
+      const firstSub = TENTANG_SUBS.find((s) => items.some((i) => i.subcategory === s))
+      setActiveSub(firstSub ?? items[0]?.subcategory ?? '')
+    }
+  }, [items])
+
+  const visibleItems =
+    isTentang && activeSub ? items.filter((i) => i.subcategory === activeSub) : items
 
   return (
-    <>
-      <style>{`
-        .ppid-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2.5rem; padding: 3rem 0 4rem; }
-        /* Sidebar nav */
-        .ppid-nav { background: white; border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-md); border: 1px solid var(--gray-100); position: sticky; top: 100px; height: fit-content; }
-        .ppid-nav-title { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400); padding: .25rem .5rem .75rem; border-bottom: 1px solid var(--gray-100); margin-bottom: .5rem; }
-        .ppid-nav-link { display: flex; align-items: center; gap: .6rem; padding: .65rem .9rem; border-radius: var(--radius-sm); text-decoration: none; font-size: .875rem; font-weight: 600; color: var(--gray-600); transition: all .15s ease; }
-        .ppid-nav-link:hover { background: var(--blue-50); color: var(--blue-700); }
-        .ppid-nav-link.active { background: var(--blue-700); color: white; }
-        /* Docs */
-        .ppid-docs { display: flex; flex-direction: column; gap: 1rem; }
-        .ppid-doc-card { background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); }
-        .ppid-doc-title { font-family: 'Playfair Display',serif; font-size: 1.1rem; color: var(--blue-900); font-weight: 700; margin-bottom: .5rem; }
-        .ppid-doc-date { font-size: .75rem; color: var(--gray-400); margin-bottom: .75rem; }
-        .ppid-doc-content { font-size: .9rem; color: var(--gray-600); line-height: 1.7; margin-bottom: 1rem; }
-        .ppid-file-list { display: flex; flex-wrap: wrap; gap: .5rem; }
-        .ppid-file-btn {
-          display: inline-flex; align-items: center; gap: .4rem;
-          background: var(--blue-50); color: var(--blue-700);
-          border: 1px solid var(--blue-200);
-          padding: .4rem .9rem; border-radius: var(--radius-sm);
-          font-size: .78rem; font-weight: 700;
-          text-decoration: none; transition: all .15s ease;
-        }
-        .ppid-file-btn:hover { background: var(--blue-700); color: white; border-color: var(--blue-700); }
-        .ppid-empty { text-align: center; padding: 4rem 2rem; color: var(--gray-400); background: white; border-radius: var(--radius-lg); }
-        @media (max-width: 768px) {
-          .ppid-layout { grid-template-columns: 1fr; }
-          .ppid-nav { position: static; display: flex; flex-wrap: wrap; gap: .3rem; }
-          .ppid-nav-title { width: 100%; }
-        }
-      `}</style>
+    <PPIDLayout currentHref={currentHref}>
+      {loading ? (
+        <div style={{ padding: '3rem', textAlign: 'center', color: '#9ca3af' }}>Memuat...</div>
+      ) : items.length === 0 ? (
+        <div style={{ padding: '3rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📄</div>
+          <p style={{ color: '#6b7280', margin: 0 }}>Belum ada dokumen yang dipublikasikan.</p>
+        </div>
+      ) : (
+        <div>
+          {/* Tab Sub-kategori khusus Tentang PPID */}
+          {isTentang && (
+            <div
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+                flexWrap: 'wrap',
+                marginBottom: '1.5rem',
+                borderBottom: '2px solid #e5e7eb',
+              }}
+            >
+              {TENTANG_SUBS.filter((s) => items.some((i) => i.subcategory === s)).map((sub) => (
+                <button
+                  key={sub}
+                  onClick={() => setActiveSub(sub)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    border: 'none',
+                    borderBottom: activeSub === sub ? '2px solid #0d2a5e' : '2px solid transparent',
+                    background: 'none',
+                    color: activeSub === sub ? '#0d2a5e' : '#6b7280',
+                    cursor: 'pointer',
+                    marginBottom: '-2px',
+                  }}
+                >
+                  {sub}
+                </button>
+              ))}
+            </div>
+          )}
 
-      <PageHero
-        title={meta.title}
-        subtitle={meta.subtitle}
-        breadcrumbs={[{ label: 'PPID', href: '/ppid/tentang' }, { label: meta.title }]}
-        accent={meta.icon}
-      />
-
-      <div className="container">
-        <div className="ppid-layout">
-          {/* Sidebar nav */}
-          <nav className="ppid-nav">
-            <div className="ppid-nav-title">Menu PPID</div>
-            {PPID_MENU.map((m) => (
-              <Link key={m.href} href={m.href} className={`ppid-nav-link${m.href === currentHref ? ' active' : ''}`}>
-                {m.icon} {m.label}
-              </Link>
+          {/* List Dokumen */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {visibleItems.map((item) => (
+              <DocCard key={item.id} item={item} />
             ))}
-          </nav>
+          </div>
+        </div>
+      )}
+    </PPIDLayout>
+  )
+}
 
-          {/* Content */}
-          <div>
-            <h2 style={{ fontFamily: 'Playfair Display,serif', color: 'var(--blue-900)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>
-              {meta.title}
-            </h2>
+function DocCard({ item }: { item: PPIDItem }) {
+  const [open, setOpen] = useState(false)
+  const attachments = item.ppid_attachments ?? []
+  const images = item.ppid_images ?? []
 
-            {docs.length === 0 ? (
-              <div className="ppid-empty">
-                <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>{meta.icon}</span>
-                <p>Konten belum tersedia. Silakan hubungi admin untuk mengisi halaman ini.</p>
-              </div>
-            ) : (
-              <div className="ppid-docs">
-                {docs.map((doc) => (
-                  <div key={doc.id} className="ppid-doc-card">
-                    <div className="ppid-doc-title">{doc.title}</div>
-                    <div className="ppid-doc-date">📅 {formatDate(doc.publishedAt)}</div>
-                    {doc.content && (
-                      <div className="ppid-doc-content">
-                        <p style={{ fontStyle: 'italic', color: 'var(--gray-400)' }}>Konten tersedia — render menggunakan RichText renderer.</p>
-                      </div>
-                    )}
-                    {doc.files && doc.files.length > 0 && (
-                      <div className="ppid-file-list">
-                        {doc.files.map((f, i) => (
-                          <a
-                            key={i}
-                            href={getImageUrl(f.file)}
-                            target="_blank"
-                            rel="noopener"
-                            className="ppid-file-btn"
-                            download
-                          >
-                            📥 {f.label ?? `Unduh Dokumen ${i + 1}`}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+  return (
+    <div
+      style={{
+        background: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+        overflow: 'hidden',
+        border: '1px solid #f3f4f6',
+      }}
+    >
+      {/* Header card */}
+      <div
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          padding: '1rem 1.25rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          cursor: 'pointer',
+          gap: '1rem',
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              fontWeight: 700,
+              color: '#111827',
+              fontSize: '0.95rem',
+              marginBottom: '0.25rem',
+            }}
+          >
+            {item.title}
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            {item.document_number && (
+              <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                No: {item.document_number}
+              </span>
+            )}
+            {item.document_date && (
+              <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                {new Date(item.document_date).toLocaleDateString('id-ID', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </span>
+            )}
+            {attachments.length > 0 && (
+              <span style={{ fontSize: '0.75rem', color: '#3b82f6' }}>
+                📎 {attachments.length} lampiran
+              </span>
             )}
           </div>
         </div>
+        <span style={{ fontSize: '0.8rem', color: '#9ca3af', flexShrink: 0 }}>
+          {open ? '▲' : '▼'}
+        </span>
       </div>
-    </>
+
+      {/* Expanded content */}
+      {open && (
+        <div
+          style={{ borderTop: '1px solid #f3f4f6', padding: '1rem 1.25rem', background: '#fafafa' }}
+        >
+          {/* HTML content */}
+          {item.content_html && (
+            <div
+              dangerouslySetInnerHTML={{ __html: item.content_html }}
+              style={{ fontSize: '0.9rem', color: '#374151', lineHeight: 1.7, marginBottom: '1rem' }}
+            />
+          )}
+
+          {/* Plain text fallback */}
+          {!item.content_html && item.content && (
+            <p
+              style={{ fontSize: '0.9rem', color: '#374151', lineHeight: 1.7, marginBottom: '1rem' }}
+            >
+              {item.content}
+            </p>
+          )}
+
+          {/* Gambar */}
+          {images.length > 0 && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                gap: '0.75rem',
+                marginBottom: '1rem',
+              }}
+            >
+              {images.map((img) => (
+                <div key={img.id}>
+                  <img
+                    src={img.image_url}
+                    alt={img.caption ?? ''}
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      objectFit: 'cover',
+                      aspectRatio: '4/3',
+                    }}
+                  />
+                  {img.caption && (
+                    <p
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#6b7280',
+                        marginTop: '0.25rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {img.caption}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Lampiran */}
+          {attachments.length > 0 && (
+            <div>
+              <div
+                style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: '#374151',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                Lampiran
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {attachments.map((att) => (
+                  <a
+                    key={att.id}
+                    href={att.file_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.5rem 0.75rem',
+                      background: 'white',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      color: '#1d4ed8',
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span>📄</span>
+                    <span style={{ flex: 1 }}>{att.file_label || 'Unduh Dokumen'}</span>
+                    {att.file_description && (
+                      <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                        {att.file_description}
+                      </span>
+                    )}
+                    <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>↓</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
