@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('users')
-    .select('role, is_active')
+    .select('name, role, is_active')
     .eq('id', userId)
     .single()
 
