@@ -131,6 +131,22 @@ export interface User {
   created_at: string
 }
 
+// ── NEW: Guru ─────────────────────────────────────────────────────────────────
+
+export interface Guru {
+  id: string
+  name: string
+  nip?: string
+  position?: string
+  subject?: string
+  photo_url?: string
+  type?: 'guru' | 'tas'
+  is_active: boolean
+  order_index: number
+  created_at: string
+  updated_at: string
+}
+
 // ── Site Settings ─────────────────────────────────────────────────────────────
 
 export async function getSiteSettings(): Promise<any | null> {
@@ -147,10 +163,8 @@ export async function getSiteSettings(): Promise<any | null> {
     .select('*')
     .order('order_index')
 
-  // Map snake_case DB fields ke camelCase yang dipakai frontend
   return {
     ...data,
-    // camelCase aliases
     schoolName: data.school_name,
     schoolLogo: data.school_logo_url,
     tickerText: data.ticker_text,
@@ -228,6 +242,26 @@ export async function getLatestPosts(limit = 4): Promise<Post[]> {
   return docs
 }
 
+export async function getRandomPosts(limit = 4, excludeSlug?: string): Promise<Post[]> {
+  // Ambil lebih banyak lalu shuffle di sisi client — Supabase belum support ORDER BY RANDOM() langsung
+  let query = supabase
+    .from('posts')
+    .select('id, title, slug, excerpt, featured_image_url, category, published_at')
+    .eq('status', 'published')
+    .limit(40)
+
+  if (excludeSlug) {
+    query = query.neq('slug', excludeSlug)
+  }
+
+  const { data, error } = await query
+  if (error || !data) return []
+
+  // Shuffle
+  const shuffled = [...data].sort(() => Math.random() - 0.5)
+  return shuffled.slice(0, limit) as Post[]
+}
+
 // ── Ekstrakurikuler ───────────────────────────────────────────────────────────
 
 export async function getEkstrakurikulerList(): Promise<Ekstrakurikuler[]> {
@@ -261,6 +295,54 @@ export async function getPPIDByCategory(category: string): Promise<PPIDDoc[]> {
     .order('order_index')
   if (error) return []
   return data ?? []
+}
+
+// ── Guru ──────────────────────────────────────────────────────────────────────
+
+export async function getGuruList(): Promise<Guru[]> {
+  const { data, error } = await supabase
+    .from('guru')
+    .select('*')
+    .eq('is_active', true)
+    .order('order_index')
+  if (error) return []
+  return data ?? []
+}
+
+export async function getGuruById(id: string): Promise<Guru | null> {
+  const { data, error } = await supabaseAdmin
+    .from('guru')
+    .select('*')
+    .eq('id', id)
+    .single()
+  if (error) return null
+  return data
+}
+
+// Admin: semua guru termasuk non-aktif
+export async function getAllGuruAdmin(): Promise<Guru[]> {
+  const { data, error } = await supabaseAdmin
+    .from('guru')
+    .select('*')
+    .order('order_index')
+  if (error) return []
+  return data ?? []
+}
+
+export async function upsertGuru(guru: Partial<Guru> & { name: string }): Promise<Guru | null> {
+  const payload = { ...guru, updated_at: new Date().toISOString() }
+  const { data, error } = await supabaseAdmin
+    .from('guru')
+    .upsert(payload)
+    .select()
+    .single()
+  if (error) return null
+  return data
+}
+
+export async function deleteGuru(id: string): Promise<boolean> {
+  const { error } = await supabaseAdmin.from('guru').delete().eq('id', id)
+  return !error
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

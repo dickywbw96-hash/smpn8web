@@ -1,10 +1,16 @@
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
+import { getGuruList } from '@/lib/db'
+import type { Guru } from '@/lib/db'
 
 export const metadata: Metadata = { title: 'Guru & TAS' }
 export const revalidate = 300
 
-export default function GuruTASPage() {
+export default async function GuruTASPage() {
+  const all  = await getGuruList()
+  const guru = all.filter((g) => g.type === 'guru' || !g.type)
+  const tas  = all.filter((g) => g.type === 'tas')
+
   return (
     <>
       <style>{`
@@ -14,7 +20,6 @@ export default function GuruTASPage() {
           gap: .5rem;
           margin-bottom: 2rem;
           border-bottom: 2px solid var(--gray-100);
-          padding-bottom: 0;
         }
         .guru-tab {
           padding: .65rem 1.5rem;
@@ -29,11 +34,8 @@ export default function GuruTASPage() {
           transition: all .2s ease;
           text-decoration: none;
         }
-        .guru-tab.active {
-          color: var(--blue-700);
-          border-bottom-color: var(--blue-600);
-        }
-        .guru-tab:hover { color: var(--blue-600); }
+        .guru-tab.active { color: var(--blue-700); border-bottom-color: var(--blue-600); }
+        .guru-tab:hover  { color: var(--blue-600); }
         .guru-table-wrap {
           background: white;
           border-radius: var(--radius-lg);
@@ -64,7 +66,8 @@ export default function GuruTASPage() {
         .guru-table tbody tr:hover { background: var(--blue-50); }
         .guru-table tbody tr:last-child { border-bottom: none; }
         .guru-table td { padding: .9rem 1.25rem; color: var(--gray-700); }
-        .guru-table td:first-child { font-weight: 600; color: var(--gray-900); }
+        .guru-table td:first-child { color: var(--gray-400); font-size: .8rem; width: 48px; text-align: center; }
+        .guru-table td:nth-child(2) { font-weight: 600; color: var(--gray-900); }
         .guru-badge {
           background: var(--blue-100);
           color: var(--blue-800);
@@ -79,6 +82,23 @@ export default function GuruTASPage() {
           color: var(--gray-500);
         }
         .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .section-title {
+          font-family: 'Playfair Display', serif;
+          color: var(--blue-900);
+          font-size: 1.3rem;
+          margin-bottom: 1.25rem;
+        }
+        .guru-count {
+          display: inline-block;
+          background: var(--blue-100);
+          color: var(--blue-700);
+          font-size: .72rem;
+          font-weight: 700;
+          padding: .15rem .65rem;
+          border-radius: 100px;
+          margin-left: .6rem;
+          vertical-align: middle;
+        }
       `}</style>
 
       <PageHero
@@ -95,29 +115,83 @@ export default function GuruTASPage() {
             <a href="#tas" className="guru-tab">Tenaga Administrasi</a>
           </div>
 
+          {/* ── Tabel Guru ── */}
           <div id="guru">
-            <h3 style={{ fontFamily: 'Playfair Display, serif', color: 'var(--blue-900)', fontSize: '1.3rem', marginBottom: '1.25rem' }}>
+            <h3 className="section-title">
               Daftar Guru
+              <span className="guru-count">{guru.length} orang</span>
             </h3>
             <div className="guru-table-wrap">
-              <div className="empty-state">
-                <span className="icon">📋</span>
-                <p>Data guru akan ditampilkan setelah diisi oleh administrator.</p>
-              </div>
+              {guru.length === 0 ? (
+                <div className="empty-state">
+                  <span className="icon">📋</span>
+                  <p>Data guru akan ditampilkan setelah diisi oleh administrator.</p>
+                </div>
+              ) : (
+                <table className="guru-table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Mata Pelajaran</th>
+                      <th>Jabatan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {guru.map((g, i) => (
+                      <tr key={g.id}>
+                        <td>{i + 1}</td>
+                        <td>{g.name}</td>
+                        <td>
+                          {g.subject
+                            ? <span className="guru-badge">{g.subject}</span>
+                            : <span style={{ color: 'var(--gray-300)' }}>—</span>
+                          }
+                        </td>
+                        <td>{g.position ?? <span style={{ color: 'var(--gray-300)' }}>—</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
 
+          {/* ── Tabel TAS ── */}
           <div id="tas" style={{ marginTop: '3rem' }}>
-            <h3 style={{ fontFamily: 'Playfair Display, serif', color: 'var(--blue-900)', fontSize: '1.3rem', marginBottom: '1.25rem' }}>
+            <h3 className="section-title">
               Tenaga Administrasi Sekolah
+              <span className="guru-count">{tas.length} orang</span>
             </h3>
             <div className="guru-table-wrap">
-              <div className="empty-state">
-                <span className="icon">📋</span>
-                <p>Data TAS akan ditampilkan setelah diisi oleh administrator.</p>
-              </div>
+              {tas.length === 0 ? (
+                <div className="empty-state">
+                  <span className="icon">📋</span>
+                  <p>Data TAS akan ditampilkan setelah diisi oleh administrator.</p>
+                </div>
+              ) : (
+                <table className="guru-table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Jabatan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tas.map((t, i) => (
+                      <tr key={t.id}>
+                        <td>{i + 1}</td>
+                        <td>{t.name}</td>
+                        <td>{t.position ?? <span style={{ color: 'var(--gray-300)' }}>—</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
+
         </div>
       </section>
     </>

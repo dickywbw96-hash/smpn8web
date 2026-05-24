@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
-import { getSiteSettings, getSliderItems, getLatestPosts } from '@/lib/db'
+import {
+  getSiteSettings,
+  getSliderItems,
+  getLatestPosts,
+  getGuruList,
+  getPosts,
+} from '@/lib/db'
 import HeroSlider from '@/components/home/HeroSlider'
 import VisiMisiSection from '@/components/home/VisiMisiSection'
 import BeritaSection from '@/components/home/BeritaSection'
 import StatsSection from '@/components/home/StatsSection'
+import GuruSection from '@/components/home/GuruSection'
+import TimelineSection from '@/components/home/TimelineSection'
 
 export const metadata: Metadata = {
   title: 'Beranda',
@@ -13,10 +21,12 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [settings, slides, posts] = await Promise.all([
+  const [settings, slides, posts, guru, timelinePosts] = await Promise.all([
     getSiteSettings(),
     getSliderItems(),
     getLatestPosts(5),
+    getGuruList(),
+    getPosts({ category: 'kegiatan_umum', limit: 6 }),
   ])
 
   return (
@@ -36,6 +46,12 @@ export default async function HomePage() {
 
       {/* Berita Terbaru */}
       <BeritaSection posts={posts} />
+
+      {/* Timeline Kegiatan */}
+      <TimelineSection posts={timelinePosts.docs} />
+
+      {/* Guru & Staff */}
+      <GuruSection guru={guru} />
 
       {/* CTA SPMB */}
       <SpmbCTA />
