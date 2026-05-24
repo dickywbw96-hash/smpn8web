@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase, supabaseAdmin } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
+import { getUserData } from './actions'  // ← tambah ini
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -24,15 +25,10 @@ export default function AdminLoginPage() {
       return
     }
 
-    // setSession tidak perlu lagi — signInWithPassword sudah otomatis set session
-    // Langsung query pakai supabaseAdmin (bypass RLS, aman karena service role key tidak diekspos ke browser)
-    const { data: userData, error: userError } = await supabaseAdmin
-      .from('users')
-      .select('role, is_active')
-      .eq('id', data.user.id)
-      .single()
+    // getUserData jalan di server — bisa baca SUPABASE_SERVICE_ROLE_KEY
+    const userData = await getUserData(data.user.id)
 
-    if (userError || !userData || !userData.is_active) {
+    if (!userData || !userData.is_active) {
       await supabase.auth.signOut()
       setError('Akun tidak ditemukan atau tidak aktif.')
       setLoading(false)
