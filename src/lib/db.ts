@@ -336,6 +336,8 @@ export async function upsertGuru(guru: Partial<Guru> & { name: string }): Promis
     .upsert(payload)
     .select()
     .single()
+  console.error('[upsertGuru] error:', error)  // ← tambah ini
+  console.log('[upsertGuru] data:', data)       // ← tambah ini
   if (error) return null
   return data
 }
