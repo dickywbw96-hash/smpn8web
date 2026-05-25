@@ -32,6 +32,7 @@ const MENU_ITEMS = [
       { label: 'Kegiatan Umum',       href: '/berita/kegiatan-umum' },
       { label: 'Prestasi',            href: '/berita/prestasi' },
       { label: 'Kegiatan Organisasi', href: '/berita/kegiatan-organisasi' },
+      { label: 'Artikel',             href: '/berita/artikel' },
     ],
   },
   { label: 'Kontak', href: '/kontak' },
