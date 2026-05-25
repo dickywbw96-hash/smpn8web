@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -35,6 +35,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function UsersPage() {
+  const supabase = getSupabaseBrowser()
   const [users, setUsers] = useState<UserRow[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createBrowserClient } from '@supabase/ssr'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import Image from 'next/image'
 
 export default function AdminLoginPage() {
@@ -13,11 +13,7 @@ export default function AdminLoginPage() {
   const [error, setError]       = useState('')
   const router = useRouter()
 
-  // Pakai createBrowserClient dari @supabase/ssr — ini yang simpan session di cookie
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = getSupabaseBrowser()
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -48,7 +44,7 @@ export default function AdminLoginPage() {
     }
 
     router.push('/dashboard')
-    router.refresh() // penting: refresh agar middleware baca cookie terbaru
+    router.refresh()
   }
 
   return (

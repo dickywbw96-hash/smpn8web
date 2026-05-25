@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import Link from 'next/link'
 
 export default function AdminDashboard() {
@@ -14,6 +14,8 @@ export default function AdminDashboard() {
   })
   const [recentPosts, setRecentPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+
+  const supabase = getSupabaseBrowser()  // ← ganti di sini
 
   useEffect(() => {
     fetchStats()

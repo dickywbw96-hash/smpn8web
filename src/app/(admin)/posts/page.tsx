@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -18,6 +18,7 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 export default function PostsPage() {
+  const supabase = getSupabaseBrowser()
   const router = useRouter()
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

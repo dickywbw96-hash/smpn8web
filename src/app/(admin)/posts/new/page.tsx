@@ -21,6 +21,7 @@ function slugify(text: string) {
 }
 
 export default function NewPostPage() {
+  const supabase = getSupabaseBrowser()
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [userId, setUserId] = useState('')

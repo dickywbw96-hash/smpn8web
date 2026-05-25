@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = getSupabaseBrowser()
   const [user, setUser] = useState<any>(null)
   const [role, setRole] = useState<string>('')
   const [loading, setLoading] = useState(true)

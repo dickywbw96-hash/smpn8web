@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import PPIDLayout from '@/components/ppid/PPIDLayout'
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -54,6 +54,7 @@ interface PPIDSubPageProps {
 }
 
 export default function PPIDSubPage({ category, currentHref }: PPIDSubPageProps) {
+  const supabase = getSupabaseBrowser()
   const [items, setItems] = useState<PPIDItem[]>([])
   const [loading, setLoading] = useState(true)
   const [activeSub, setActiveSub] = useState<string>('')

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { uploadFile } from '@/lib/supabase'
 import ThemePicker from '@/components/admin/ThemePicker'
 
@@ -89,6 +89,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function SiteSettingsPage() {
+  const supabase = getSupabaseBrowser()
   const [form, setForm] = useState<SettingsForm>(EMPTY_FORM)
   const [missions, setMissions] = useState<MissionPoint[]>([])
   const [taglines, setTaglines] = useState<Tagline[]>([])

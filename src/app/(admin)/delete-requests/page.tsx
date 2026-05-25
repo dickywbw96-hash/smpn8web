@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import Link from 'next/link'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -60,6 +60,7 @@ function formatDate(d?: string) {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function DeleteRequestsPage() {
+  const supabase = getSupabaseBrowser()
   const [requests, setRequests] = useState<DeleteRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending')

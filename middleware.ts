@@ -2,7 +2,6 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Route yang hanya boleh diakses admin
 const ADMIN_ONLY = [
   '/ekstrakurikuler',
   '/guru',
@@ -15,12 +14,10 @@ const ADMIN_ONLY = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Buat response dulu (diperlukan Supabase SSR untuk refresh cookie)
-  const response = NextResponse.next({
+  let response = NextResponse.next({
     request: { headers: request.headers },
   })
 
-  // Init Supabase client pakai cookie
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -39,11 +36,11 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Ambil session
-  const { data: { session } } = await supabase.auth.getSession()
+  // Pakai getUser() bukan getSession() — lebih reliable untuk SSR
+  const { data: { user } } = await supabase.auth.getUser()
 
   // Belum login → redirect ke /login
-  if (!session) {
+  if (!user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
@@ -51,19 +48,17 @@ export async function middleware(request: NextRequest) {
   const isAdminOnly = ADMIN_ONLY.some((route) => pathname.startsWith(route))
 
   if (isAdminOnly) {
-    // Ambil role dari tabel users
     const { data: userData } = await supabase
       .from('users')
       .select('role, is_active')
-      .eq('id', session.user.id)
+      .eq('id', user.id)
       .single()
 
-    // User tidak ditemukan / nonaktif → logout
     if (!userData || !userData.is_active) {
+      await supabase.auth.signOut()
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    // Bukan admin → redirect ke dashboard
     if (userData.role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { themes } from '@/lib/themes'
 import type { Theme, ThemeId } from '@/lib/themes'
 
@@ -60,6 +60,7 @@ const css = `
 `
 
 export default function ThemePicker() {
+  const supabase = getSupabaseBrowser()
   const [selected, setSelected] = useState<ThemeId>('klasik-formal')
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)

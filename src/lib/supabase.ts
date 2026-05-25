@@ -4,11 +4,15 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
 
-// Client untuk frontend (public)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Hanya untuk server-side / API routes (tidak pakai auth cookie)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: { persistSession: false }
+})
 
-// Client untuk server/admin (full access)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey)
+// Untuk admin/server dengan full access
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey, {
+  auth: { persistSession: false }
+})
 
 // ── Storage helpers ───────────────────────────────────────────────────────────
 

@@ -5,6 +5,7 @@ import { supabase, uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
 export default function SliderPage() {
+  const supabase = getSupabaseBrowser()
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import Link from 'next/link'
 
 const PPID_STRUCTURE: Record<string, string[]> = {
@@ -14,6 +14,7 @@ const PPID_STRUCTURE: Record<string, string[]> = {
 const PPID_CATEGORIES = Object.keys(PPID_STRUCTURE)
 
 export default function PPIDPage() {
+  const supabase = getSupabaseBrowser()
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState('')
