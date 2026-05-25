@@ -3,7 +3,6 @@ import { getSiteSettings, getImageUrl } from '@/lib/db'
 import { getThemeById, themeToCSS } from '@/lib/themes'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import Ticker from '@/components/layout/Ticker'
 import '@/styles/globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,6 +28,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const theme = getThemeById((settings as any)?.activeTheme ?? 'klasik-formal')
   const themeStyles = themeToCSS(theme)
 
+  // Ticker state untuk kalkulasi paddingTop awal (SSR).
+  // Navbar sendiri sudah handle sticky + perubahan height via JS.
+  // Nilai ini adalah tinggi maksimum (sebelum scroll):
+  //   topbar(36) + navbar(66) + ticker(34) = 136px
+  //   tanpa ticker: 36 + 66 = 102px
+  const showTicker = (settings?.tickerEnabled ?? true) && !!settings?.tickerText
+  const initialPadding = 36 + 66 + (showTicker ? 34 : 0)
+
   return (
     <html lang="id">
       <head>
@@ -37,10 +44,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        {/* Urutan: Navbar (topbar di dalamnya) → Ticker → main */}
-        <Navbar logoUrl={logoUrl} settings={settings} />
-        <Ticker text={settings?.tickerText} enabled={settings?.tickerEnabled ?? true} />
-        <main style={{ paddingTop: '109px' }}>{children}</main>
+        {/*
+          Navbar sekarang menampung topbar + navbar + ticker dalam satu
+          .header-shell fixed, sehingga tidak ada celah/gap di antara ketiganya.
+          Ticker.tsx sudah bisa dihapus / tidak dipakai lagi.
+        */}
+        <Navbar
+          logoUrl={logoUrl}
+          settings={settings}
+          tickerText={settings?.tickerText}
+          tickerEnabled={settings?.tickerEnabled ?? true}
+        />
+        <main style={{ paddingTop: `${initialPadding}px` }}>{children}</main>
         <Footer settings={settings} />
       </body>
     </html>
