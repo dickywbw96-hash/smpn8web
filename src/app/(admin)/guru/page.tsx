@@ -119,13 +119,13 @@ export default function AdminGuruPage() {
       <div className="ag-page">
         <div className="ag-topbar">
           <h1 className="ag-title">Kelola Guru &amp; Staff</h1>
-          <Link href="/admin/guru/baru" className="ag-add-btn">+ Tambah Guru</Link>
+          <Link href="/guru/baru" className="ag-add-btn">+ Tambah Guru</Link>
         </div>
 
         {loading ? (
           <div className="ag-loading">Memuat data...</div>
         ) : list.length === 0 ? (
-          <div className="ag-empty">Belum ada data guru. <Link href="/admin/guru/baru">Tambah sekarang →</Link></div>
+          <div className="ag-empty">Belum ada data guru. <Link href="/guru/baru">Tambah sekarang →</Link></div>
         ) : (
           <table className="ag-table">
             <thead>
@@ -179,7 +179,7 @@ export default function AdminGuruPage() {
                   </td>
                   <td>
                     <div className="ag-actions">
-                      <Link href={`/admin/guru/${g.id}`} className="ag-btn-edit">Edit</Link>
+                      <Link href={`/guru/${g.id}`} className="ag-btn-edit">Edit</Link>
                       <button
                         className="ag-btn-del"
                         disabled={deleting === g.id}

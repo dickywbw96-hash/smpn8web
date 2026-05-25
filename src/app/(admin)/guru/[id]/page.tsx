@@ -95,7 +95,7 @@ export default function GuruFormPage() {
     const data = await res.json()
 
     if (!res.ok) { setError(data?.message ?? 'Gagal menyimpan'); setSaving(false); return }
-    router.push('/admin/guru')
+    router.push('/guru')
   }
 
   if (loading) {
