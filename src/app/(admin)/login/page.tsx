@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
+import Image from 'next/image'
 
 export default function AdminLoginPage() {
   const [email, setEmail]       = useState('')
@@ -68,7 +69,17 @@ export default function AdminLoginPage() {
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
       }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏫</div>
+          <div style={{
+            width: '72px', height: '72px',
+            borderRadius: '18px',
+            background: '#f1f5f9',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 1rem',
+            overflow: 'hidden',
+            boxShadow: '0 4px 12px rgba(7,30,74,0.1)',
+          }}>
+            <Image src="/icon.png" alt="Logo SMPN 8" width={60} height={60} style={{ objectFit: 'contain' }} />
+          </div>
           <h1 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#030f2b', marginBottom: '0.25rem' }}>
             Admin Panel
           </h1>

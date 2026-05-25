@@ -3,33 +3,31 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
   const [role, setRole] = useState<string>('')
   const [loading, setLoading] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
-  useEffect(() => {
-    checkAuth()
-  }, [])
+  useEffect(() => { checkAuth() }, [])
+
+  // Tutup sidebar kalau pindah halaman di mobile
+  useEffect(() => { setSidebarOpen(false) }, [pathname])
 
   async function checkAuth() {
     const { data: { session } } = await supabase.auth.getSession()
-
-    if (!session) {
-      router.push('/login')
-      return
-    }
+    if (!session) { router.push('/login'); return }
 
     const res = await fetch('/api/get-user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: session.user.id }),
     })
-
     const userData = res.ok ? await res.json() : null
 
     if (!userData || !userData.is_active) {
@@ -56,80 +54,238 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 
   const menuItems = [
-    { href: '/dashboard', label: '🏠 Dashboard', roles: ['admin', 'editor'] },
-    { href: '/posts', label: '📰 Berita', roles: ['admin', 'editor'] },
-    { href: '/slider', label: '🖼️ Slider', roles: ['admin', 'editor'] },
-    { href: '/ekstrakurikuler', label: '⚽ Ekstrakurikuler', roles: ['admin', 'editor'] },
-{ href: '/guru', label: '👨‍🏫 Guru & TAS', roles: ['admin', 'editor'] },  // ← tambah ini
-{ href: '/ppid', label: '📋 PPID', roles: ['admin', 'editor'] },
-    { href: '/site-settings', label: '⚙️ Pengaturan', roles: ['admin'] },
-    { href: '/users', label: '👥 Kelola User', roles: ['admin'] },
+    { href: '/dashboard',       label: '🏠 Dashboard',          roles: ['admin', 'editor'] },
+    { href: '/posts',           label: '📰 Berita',             roles: ['admin', 'editor'] },
+    { href: '/slider',          label: '🖼️ Slider',            roles: ['admin', 'editor'] },
+    { href: '/ekstrakurikuler', label: '⚽ Ekstrakurikuler',    roles: ['admin'] },
+    { href: '/guru',            label: '👨‍🏫 Guru & TAS',       roles: ['admin'] },
+    { href: '/ppid',            label: '📋 PPID',               roles: ['admin'] },
+    { href: '/site-settings',   label: '⚙️ Pengaturan',        roles: ['admin'] },
+    { href: '/users',           label: '👥 Kelola User',        roles: ['admin'] },
     { href: '/delete-requests', label: '🗑️ Permintaan Hapus', roles: ['admin'] },
   ]
 
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
-      {/* Sidebar */}
-      <aside style={{
-        width: '240px',
-        background: '#030f2b',
-        color: 'white',
-        display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-      }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: '1rem', fontWeight: 800 }}>🏫 SMPN 8 Prob</div>
-          <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: '0.25rem' }}>Admin Panel</div>
-        </div>
+  const panelLabel = role === 'admin' ? 'Admin Panel' : 'Editor Panel'
 
-        <nav style={{ flex: 1, padding: '1rem 0' }}>
-          {menuItems.filter(m => m.roles.includes(role)).map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                display: 'block',
-                padding: '0.75rem 1.5rem',
-                color: pathname.startsWith(item.href) ? 'white' : 'rgba(255,255,255,0.6)',
-                background: pathname.startsWith(item.href) ? 'rgba(255,255,255,0.1)' : 'transparent',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                fontWeight: pathname.startsWith(item.href) ? 700 : 400,
-                borderLeft: pathname.startsWith(item.href) ? '3px solid #60a5fa' : '3px solid transparent',
-              }}
-            >
+  const Sidebar = () => (
+    <aside style={{
+      width: '240px',
+      background: 'linear-gradient(180deg, #030f2b 0%, #071e4a 100%)',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      flexShrink: 0,
+      height: '100vh',
+      position: 'sticky',
+      top: 0,
+    }}>
+      {/* Logo & nama sekolah */}
+      <div style={{
+        padding: '1.5rem 1.25rem',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.875rem',
+      }}>
+        <div style={{
+          width: '44px', height: '44px',
+          borderRadius: '12px',
+          background: 'white',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+          overflow: 'hidden',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+        }}>
+          <Image src="/icon.png" alt="Logo SMPN 8" width={40} height={40} style={{ objectFit: 'contain' }} />
+        </div>
+        <div>
+          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'white', lineHeight: 1.2 }}>
+            SMP Negeri 8
+          </div>
+          <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', marginTop: '0.15rem' }}>
+            Kota Probolinggo
+          </div>
+          <div style={{
+            fontSize: '0.6rem',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            marginTop: '0.25rem',
+            color: role === 'admin' ? '#60a5fa' : '#34d399',
+            background: role === 'admin' ? 'rgba(96,165,250,0.12)' : 'rgba(52,211,153,0.12)',
+            borderRadius: '4px',
+            padding: '0.1rem 0.4rem',
+            display: 'inline-block',
+          }}>
+            {panelLabel}
+          </div>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '0.75rem 0', overflowY: 'auto' }}>
+        {menuItems.filter(m => m.roles.includes(role)).map(item => {
+          const active = pathname.startsWith(item.href)
+          return (
+            <Link key={item.href} href={item.href} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.7rem 1.25rem',
+              color: active ? 'white' : 'rgba(255,255,255,0.55)',
+              background: active ? 'rgba(255,255,255,0.1)' : 'transparent',
+              textDecoration: 'none',
+              fontSize: '0.845rem',
+              fontWeight: active ? 700 : 400,
+              borderLeft: active ? '3px solid #60a5fa' : '3px solid transparent',
+              transition: 'all 0.15s ease',
+            }}>
               {item.label}
             </Link>
-          ))}
-        </nav>
+          )
+        })}
+      </nav>
 
-        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem' }}>
-            {user?.name} ({role})
+      {/* User info + logout */}
+      <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '0.6rem',
+          marginBottom: '0.75rem',
+        }}>
+          <div style={{
+            width: '32px', height: '32px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.12)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '0.85rem', fontWeight: 700, color: 'white', flexShrink: 0,
+          }}>
+            {user?.name?.[0]?.toUpperCase() ?? '?'}
           </div>
-          <button
-            onClick={handleLogout}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              background: 'rgba(255,255,255,0.1)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-            }}
-          >
-            Keluar
-          </button>
+          <div style={{ overflow: 'hidden' }}>
+            <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {user?.name}
+            </div>
+            <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.45)' }}>{role}</div>
+          </div>
         </div>
-      </aside>
+        <button onClick={handleLogout} style={{
+          width: '100%',
+          padding: '0.5rem',
+          background: 'rgba(255,255,255,0.08)',
+          color: 'rgba(255,255,255,0.7)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontSize: '0.78rem',
+          fontWeight: 600,
+          transition: 'all 0.15s',
+        }}>
+          🚪 Keluar
+        </button>
+      </div>
+    </aside>
+  )
 
-      {/* Main content */}
-      <main style={{ flex: 1, overflow: 'auto' }}>
-        {children}
-      </main>
-    </div>
+  return (
+    <>
+      <style>{`
+        .admin-wrapper { display: flex; min-height: 100vh; background: #f9fafb; }
+        .admin-sidebar-desktop { display: flex; }
+        .admin-topbar { display: none; }
+        .admin-overlay { display: none; }
+
+        @media (max-width: 768px) {
+          .admin-sidebar-desktop { display: none; }
+          .admin-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: #030f2b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          }
+          .admin-topbar-logo {
+            display: flex; align-items: center; gap: 0.6rem;
+          }
+          .admin-topbar-logo span {
+            font-size: 0.875rem; font-weight: 800; color: white;
+          }
+          .admin-hamburger {
+            background: none; border: none; cursor: pointer;
+            display: flex; flex-direction: column; gap: 5px; padding: 4px;
+          }
+          .admin-hamburger span {
+            display: block; width: 22px; height: 2px;
+            background: white; border-radius: 2px;
+            transition: all 0.3s ease;
+          }
+          .admin-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+          .admin-hamburger.open span:nth-child(2) { opacity: 0; }
+          .admin-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+          .admin-sidebar-mobile {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: 260px;
+            z-index: 200;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+          }
+          .admin-sidebar-mobile.open { transform: translateX(0); }
+          .admin-overlay {
+            display: block;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 199;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+          }
+          .admin-overlay.open { opacity: 1; pointer-events: auto; }
+        }
+      `}</style>
+
+      <div className="admin-wrapper">
+        {/* Desktop sidebar */}
+        <div className="admin-sidebar-desktop">
+          <Sidebar />
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          {/* Mobile topbar */}
+          <div className="admin-topbar">
+            <div className="admin-topbar-logo">
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'white', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image src="/icon.png" alt="Logo" width={28} height={28} style={{ objectFit: 'contain' }} />
+              </div>
+              <span>SMPN 8 Probolinggo</span>
+            </div>
+            <button
+              className={`admin-hamburger${sidebarOpen ? ' open' : ''}`}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Toggle menu"
+            >
+              <span/><span/><span/>
+            </button>
+          </div>
+
+          <main style={{ flex: 1, overflow: 'auto' }}>
+            {children}
+          </main>
+        </div>
+
+        {/* Mobile sidebar */}
+        <div className={`admin-sidebar-mobile${sidebarOpen ? ' open' : ''}`}>
+          <Sidebar />
+        </div>
+
+        {/* Overlay */}
+        <div
+          className={`admin-overlay${sidebarOpen ? ' open' : ''}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+      </div>
+    </>
   )
 }
