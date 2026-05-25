@@ -60,7 +60,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/posts', label: '📰 Berita', roles: ['admin', 'editor'] },
     { href: '/slider', label: '🖼️ Slider', roles: ['admin', 'editor'] },
     { href: '/ekstrakurikuler', label: '⚽ Ekstrakurikuler', roles: ['admin', 'editor'] },
-    { href: '/ppid', label: '📋 PPID', roles: ['admin', 'editor'] },
+{ href: '/guru', label: '👨‍🏫 Guru & TAS', roles: ['admin', 'editor'] },  // ← tambah ini
+{ href: '/ppid', label: '📋 PPID', roles: ['admin', 'editor'] },
     { href: '/site-settings', label: '⚙️ Pengaturan', roles: ['admin'] },
     { href: '/users', label: '👥 Kelola User', roles: ['admin'] },
     { href: '/delete-requests', label: '🗑️ Permintaan Hapus', roles: ['admin'] },
