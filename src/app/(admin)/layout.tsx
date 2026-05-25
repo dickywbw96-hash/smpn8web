@@ -55,7 +55,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const menuItems = [
     { href: '/dashboard',       label: '🏠 Dashboard',         roles: ['admin', 'editor'] },
     { href: '/posts',           label: '📰 Berita',            roles: ['admin', 'editor'] },
-    { href: '/articles',        label: '📝 Artikel',           roles: ['admin', 'editor'] },
     { href: '/slider',          label: '🖼️ Slider',           roles: ['admin', 'editor'] },
     { href: '/ekstrakurikuler', label: '⚽ Ekstrakurikuler',   roles: ['admin'] },
     { href: '/guru',            label: '👨‍🏫 Guru & TAS',      roles: ['admin'] },
