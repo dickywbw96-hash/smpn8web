@@ -223,6 +223,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           .admin-hamburger.open span:nth-child(2) { opacity: 0; }
           .admin-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
           .admin-sidebar-mobile {
+            display: none;
             position: fixed;
             top: 0; left: 0; bottom: 0;
             width: 260px;
@@ -230,7 +231,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             transform: translateX(-100%);
             transition: transform 0.3s ease;
           }
-          .admin-sidebar-mobile.open { transform: translateX(0); }
+          .admin-sidebar-mobile.open { display: block; transform: translateX(0); }
           .admin-overlay {
             display: block;
             position: fixed; inset: 0;
