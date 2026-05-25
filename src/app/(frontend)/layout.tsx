@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Urutan: Navbar (topbar di dalamnya) → Ticker → main */}
         <Navbar logoUrl={logoUrl} settings={settings} />
         <Ticker text={settings?.tickerText} enabled={settings?.tickerEnabled ?? true} />
-        <main style={{ paddingTop: '144px' }}>{children}</main>
+        <main style={{ paddingTop: '109px' }}>{children}</main>
         <Footer settings={settings} />
       </body>
     </html>

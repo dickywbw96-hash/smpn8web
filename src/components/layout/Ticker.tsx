@@ -1,6 +1,16 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 export default function Ticker({ text, enabled = true }: { text?: string; enabled?: boolean }) {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
+
   if (!enabled || !text) return null
 
   const displayText = text || 'Selamat datang di website resmi SMP Negeri 8 Probolinggo'
@@ -16,15 +26,10 @@ export default function Ticker({ text, enabled = true }: { text?: string; enable
           padding: .4rem 0;
           overflow: hidden;
           position: fixed;
-          top: 109px; /* topbar(37) + navbar(72) */
           left: 0; right: 0;
           z-index: 998;
           box-shadow: 0 2px 12px rgba(0,0,0,.2);
-        }
-        /* Saat navbar scrolled (topbar hilang, navbar naik ke top:0) */
-        .navbar-scrolled-active ~ .ticker-bar,
-        body.scrolled .ticker-bar {
-          top: 72px;
+          transition: top .35s ease;
         }
         .ticker-inner {
           display: flex;
@@ -72,7 +77,7 @@ export default function Ticker({ text, enabled = true }: { text?: string; enable
         }
       `}</style>
 
-      <div className="ticker-bar">
+      <div className="ticker-bar" style={{ top: scrolled ? '72px' : '109px' }}>
         <div className="ticker-inner">
           <div className="ticker-label">📢 Info</div>
           <div className="ticker-track">
