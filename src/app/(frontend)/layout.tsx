@@ -29,22 +29,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   const logoUrl = settings?.schoolLogo ? getImageUrl(settings.schoolLogo) : undefined
 
-  // getThemeById sudah handle fallback ke defaultTheme jika id tidak dikenal
   const theme = getThemeById((settings as any)?.activeTheme ?? 'klasik-formal')
   const themeStyles = themeToCSS(theme)
 
   return (
     <html lang="id">
       <head>
-        {/* CSS variables tema disuntikkan server-side — tidak ada FOUC */}
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} data-theme="dynamic" />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
         <Ticker text={settings?.tickerText} enabled={settings?.tickerEnabled ?? true} />
-        <Navbar logoUrl={logoUrl} />
+        <Navbar logoUrl={logoUrl} settings={settings} />
         <main>{children}</main>
         <Footer settings={settings} />
       </body>

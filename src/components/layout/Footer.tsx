@@ -74,15 +74,21 @@ function VisitorCounter() {
   const [count, setCount] = useState<number | null>(null)
 
   useEffect(() => {
-    try {
-      const key = 'smpn8_visits'
-      const stored = parseInt(localStorage.getItem(key) ?? '0', 10)
-      const newCount = stored + 1
-      localStorage.setItem(key, String(newCount))
-      setCount(newCount)
-    } catch {
-      setCount(null)
-    }
+    // Catat kunjungan & ambil total hari ini
+    fetch('/api/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: window.location.pathname }),
+    })
+      .then(r => r.json())
+      .then(d => setCount(d.count))
+      .catch(() => {
+        // fallback: ambil saja tanpa log
+        fetch('/api/visit')
+          .then(r => r.json())
+          .then(d => setCount(d.count))
+          .catch(() => setCount(null))
+      })
   }, [])
 
   if (count === null) return null
@@ -90,12 +96,12 @@ function VisitorCounter() {
   return (
     <div style={{ textAlign: 'center' }}>
       <div style={{ fontSize: '.65rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,.4)', marginBottom: '.3rem' }}>
-        Kunjungan Anda ke-
+        Pengunjung Hari Ini
       </div>
       <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#e8a31a', letterSpacing: '.05em' }}>
         {count.toLocaleString('id-ID')}
       </div>
-      <div style={{ fontSize: '.7rem', color: 'rgba(255,255,255,.4)' }}>pada perangkat ini</div>
+      <div style={{ fontSize: '.7rem', color: 'rgba(255,255,255,.4)' }}>unique visitor</div>
     </div>
   )
 }

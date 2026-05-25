@@ -377,3 +377,30 @@ export const CATEGORY_COLORS: Record<string, string> = {
   prestasi: '#e8a31a',
   kegiatan_organisasi: '#16a34a',
 }
+
+// ── Visitor Counter ───────────────────────────────────────────────────────────
+
+export async function logVisitor(ip: string, page = '/'): Promise<void> {
+  await supabase.from('visitor_logs').insert({ ip_address: ip, page })
+}
+
+export async function getTodayVisitorCount(): Promise<number> {
+  const today = new Date().toISOString().split('T')[0]
+  const { count } = await supabase
+    .from('visitor_logs')
+    .select('*', { count: 'exact', head: true })
+    .gte('visited_at', `${today}T00:00:00`)
+    .lte('visited_at', `${today}T23:59:59`)
+  return count ?? 0
+}
+
+export async function getTodayUniqueVisitorCount(): Promise<number> {
+  const today = new Date().toISOString().split('T')[0]
+  const { data } = await supabase
+    .from('visitor_logs')
+    .select('ip_address')
+    .gte('visited_at', `${today}T00:00:00`)
+    .lte('visited_at', `${today}T23:59:59`)
+  if (!data) return 0
+  return new Set(data.map(r => r.ip_address)).size
+}
