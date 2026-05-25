@@ -8,7 +8,6 @@ import '@/styles/globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
-
   return {
     title: {
       default: settings?.seo?.metaTitle ?? 'SMP Negeri 8 Probolinggo',
@@ -26,9 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings()
-
   const logoUrl = settings?.schoolLogo ? getImageUrl(settings.schoolLogo) : undefined
-
   const theme = getThemeById((settings as any)?.activeTheme ?? 'klasik-formal')
   const themeStyles = themeToCSS(theme)
 
@@ -40,9 +37,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <Ticker text={settings?.tickerText} enabled={settings?.tickerEnabled ?? true} />
+        {/* Urutan: Navbar (topbar di dalamnya) → Ticker → main */}
         <Navbar logoUrl={logoUrl} settings={settings} />
-        <main>{children}</main>
+        <Ticker text={settings?.tickerText} enabled={settings?.tickerEnabled ?? true} />
+        <main style={{ paddingTop: '144px' }}>{children}</main>
         <Footer settings={settings} />
       </body>
     </html>

@@ -1,3 +1,4 @@
+// app/(frontend)/page.tsx //
 import type { Metadata } from 'next'
 import {
   getSiteSettings,

@@ -9,54 +9,62 @@ export default function Ticker({ text, enabled = true }: { text?: string; enable
     <>
       <style>{`
         .ticker-bar {
-          background: linear-gradient(90deg, #0d3278 0%, #1a5cc8 50%, #0d3278 100%);
+          background: linear-gradient(90deg, #071e4a 0%, #0d2a5e 50%, #071e4a 100%);
+          border-top: 1px solid rgba(255,255,255,.08);
+          border-bottom: 1px solid rgba(77,146,240,.25);
           color: white;
-          padding: .45rem 0;
+          padding: .4rem 0;
           overflow: hidden;
-          position: relative;
-          z-index: 999;
-          margin-top: 72px; /* navbar height */
+          position: fixed;
+          top: 109px; /* topbar(37) + navbar(72) */
+          left: 0; right: 0;
+          z-index: 998;
+          box-shadow: 0 2px 12px rgba(0,0,0,.2);
+        }
+        /* Saat navbar scrolled (topbar hilang, navbar naik ke top:0) */
+        .navbar-scrolled-active ~ .ticker-bar,
+        body.scrolled .ticker-bar {
+          top: 72px;
         }
         .ticker-inner {
           display: flex;
           align-items: center;
-          gap: 0;
         }
         .ticker-label {
-          background: #e8a31a;
+          background: linear-gradient(135deg, #e8a31a, #f5b830);
           color: #030f2b;
-          font-size: .72rem;
+          font-size: .7rem;
           font-weight: 800;
           letter-spacing: .08em;
           text-transform: uppercase;
-          padding: .25rem .75rem;
+          padding: .3rem .85rem;
           white-space: nowrap;
           flex-shrink: 0;
-          z-index: 2;
+          border-right: 2px solid rgba(255,255,255,.15);
         }
         .ticker-track {
           flex: 1;
           overflow: hidden;
-          mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%);
         }
         .ticker-content {
           display: flex;
           width: max-content;
-          animation: ticker-scroll 30s linear infinite;
+          animation: ticker-scroll 35s linear infinite;
         }
         .ticker-content:hover { animation-play-state: paused; }
         .ticker-text {
           white-space: nowrap;
-          font-size: .82rem;
+          font-size: .8rem;
           font-weight: 500;
-          padding: 0 3rem;
-          opacity: .95;
+          padding: 0 2.5rem;
+          opacity: .9;
+          letter-spacing: .01em;
         }
         .ticker-sep {
           color: #e8a31a;
-          font-size: 1rem;
-          padding: 0 1rem;
-          opacity: .7;
+          font-size: .9rem;
+          opacity: .6;
         }
         @keyframes ticker-scroll {
           0%   { transform: translateX(0); }
@@ -69,11 +77,10 @@ export default function Ticker({ text, enabled = true }: { text?: string; enable
           <div className="ticker-label">📢 Info</div>
           <div className="ticker-track">
             <div className="ticker-content">
-              {/* Duplikat untuk seamless loop */}
               {[...Array(4)].map((_, i) => (
                 <span key={i} className="ticker-text">
                   {displayText}
-                  <span className="ticker-sep">✦</span>
+                  <span className="ticker-sep"> ✦ </span>
                 </span>
               ))}
             </div>
