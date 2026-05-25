@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase, uploadFile } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
+import { uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
 export default function SliderPage() {

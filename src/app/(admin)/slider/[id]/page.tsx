@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { supabase, uploadFile } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
+import { uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
 export default function EditSliderPage() {
+  const supabase = getSupabaseBrowser()
   const router = useRouter()
   const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(true)
