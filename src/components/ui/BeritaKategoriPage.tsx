@@ -7,6 +7,7 @@ const BADGE_STYLE: Record<string, { bg: string; color: string }> = {
   kegiatan_umum:       { bg: '#deeafb', color: '#1345a0' },
   prestasi:            { bg: '#fdf3d6', color: '#b45309' },
   kegiatan_organisasi: { bg: '#dcfce7', color: '#15803d' },
+  artikel: { bg: '#fce7f3', color: '#9d174d' },
 }
 
 const CAT_META: Record<string, { title: string; subtitle: string; icon: string }> = {
@@ -25,6 +26,11 @@ const CAT_META: Record<string, { title: string; subtitle: string; icon: string }
     subtitle: 'Kegiatan OSIS dan organisasi siswa lainnya.',
     icon: '🎯',
   },
+  artikel: {
+  title: 'Artikel',
+  subtitle: 'Tulisan dan artikel informatif seputar dunia pendidikan.',
+  icon: '📝',
+},
 }
 
 export default async function BeritaKategoriPage({ category }: { category: string }) {
@@ -75,13 +81,13 @@ export default async function BeritaKategoriPage({ category }: { category: strin
               {posts.map((post) => (
                 <Link key={post.id} href={`/berita/${post.slug}`} className="bk-card">
                   <div className="bk-img-wrap">
-                    <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="33vw" className="bk-img" />
+                    <Image src={getImageUrl(post.featured_image_url)} alt={post.title} fill sizes="33vw" className="bk-img" />
                     <span style={{ position: 'absolute', top: '.6rem', left: '.6rem', background: badge.bg, color: badge.color, padding: '.2rem .65rem', borderRadius: '100px', fontSize: '.7rem', fontWeight: 700 }}>
                       {CATEGORY_LABELS[post.category]}
                     </span>
                   </div>
                   <div className="bk-body">
-                    <div className="bk-date">{formatDateShort(post.publishedAt)}</div>
+                    <div className="bk-date">{formatDateShort(post.published_at)}</div>
                     <h3 className="bk-title">{post.title}</h3>
                     <p className="bk-excerpt">{post.excerpt}</p>
                     <span className="bk-more">Baca selengkapnya →</span>

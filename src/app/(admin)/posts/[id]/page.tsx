@@ -9,6 +9,7 @@ const CATEGORIES = [
   { value: 'kegiatan_umum', label: 'Kegiatan Umum' },
   { value: 'prestasi', label: 'Prestasi' },
   { value: 'kegiatan_organisasi', label: 'Kegiatan Organisasi' },
+  { value: 'artikel', label: 'Artikel' },
 ]
 
 function slugify(text: string) {

@@ -12,12 +12,14 @@ const CATEGORIES = [
   { slug: 'kegiatan_umum', label: 'Kegiatan Umum', href: '/berita/kegiatan-umum', icon: '🗓️' },
   { slug: 'prestasi', label: 'Prestasi', href: '/berita/prestasi', icon: '🏆' },
   { slug: 'kegiatan_organisasi', label: 'Kegiatan Organisasi', href: '/berita/kegiatan-organisasi', icon: '🎯' },
+  { slug: 'artikel', label: 'Artikel', href: '/berita/artikel', icon: '✍️' }, // ← tambah
 ]
 
 const BADGE_STYLE: Record<string, { bg: string; color: string }> = {
   kegiatan_umum:       { bg: '#deeafb', color: '#1345a0' },
   prestasi:            { bg: '#fdf3d6', color: '#b45309' },
   kegiatan_organisasi: { bg: '#dcfce7', color: '#15803d' },
+  artikel:             { bg: '#f3e8ff', color: '#7c3aed' }, // ← tambah
 }
 
 export default async function BeritaPage() {
@@ -123,7 +125,7 @@ export default async function BeritaPage() {
                   <Link key={post.id} href={`/berita/${post.slug}`} className="berita-card">
                     <div className="bc-img-wrap">
                       <Image
-                        src={getImageUrl(post.featuredImage)}
+                        src={getImageUrl(post.featured_image_url)}
                         alt={post.title}
                         fill sizes="(max-width:900px) 50vw, 33vw"
                         className="bc-img"
@@ -133,7 +135,7 @@ export default async function BeritaPage() {
                       </span>
                     </div>
                     <div className="bc-body">
-                      <div className="bc-date">{formatDateShort(post.publishedAt)}</div>
+                      <div className="bc-date">{formatDateShort(post.published_at)}</div>
                       <h3 className="bc-title">{post.title}</h3>
                       <p className="bc-excerpt">{post.excerpt}</p>
                       <span className="bc-more">Baca selengkapnya →</span>

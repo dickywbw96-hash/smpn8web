@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase, uploadFile } from '@/lib/supabase'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
+import { uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
 const CATEGORIES = [
   { value: 'kegiatan_umum', label: 'Kegiatan Umum' },
   { value: 'prestasi', label: 'Prestasi' },
   { value: 'kegiatan_organisasi', label: 'Kegiatan Organisasi' },
+  { value: 'artikel', label: 'Artikel' },
 ]
 
 function slugify(text: string) {
@@ -46,7 +48,7 @@ export default function NewPostPage() {
   const [gallery, setGallery] = useState<{ image_url: string; caption: string }[]>([])
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
       if (session) setUserId(session.user.id)
     })
   }, [])

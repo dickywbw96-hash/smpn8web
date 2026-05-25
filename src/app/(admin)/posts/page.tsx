@@ -9,6 +9,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   kegiatan_umum: 'Kegiatan Umum',
   prestasi: 'Prestasi',
   kegiatan_organisasi: 'Kegiatan Organisasi',
+  artikel: 'Artikel',
 }
 
 const STATUS_LABELS: Record<string, string> = {

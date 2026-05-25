@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = await getPostBySlug(slug)
   if (!post) return { title: 'Berita tidak ditemukan' }
   return {
-    title: post.seo?.metaTitle ?? post.title,
-    description: post.seo?.metaDescription ?? post.excerpt,
+    title: post.seo_meta_title ?? post.title,
+    description: post.seo_meta_description ?? post.excerpt,
     openGraph: {
-      images: post.featuredImage ? [getImageUrl(post.featuredImage)] : [],
+      images: post.featured_image_url ? [getImageUrl(post.featured_image_url)] : [],
     },
   }
 }
@@ -28,6 +28,7 @@ const BADGE_STYLE: Record<string, { bg: string; color: string }> = {
   kegiatan_umum:       { bg: '#deeafb', color: '#1345a0' },
   prestasi:            { bg: '#fdf3d6', color: '#b45309' },
   kegiatan_organisasi: { bg: '#dcfce7', color: '#15803d' },
+  artikel:             { bg: '#f3e8ff', color: '#7c3aed' },
 }
 
 export default async function BeritaDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -42,7 +43,6 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
   const badge = BADGE_STYLE[post.category] ?? { bg: '#f3f4f6', color: '#374151' }
   const catLabel = CATEGORY_LABELS[post.category] ?? post.category
   const related = relatedPosts.filter((p) => p.slug !== post.slug).slice(0, 3)
-  const author = (post as any).author
 
   return (
     <>
@@ -159,7 +159,14 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
       <div className="article-spacer" />
 
       <div className="article-hero">
-        <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="article-hero-img" priority sizes="100vw" />
+        <Image
+          src={getImageUrl(post.featured_image_url)}
+          alt={post.title}
+          fill
+          className="article-hero-img"
+          priority
+          sizes="100vw"
+        />
         <div className="article-hero-overlay" />
         <div className="article-hero-content">
           <div className="container">
@@ -168,15 +175,14 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
               <span>›</span>
               <Link href="/berita">Berita</Link>
               <span>›</span>
-              <span>{CATEGORY_LABELS[post.category]}</span>
+              <span>{CATEGORY_LABELS[post.category] ?? post.category}</span>
             </div>
-            <span className="article-badge" style={{ background: badge.bg, color: badge.color }}>{catLabel}</span>
+            <span className="article-badge" style={{ background: badge.bg, color: badge.color }}>
+              {catLabel}
+            </span>
             <h1 className="article-title">{post.title}</h1>
             <div className="article-meta">
-              <span>📅 {formatDate(post.publishedAt)}</span>
-              {author && typeof author === 'object' && author.name && (
-                <span>✍️ {author.name}</span>
-              )}
+              <span>📅 {formatDate(post.published_at)}</span>
             </div>
           </div>
         </div>
@@ -186,15 +192,22 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         <div className="container">
           <div className="article-layout">
             <div className="article-content">
-              <div className="article-excerpt-box">{post.excerpt}</div>
+              {post.excerpt && (
+                <div className="article-excerpt-box">{post.excerpt}</div>
+              )}
 
-              <div className="prose">
-                <p style={{ color: 'var(--gray-500)', fontStyle: 'italic' }}>
-                  Konten berita ditampilkan di sini menggunakan RichText renderer dari Payload CMS.
-                  Pastikan menginstall <code>@payloadcms/richtext-lexical</code> dan menggunakan komponen{' '}
-                  <code>RichText</code> untuk merender konten.
-                </p>
-              </div>
+              {post.content_html ? (
+                <div
+                  className="prose"
+                  dangerouslySetInnerHTML={{ __html: post.content_html }}
+                />
+              ) : (
+                <div className="prose">
+                  <p style={{ color: 'var(--gray-400)', fontStyle: 'italic' }}>
+                    Konten belum tersedia.
+                  </p>
+                </div>
+              )}
 
               {post.gallery && post.gallery.length > 0 && (
                 <div className="article-gallery">
@@ -202,7 +215,12 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                   <div className="article-gallery-grid">
                     {post.gallery.map((g, i) => (
                       <div key={i} className="article-gallery-item">
-                        <Image src={getImageUrl(g.image)} alt={g.caption ?? `Foto ${i + 1}`} fill sizes="200px" />
+                        <Image
+                          src={getImageUrl(g.image_url)}
+                          alt={g.caption ?? `Foto ${i + 1}`}
+                          fill
+                          sizes="200px"
+                        />
                       </div>
                     ))}
                   </div>
@@ -219,7 +237,10 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
               )}
 
               <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--gray-100)' }}>
-                <Link href="/berita" style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem', color: 'var(--blue-600)', fontWeight: 700, textDecoration: 'none', fontSize: '.9rem' }}>
+                <Link
+                  href="/berita"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem', color: 'var(--blue-600)', fontWeight: 700, textDecoration: 'none', fontSize: '.9rem' }}
+                >
                   ← Kembali ke Daftar Berita
                 </Link>
               </div>
@@ -230,20 +251,20 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                 <div className="sidebar-title">Bagikan</div>
                 <div className="share-btns">
                   <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(process.env.NEXT_PUBLIC_SERVER_URL + '/berita/' + post.slug)}`}
-                    target="_blank" rel="noopener"
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent((process.env.NEXT_PUBLIC_SERVER_URL ?? '') + '/berita/' + post.slug)}`}
+                    target="_blank" rel="noopener noreferrer"
                     className="share-btn"
                     style={{ background: '#1877f2', color: 'white' }}
                   >Facebook</a>
                   <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(process.env.NEXT_PUBLIC_SERVER_URL + '/berita/' + post.slug)}`}
-                    target="_blank" rel="noopener"
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent((process.env.NEXT_PUBLIC_SERVER_URL ?? '') + '/berita/' + post.slug)}`}
+                    target="_blank" rel="noopener noreferrer"
                     className="share-btn"
                     style={{ background: '#1da1f2', color: 'white' }}
                   >Twitter</a>
                   <a
-                    href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + process.env.NEXT_PUBLIC_SERVER_URL + '/berita/' + post.slug)}`}
-                    target="_blank" rel="noopener"
+                    href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + (process.env.NEXT_PUBLIC_SERVER_URL ?? '') + '/berita/' + post.slug)}`}
+                    target="_blank" rel="noopener noreferrer"
                     className="share-btn"
                     style={{ background: '#25d366', color: 'white' }}
                   >WhatsApp</a>
@@ -257,11 +278,17 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                     {related.map((p) => (
                       <Link key={p.id} href={`/berita/${p.slug}`} className="sidebar-post">
                         <div className="sidebar-post-img">
-                          <Image src={getImageUrl(p.featuredImage)} alt={p.title} fill sizes="64px" style={{ objectFit: 'cover' }} />
+                          <Image
+                            src={getImageUrl(p.featured_image_url)}
+                            alt={p.title}
+                            fill
+                            sizes="64px"
+                            style={{ objectFit: 'cover' }}
+                          />
                         </div>
                         <div>
                           <div className="sidebar-post-title">{p.title}</div>
-                          <div className="sidebar-post-date">{formatDate(p.publishedAt)}</div>
+                          <div className="sidebar-post-date">{formatDate(p.published_at)}</div>
                         </div>
                       </Link>
                     ))}

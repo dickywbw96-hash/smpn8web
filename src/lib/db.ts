@@ -26,7 +26,7 @@ export interface Post {
   content?: any
   content_html?: string
   featured_image_url?: string
-  category: 'kegiatan_umum' | 'prestasi' | 'kegiatan_organisasi'
+  category: 'kegiatan_umum' | 'prestasi' | 'kegiatan_organisasi' | 'artikel'
   status: 'draft' | 'published' | 'archived'
   published_at?: string
   author_id?: string
@@ -370,12 +370,14 @@ export const CATEGORY_LABELS: Record<string, string> = {
   kegiatan_umum: 'Kegiatan Umum',
   prestasi: 'Prestasi',
   kegiatan_organisasi: 'Kegiatan Organisasi',
+  artikel: 'Artikel', // ← tambah
 }
 
 export const CATEGORY_COLORS: Record<string, string> = {
   kegiatan_umum: '#1a5cc8',
   prestasi: '#e8a31a',
   kegiatan_organisasi: '#16a34a',
+  artikel: '#7c3aed', // ← tambah
 }
 
 // ── Visitor Counter ───────────────────────────────────────────────────────────

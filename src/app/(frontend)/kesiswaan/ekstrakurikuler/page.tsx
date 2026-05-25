@@ -106,9 +106,9 @@ export default async function EkstrakurikulerPage() {
               {list.map((ekskul) => (
                 <Link key={ekskul.id} href={`/kesiswaan/ekstrakurikuler/${ekskul.slug}`} className="ekskul-card">
                   <div className="ekskul-img">
-                    {ekskul.gallery?.[0]?.image ? (
-                      <Image
-                        src={getImageUrl(ekskul.gallery[0].image)}
+                    {ekskul.gallery?.[0]?.image_url ? (
+                        <Image
+                        src={getImageUrl(ekskul.gallery[0].image_url)}
                         alt={ekskul.name}
                         fill
                         sizes="33vw"

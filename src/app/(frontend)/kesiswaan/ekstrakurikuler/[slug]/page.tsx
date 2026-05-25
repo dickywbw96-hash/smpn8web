@@ -95,10 +95,10 @@ export default async function EkstrakurikulerDetailPage({ params }: { params: Pr
           <div className="ekskul-detail-grid">
             {/* Info Card */}
             <div className="ekskul-info-card">
-              {ekskul.coverImage && (
-                <div className="ekskul-cover">
-                  <Image
-                    src={getImageUrl(ekskul.coverImage)}
+              {ekskul.cover_image_url && (
+  <div className="ekskul-cover">
+    <Image
+      src={getImageUrl(ekskul.cover_image_url)}
                     alt={ekskul.name}
                     fill
                     sizes="400px"
@@ -113,7 +113,7 @@ export default async function EkstrakurikulerDetailPage({ params }: { params: Pr
               <div className="ekskul-meta-row">
                 <span className="ekskul-meta-label">Status</span>
                 <span style={{ background: 'var(--blue-100)', color: 'var(--blue-700)', padding: '.2rem .7rem', borderRadius: '100px', fontSize: '.75rem', fontWeight: 700 }}>
-                  {ekskul.isActive ? 'Aktif' : 'Tidak Aktif'}
+                  {ekskul.is_active ? 'Aktif' : 'Tidak Aktif'}
                 </span>
               </div>
             </div>
