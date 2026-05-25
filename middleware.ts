@@ -74,13 +74,14 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match semua path di bawah ini kecuali:
-     * - /login
-     * - /_next (static files)
-     * - /api (API routes punya proteksi sendiri)
-     * - file statis (.ico, .png, dll)
-     */
-    '/((?!login|_next/static|_next/image|favicon.ico|images|api).*)',
+    '/dashboard/:path*',
+    '/posts/:path*',
+    '/slider/:path*',
+    '/ekstrakurikuler/:path*',
+    '/guru/:path*',
+    '/ppid/:path*',
+    '/site-settings/:path*',
+    '/users/:path*',
+    '/delete-requests/:path*',
   ],
 }
