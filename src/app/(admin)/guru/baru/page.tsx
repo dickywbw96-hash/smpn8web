@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface GuruForm {
@@ -31,10 +31,9 @@ function getInitials(name: string) {
 }
 
 export default function GuruFormPage() {
-  const params  = useParams()
-  const router  = useRouter()
-  const id      = params?.id as string
-  const isNew   = id === 'baru'
+const router  = useRouter()
+const id      = 'baru'
+const isNew   = true
 
   const [form, setForm]         = useState<GuruForm>(EMPTY)
   const [loading, setLoading]   = useState(!isNew)
