@@ -10,7 +10,6 @@ import {
 import HeroSlider from '@/components/home/HeroSlider'
 import VisiMisiSection from '@/components/home/VisiMisiSection'
 import BeritaSection from '@/components/home/BeritaSection'
-import TaglinesSection from '@/components/home/TaglinesSection'
 import GuruSection from '@/components/home/GuruSection'
 import TimelineSection from '@/components/home/TimelineSection'
 
@@ -38,10 +37,6 @@ export default async function HomePage() {
   taglines={[]}
   schoolName={settings?.schoolName}
 />
-
-{/* Taglines */}
-<TaglinesSection settings={settings} />
-
       {/* Visi Misi + Kepsek */}
       <VisiMisiSection settings={settings} />
 

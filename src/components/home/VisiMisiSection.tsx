@@ -87,22 +87,24 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           display: grid;
           grid-template-columns: 300px 1fr;
           gap: 3rem;
-          align-items: start;
+          align-items: stretch;
         }
 
-        /* Foto sticky agar selalu center terhadap konten sambutan */
+        /* Kolom kiri: flex column agar foto mengisi sisa tinggi */
         .vm-kepsek-left {
-          position: sticky;
-          top: 2rem;
-          align-self: start;
+          display: flex;
+          flex-direction: column;
         }
+
+        /* Foto mengisi sisa tinggi kolom kiri */
         .vm-kepsek-photo {
           position: relative;
           border-radius: 16px 16px 0 0;
           overflow: hidden;
-          aspect-ratio: 3/4;
-          box-shadow: 0 12px 40px rgba(7,30,74,.18);
+          flex: 1;
+          min-height: 300px;
         }
+
         .vm-kepsek-info {
           background: white;
           border-radius: 0 0 16px 16px;
@@ -111,6 +113,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           box-shadow: 0 6px 20px rgba(7,30,74,.1);
           border: 1px solid #e8eef8;
           border-top: none;
+          flex-shrink: 0;
         }
         .vm-kepsek-role {
           font-size: .65rem;
@@ -168,7 +171,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           margin-top: .4rem;
         }
 
-        /* Fallback jika tidak ada enter (1 blok teks panjang) */
+        /* Fallback jika tidak ada enter */
         .vm-kepsek-message {
           font-size: .9rem;
           line-height: 1.75;
@@ -197,12 +200,16 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           .vm-kepsek {
             grid-template-columns: 1fr;
             gap: 2rem;
+            align-items: start;
           }
           .vm-kepsek-left {
             max-width: 280px;
             margin: 0 auto;
             width: 100%;
-            position: static;
+          }
+          .vm-kepsek-photo {
+            aspect-ratio: 3/4;
+            flex: unset;
           }
         }
         @media (max-width: 480px) {
@@ -236,7 +243,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           {/* Kepsek */}
           <div className="vm-kepsek">
 
-            {/* Foto + nama — sticky agar selalu center */}
+            {/* Foto + nama */}
             <div className="vm-kepsek-left">
               <div className="vm-kepsek-photo">
                 {principal.photo ? (
