@@ -217,7 +217,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           {/* Header */}
           <div className="vm-header">
             <span className="section-label">Tentang Kami</span>
-            <h2 className="section-title">Visi Sekolah</h2>
+            <h2 className="section-title">Profil Sekolah</h2>
             <div className="vm-divider" />
           </div>
 
@@ -245,7 +245,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
                     alt={principal.name ?? 'Kepala Sekolah'}
                     fill
                     sizes="300px"
-                    style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                    style={{ objectFit: 'cover', objectPosition: 'center center' }}
                   />
                 ) : (
                   <div style={{
