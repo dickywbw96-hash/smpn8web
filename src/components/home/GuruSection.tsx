@@ -157,35 +157,37 @@ export default function GuruSection({ guru }: Props) {
         /* Slider */
         .guru-slider-outer {
           position: relative;
-          padding: 0 3.5rem;
+          padding: 0 3rem;
+          max-width: 720px;
+          margin: 0 auto;
         }
         .guru-track-clip {
           overflow: hidden;
         }
         .guru-track {
           display: flex;
-          gap: 20px;
+          gap: 14px;
           transition: transform .55s cubic-bezier(.4, 0, .2, 1);
-          padding: 8px 4px 12px;
+          padding: 6px 2px 10px;
         }
 
         /* Card */
         .guru-vcard {
-          flex: 0 0 calc(33.333% - 14px);
+          flex: 0 0 calc(33.333% - 10px);
           background: white;
-          border-radius: 12px;
+          border-radius: 10px;
           overflow: hidden;
-          box-shadow: 0 2px 14px rgba(26,58,107,.09);
+          box-shadow: 0 2px 12px rgba(26,58,107,.09);
           transition: transform .2s ease, box-shadow .2s ease;
         }
         .guru-vcard:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 12px 32px rgba(26,58,107,.15);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 26px rgba(26,58,107,.14);
         }
 
         /* Frame */
         .guru-vcard-frame-wrap {
-          padding: 14px 14px 0;
+          padding: 10px 10px 0;
         }
         .guru-vcard-frame {
           position: relative;
@@ -203,7 +205,7 @@ export default function GuruSection({ guru }: Props) {
         }
         .guru-vcard-photo {
           width: 100%;
-          aspect-ratio: 3 / 4;
+          aspect-ratio: 2 / 3;
           overflow: hidden;
           position: relative;
           background: #e8eef8;
@@ -233,11 +235,11 @@ export default function GuruSection({ guru }: Props) {
 
         /* Info */
         .guru-vcard-body {
-          padding: 14px 14px 18px;
+          padding: 10px 12px 14px;
           text-align: center;
         }
         .guru-vcard-name {
-          font-size: .9rem;
+          font-size: .8rem;
           font-weight: 700;
           color: #1a3a6b;
           margin: 0 0 5px;
@@ -248,7 +250,7 @@ export default function GuruSection({ guru }: Props) {
           overflow: hidden;
         }
         .guru-vcard-role {
-          font-size: .78rem;
+          font-size: .72rem;
           color: #64748b;
           margin: 0;
           font-weight: 500;
@@ -317,8 +319,11 @@ export default function GuruSection({ guru }: Props) {
           margin-top: .9rem;
         }
 
+        @media (max-width: 768px) {
+          .guru-slider-outer { max-width: 100%; padding: 0 2.5rem; }
+        }
         @media (max-width: 640px) {
-          .guru-vcard { flex: 0 0 calc(80% - 10px); }
+          .guru-vcard { flex: 0 0 calc(75% - 8px); }
           .guru-slider-outer { padding: 0 2rem; }
         }
       `}</style>
