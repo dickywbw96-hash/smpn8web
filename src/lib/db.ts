@@ -267,7 +267,7 @@ export async function getRandomPosts(limit = 4, excludeSlug?: string): Promise<P
 export async function getEkstrakurikulerList(): Promise<Ekstrakurikuler[]> {
   const { data, error } = await supabase
     .from('ekstrakurikuler')
-    .select('*')
+    .select('*, ekstrakurikuler_gallery(*)')  // ← tambah gallery
     .eq('is_active', true)
     .order('order_index')
   if (error) return []

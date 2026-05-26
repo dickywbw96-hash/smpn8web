@@ -43,8 +43,9 @@ export default function AdminLoginPage() {
       return
     }
 
-    router.push('/dashboard')
     router.refresh()
+await new Promise(r => setTimeout(r, 100)) // tunggu refresh selesai
+router.push('/dashboard')
   }
 
   return (

@@ -19,13 +19,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => { setSidebarOpen(false) }, [pathname])
 
   async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) { router.push('/login'); return }
+    const { data: { user }, error } = await supabase.auth.getUser()
+    if (!user || error) { router.push('/login'); return }
 
     const res = await fetch('/api/get-user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: session.user.id }),
+      body: JSON.stringify({ userId: user.id }),
     })
     const userData = res.ok ? await res.json() : null
 
@@ -35,15 +35,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       return
     }
 
-    setUser({ ...session.user, name: userData.name })
+    setUser({ ...user, name: userData.name })
     setRole(userData.role)
     setLoading(false)
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
+async function handleLogout() {
+  await supabase.auth.signOut()
+  setUser(null)
+  setRole('')
+  router.refresh()
+  router.push('/login')
+}
 
   if (pathname === '/login') return <>{children}</>
   if (loading) return (
