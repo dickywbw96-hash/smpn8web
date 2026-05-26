@@ -13,6 +13,10 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
     message: settings.principal_message,
   }
 
+  const messageParagraphs = principal.message
+    ? principal.message.split('\n').filter((p) => p.trim() !== '')
+    : []
+
   return (
     <>
       <style>{`
@@ -41,14 +45,24 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           text-align: center;
           padding: 0 1rem;
         }
+        .vm-quote-marks {
+          display: flex;
+          justify-content: space-between;
+          max-width: 820px;
+          margin: 0 auto -0.8rem;
+          padding: 0 0.5rem;
+        }
         .vm-quote-icon {
           font-size: 3rem;
           color: #1a5cc8;
           opacity: .25;
           line-height: 1;
-          margin-bottom: -.5rem;
           font-family: Georgia, serif;
           display: block;
+        }
+        .vm-quote-icon-close {
+          transform: scaleX(-1);
+          display: inline-block;
         }
         .vm-quote-text {
           font-family: 'Playfair Display', serif;
@@ -76,15 +90,18 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           align-items: start;
         }
 
-        /* Foto + nama di bawah */
-        .vm-kepsek-left {}
+        /* Foto sticky agar selalu center terhadap konten sambutan */
+        .vm-kepsek-left {
+          position: sticky;
+          top: 2rem;
+          align-self: start;
+        }
         .vm-kepsek-photo {
           position: relative;
-          border-radius: 16px;
+          border-radius: 16px 16px 0 0;
           overflow: hidden;
           aspect-ratio: 3/4;
           box-shadow: 0 12px 40px rgba(7,30,74,.18);
-          margin-bottom: 0;
         }
         .vm-kepsek-info {
           background: white;
@@ -94,7 +111,6 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           box-shadow: 0 6px 20px rgba(7,30,74,.1);
           border: 1px solid #e8eef8;
           border-top: none;
-          margin-top: -4px;
         }
         .vm-kepsek-role {
           font-size: .65rem;
@@ -140,6 +156,28 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           margin-bottom: 1.5rem;
           line-height: 1.35;
         }
+
+        /* Kotak pesan sambutan */
+        .vm-message-box {
+          background: #f8faff;
+          border: 1px solid #dce8f9;
+          border-left: 4px solid #1a5cc8;
+          border-radius: 0 12px 12px 0;
+          padding: 1.5rem 1.75rem;
+        }
+        .vm-message-para {
+          font-size: .9rem;
+          line-height: 2;
+          color: #374151;
+          font-style: italic;
+          margin: 0 0 1rem;
+          text-align: justify;
+        }
+        .vm-message-para:last-child {
+          margin-bottom: 0;
+        }
+
+        /* Fallback jika tidak ada enter (1 blok teks panjang) */
         .vm-kepsek-message {
           font-size: .925rem;
           line-height: 1.9;
@@ -148,6 +186,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           padding-left: 1.25rem;
           font-style: italic;
         }
+
         .vm-motto {
           display: inline-flex;
           align-items: center;
@@ -164,8 +203,16 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-          .vm-kepsek { grid-template-columns: 1fr; gap: 2rem; }
-          .vm-kepsek-left { max-width: 280px; margin: 0 auto; width: 100%; }
+          .vm-kepsek {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .vm-kepsek-left {
+            max-width: 280px;
+            margin: 0 auto;
+            width: 100%;
+            position: static;
+          }
         }
         @media (max-width: 480px) {
           .vm-section { padding: 3rem 0 2.5rem; }
@@ -186,7 +233,10 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           {/* Vision quote */}
           {vision && (
             <div className="vm-quote-wrap">
-              <span className="vm-quote-icon">"</span>
+              <div className="vm-quote-marks">
+                <span className="vm-quote-icon">"</span>
+                <span className="vm-quote-icon vm-quote-icon-close">"</span>
+              </div>
               <p className="vm-quote-text">{vision}</p>
               <div className="vm-quote-bar" />
             </div>
@@ -194,7 +244,8 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
 
           {/* Kepsek */}
           <div className="vm-kepsek">
-            {/* Foto + nama */}
+
+            {/* Foto + nama — sticky agar selalu center */}
             <div className="vm-kepsek-left">
               <div className="vm-kepsek-photo">
                 {principal.photo ? (
@@ -228,9 +279,19 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
                 Selamat Datang di<br />
                 {settings.school_name ?? 'SMP Negeri 8 Probolinggo'}
               </h3>
+
               {principal.message && (
-                <div className="vm-kepsek-message">{principal.message}</div>
+                messageParagraphs.length > 1 ? (
+                  <div className="vm-message-box">
+                    {messageParagraphs.map((para, i) => (
+                      <p key={i} className="vm-message-para">{para}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="vm-kepsek-message">{principal.message}</div>
+                )
               )}
+
               {motto && (
                 <div className="vm-motto">⭐ {motto}</div>
               )}
