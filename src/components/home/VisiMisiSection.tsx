@@ -218,7 +218,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           {/* Header */}
           <div className="vm-header">
             <span className="section-label">Tentang Kami</span>
-            <h2 className="section-title">Profil Sekolah</h2>
+            <h2 className="section-title">Visi Sekolah</h2>
             <div className="vm-divider" />
           </div>
 
