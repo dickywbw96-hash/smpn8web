@@ -5,7 +5,13 @@ import { getImageUrl } from '@/lib/db'
 export default function VisiMisiSection({ settings }: { settings?: SiteSettings | null }) {
   if (!settings) return null
 
-  const { vision, mission, principal, motto } = settings
+  const { vision, mission, motto } = settings
+const principal = {
+  name:    settings.principal_name,
+  nip:     settings.principal_nip,
+  photo:   settings.principal_photo_url,
+  message: settings.principal_message,
+}
 
   return (
     <>

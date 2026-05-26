@@ -10,7 +10,7 @@ import {
 import HeroSlider from '@/components/home/HeroSlider'
 import VisiMisiSection from '@/components/home/VisiMisiSection'
 import BeritaSection from '@/components/home/BeritaSection'
-import StatsSection from '@/components/home/StatsSection'
+import TaglinesSection from '@/components/home/TaglinesSection'
 import GuruSection from '@/components/home/GuruSection'
 import TimelineSection from '@/components/home/TimelineSection'
 
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: 'Website resmi SMP Negeri 8 Kota Probolinggo — Sekolah berkualitas, adiwiyata, dan berprestasi.',
 }
 
-export const revalidate = 60
+export const revalidate = 0
 
 export default async function HomePage() {
   const [settings, slides, posts, guru, timelinePosts] = await Promise.all([
@@ -34,13 +34,13 @@ export default async function HomePage() {
     <>
       {/* Hero Slider */}
       <HeroSlider
-        slides={slides}
-        taglines={settings?.heroTaglines ?? []}
-        schoolName={settings?.schoolName}
-      />
+  slides={slides}
+  taglines={[]}
+  schoolName={settings?.schoolName}
+/>
 
-      {/* Stats strip */}
-      <StatsSection />
+{/* Taglines */}
+<TaglinesSection settings={settings} />
 
       {/* Visi Misi + Kepsek */}
       <VisiMisiSection settings={settings} />
