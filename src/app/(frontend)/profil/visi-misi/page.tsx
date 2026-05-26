@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
-import VisiMisiSection from '@/components/home/VisiMisiSection'
+import VisiMisiFullSection from '@/components/home/VisiMisiFullSection'
 import { getSiteSettings } from '@/lib/db'
 
 export const metadata: Metadata = { title: 'Visi & Misi' }
@@ -16,7 +16,7 @@ export default async function VisiMisiPage() {
         breadcrumbs={[{ label: 'Profil', href: '/profil' }, { label: 'Visi & Misi' }]}
         accent="🎯"
       />
-      <VisiMisiSection settings={settings} />
+      <VisiMisiFullSection settings={settings} />
     </>
   )
 }
