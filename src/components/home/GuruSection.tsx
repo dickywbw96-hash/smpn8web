@@ -68,7 +68,7 @@ function VerticalCard({ g, index, isTas }: { g: Guru; index: number; isTas: bool
   )
 }
 
-const VISIBLE = 3
+const VISIBLE = 5
 
 export default function GuruSection({ guru }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -93,7 +93,7 @@ export default function GuruSection({ guru }: Props) {
     if (!el) return
     const cardEl = el.children[0] as HTMLElement
     if (!cardEl) return
-    const cardW = cardEl.offsetWidth + 20
+    const cardW = cardEl.offsetWidth + 15
     el.style.transform = `translateX(-${next * cardW}px)`
   }, [steps])
 
@@ -106,7 +106,7 @@ export default function GuruSection({ guru }: Props) {
         if (el) {
           const cardEl = el.children[0] as HTMLElement
           if (cardEl) {
-            const cardW = cardEl.offsetWidth + 20
+            const cardW = cardEl.offsetWidth + 15
             el.style.transform = `translateX(-${next * cardW}px)`
           }
         }
@@ -158,7 +158,7 @@ export default function GuruSection({ guru }: Props) {
         .guru-slider-outer {
           position: relative;
           padding: 0 3rem;
-          max-width: 720px;
+          max-width: 1100px;
           margin: 0 auto;
         }
         .guru-track-clip {
@@ -173,7 +173,7 @@ export default function GuruSection({ guru }: Props) {
 
         /* Card */
         .guru-vcard {
-          flex: 0 0 calc(33.333% - 10px);
+          flex: 0 0 calc(20% - 12px);
           background: white;
           border-radius: 10px;
           overflow: hidden;
@@ -323,7 +323,7 @@ export default function GuruSection({ guru }: Props) {
           .guru-slider-outer { max-width: 100%; padding: 0 2.5rem; }
         }
         @media (max-width: 640px) {
-          .guru-vcard { flex: 0 0 calc(75% - 8px); }
+          .guru-vcard { flex: 0 0 calc(45% - 8px); }
           .guru-slider-outer { padding: 0 2rem; }
         }
       `}</style>
