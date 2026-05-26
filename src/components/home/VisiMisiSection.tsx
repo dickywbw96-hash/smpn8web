@@ -141,20 +141,11 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           padding-top: .5rem;
         }
         .vm-kepsek-eyebrow {
-          font-size: .7rem;
-          font-weight: 800;
-          letter-spacing: .14em;
-          text-transform: uppercase;
-          color: #1a5cc8;
-          margin-bottom: .5rem;
-        }
-        .vm-kepsek-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(1.3rem, 2vw, 1.75rem);
+          font-size: clamp(1.1rem, 2vw, 1.5rem);
           font-weight: 700;
           color: #071e4a;
-          margin-bottom: 1.5rem;
-          line-height: 1.35;
+          margin-bottom: 1rem;
+          font-family: 'Playfair Display', serif;
         }
 
         /* Kotak pesan sambutan */
@@ -163,26 +154,26 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           border: 1px solid #dce8f9;
           border-left: 4px solid #1a5cc8;
           border-radius: 0 12px 12px 0;
-          padding: 1.5rem 1.75rem;
+          padding: 1.25rem 1.5rem;
         }
         .vm-message-para {
           font-size: .9rem;
-          line-height: 2;
+          line-height: 1.75;
           color: #374151;
           font-style: italic;
-          margin: 0 0 1rem;
+          margin: 0;
           text-align: justify;
         }
-        .vm-message-para:last-child {
-          margin-bottom: 0;
+        .vm-message-para + .vm-message-para {
+          margin-top: .4rem;
         }
 
         /* Fallback jika tidak ada enter (1 blok teks panjang) */
         .vm-kepsek-message {
-          font-size: .925rem;
-          line-height: 1.9;
-          color: #4b5563;
-          border-left: 3px solid #1a5cc8;
+          font-size: .9rem;
+          line-height: 1.75;
+          color: #374151;
+          border-left: 4px solid #1a5cc8;
           padding-left: 1.25rem;
           font-style: italic;
         }
@@ -226,7 +217,7 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
           {/* Header */}
           <div className="vm-header">
             <span className="section-label">Tentang Kami</span>
-            <h2 className="section-title">Profil Sekolah</h2>
+            <h2 className="section-title">Visi Sekolah</h2>
             <div className="vm-divider" />
           </div>
 
@@ -275,10 +266,6 @@ export default function VisiMisiSection({ settings }: { settings?: SiteSettings 
             {/* Pesan */}
             <div className="vm-kepsek-content">
               <div className="vm-kepsek-eyebrow">💬 Sambutan Kepala Sekolah</div>
-              <h3 className="vm-kepsek-title">
-                Selamat Datang di<br />
-                {settings.school_name ?? 'SMP Negeri 8 Probolinggo'}
-              </h3>
 
               {principal.message && (
                 messageParagraphs.length > 1 ? (
