@@ -11,23 +11,37 @@ const CATEGORY_BADGE_STYLE: Record<string, { bg: string; color: string }> = {
   kegiatan_umum:       { bg: '#deeafb', color: '#1345a0' },
   prestasi:            { bg: '#fdf3d6', color: '#b45309' },
   kegiatan_organisasi: { bg: '#dcfce7', color: '#15803d' },
+  artikel:             { bg: '#f3e8ff', color: '#7c3aed' },
 }
 
 function PostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
   const badge = CATEGORY_BADGE_STYLE[post.category] ?? { bg: '#f3f4f6', color: '#374151' }
   const label = CATEGORY_LABELS[post.category] ?? post.category
+  const imgSrc = getImageUrl(post.featured_image_url)
 
   return (
     <Link href={`/berita/${post.slug}`} className={`news-card${featured ? ' featured' : ''}`}>
       <div className="news-img-wrap">
-        <Image
-          src={getImageUrl(post.featured_image_url)}
-          alt={post.title}
-          fill
-          sizes={featured ? '(max-width:768px) 100vw, 50vw' : '(max-width:768px) 100vw, 33vw'}
-          style={{ objectFit: 'cover', transition: 'transform .4s ease' }}
-          className="news-img"
-        />
+        {imgSrc && imgSrc !== '/images/placeholder.jpg' ? (
+          <Image
+            src={imgSrc}
+            alt={post.title}
+            fill
+            sizes={featured ? '(max-width:768px) 100vw, 50vw' : '(max-width:768px) 100vw, 33vw'}
+            style={{ objectFit: 'cover', transition: 'transform .4s ease' }}
+            className="news-img"
+            unoptimized
+          />
+        ) : (
+          /* Fallback placeholder kalau gambar tidak ada */
+          <div className="news-img-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </div>
+        )}
         <span className="news-badge" style={{ background: badge.bg, color: badge.color }}>
           {label}
         </span>
@@ -100,9 +114,20 @@ export default function BeritaSection({ posts }: Props) {
           position: relative;
           aspect-ratio: 16/9;
           overflow: hidden;
+          background: #f0f4f8;
         }
         .news-card.featured .news-img-wrap {
           aspect-ratio: 4/3;
+        }
+        /* Placeholder saat tidak ada gambar */
+        .news-img-placeholder {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #e8f0fe 0%, #f0f4f8 100%);
+          color: #93adc8;
         }
         .news-badge {
           position: absolute;
@@ -113,6 +138,7 @@ export default function BeritaSection({ posts }: Props) {
           font-size: .72rem;
           font-weight: 700;
           letter-spacing: .03em;
+          z-index: 1;
         }
         .news-body {
           padding: 1.25rem;
@@ -178,7 +204,7 @@ export default function BeritaSection({ posts }: Props) {
           <div className="news-header">
             <div>
               <span className="section-label">Terkini</span>
-              <h2 className="section-title">Berita & Informasi</h2>
+              <h2 className="section-title">Berita &amp; Informasi</h2>
             </div>
             <Link href="/berita" className="news-all-link">
               Semua Berita →

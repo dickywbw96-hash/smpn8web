@@ -343,8 +343,17 @@ export async function upsertGuru(guru: Partial<Guru> & { name: string }): Promis
 }
 
 export async function deleteGuru(id: string): Promise<boolean> {
-  const { error } = await supabaseAdmin.from('guru').delete().eq('id', id)
-  return !error
+  const { data, error } = await supabaseAdmin
+    .from('guru')
+    .delete()
+    .eq('id', id)
+    .select()
+
+  console.log('[deleteGuru] data:', JSON.stringify(data))
+  console.log('[deleteGuru] error:', JSON.stringify(error))
+
+  if (error) return false
+  return true
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
