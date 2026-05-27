@@ -31,6 +31,30 @@ const BADGE_STYLE: Record<string, { bg: string; color: string }> = {
   artikel:             { bg: '#f3e8ff', color: '#7c3aed' },
 }
 
+/**
+ * Konversi plain text (dengan newline) ke HTML paragraf.
+ * Jika konten sudah HTML (mengandung tag), langsung kembalikan apa adanya.
+ */
+function formatContent(content: string): string {
+  if (!content) return ''
+
+  // Jika sudah HTML, kembalikan langsung
+  if (/<[a-z][\s\S]*>/i.test(content)) return content
+
+  // Plain text: split per baris kosong (paragraf), wrap tiap paragraf ke <p>
+  return content
+    .split(/\n{2,}/)
+    .map((para) =>
+      `<p>${para
+        .split(/\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join('<br />')}</p>`
+    )
+    .filter((p) => p !== '<p></p>')
+    .join('\n')
+}
+
 export default async function BeritaDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const [post, { docs: relatedPosts }] = await Promise.all([
@@ -44,6 +68,10 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
   const catLabel = CATEGORY_LABELS[post.category] ?? post.category
   const related = relatedPosts.filter((p) => p.slug !== post.slug).slice(0, 3)
   const heroImg = getImageUrl(post.featured_image_url)
+
+  // Proses konten: gunakan content_html jika ada, fallback ke content (plain text)
+  const rawContent = post.content_html || (post as any).content || ''
+  const processedContent = formatContent(rawContent)
 
   return (
     <>
@@ -66,7 +94,6 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           display: flex; flex-direction: column;
           justify-content: flex-end; padding-bottom: 3rem;
         }
-        /* Hero fallback saat tidak ada gambar */
         .article-hero-fallback {
           width: 100%; height: 100%;
           background: linear-gradient(135deg, #0d2a6e 0%, #1a4db5 50%, #0d2a6e 100%);
@@ -103,20 +130,33 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           gap: 3rem; align-items: start;
         }
 
-        /* ── PROSE — ini yang penting biar konten rapi ── */
+        /* ══════════════════════════════════════
+           PROSE — styling konten artikel
+        ══════════════════════════════════════ */
         .article-content .prose {
           font-size: 1.05rem;
-          line-height: 1.85;
-          color: var(--gray-700);
+          line-height: 1.9;
+          color: var(--gray-700, #374151);
           word-break: break-word;
+
+          /* Rata kanan-kiri */
+          text-align: justify;
+          text-justify: inter-word;
+
+          /* Hyphenation otomatis supaya justify tidak aneh */
+          hyphens: auto;
+          -webkit-hyphens: auto;
+          overflow-wrap: break-word;
         }
-        /* Paragraf */
+
+        /* ── Paragraf ── */
         .article-content .prose p {
           margin-top: 0;
-          margin-bottom: 1.35rem;
+          margin-bottom: 1.6rem;   /* jarak antar paragraf */
         }
         .article-content .prose p:last-child { margin-bottom: 0; }
-        /* Headings */
+
+        /* ── Headings ── */
         .article-content .prose h1,
         .article-content .prose h2,
         .article-content .prose h3,
@@ -127,8 +167,9 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           color: var(--blue-900, #0c2461);
           font-weight: 700;
           line-height: 1.35;
-          margin-top: 2rem;
-          margin-bottom: .75rem;
+          margin-top: 2.25rem;
+          margin-bottom: .85rem;
+          text-align: left;  /* heading tetap left-align */
         }
         .article-content .prose h1 { font-size: 1.9rem; }
         .article-content .prose h2 { font-size: 1.55rem; }
@@ -136,24 +177,27 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         .article-content .prose h4 { font-size: 1.1rem; }
         .article-content .prose h5,
         .article-content .prose h6 { font-size: 1rem; }
-        /* List */
+
+        /* ── List ── */
         .article-content .prose ul,
         .article-content .prose ol {
-          padding-left: 1.6rem;
-          margin-bottom: 1.35rem;
+          padding-left: 1.75rem;
+          margin-bottom: 1.6rem;
+          text-align: left;  /* list tetap left-align supaya terlihat rapi */
         }
         .article-content .prose ul { list-style: disc; }
         .article-content .prose ol { list-style: decimal; }
         .article-content .prose li {
-          margin-bottom: .5rem;
-          line-height: 1.75;
+          margin-bottom: .55rem;
+          line-height: 1.8;
         }
         .article-content .prose li > ul,
         .article-content .prose li > ol {
           margin-top: .4rem;
           margin-bottom: .4rem;
         }
-        /* Inline */
+
+        /* ── Inline ── */
         .article-content .prose strong,
         .article-content .prose b {
           font-weight: 700;
@@ -163,7 +207,8 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         .article-content .prose i { font-style: italic; }
         .article-content .prose u { text-decoration: underline; }
         .article-content .prose s { text-decoration: line-through; }
-        /* Link */
+
+        /* ── Link ── */
         .article-content .prose a {
           color: var(--blue-600, #2563eb);
           text-decoration: underline;
@@ -171,7 +216,8 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           transition: color .2s;
         }
         .article-content .prose a:hover { color: var(--blue-800, #1e40af); }
-        /* Blockquote */
+
+        /* ── Blockquote ── */
         .article-content .prose blockquote {
           border-left: 4px solid var(--blue-300, #93c5fd);
           padding: .9rem 1.35rem;
@@ -180,9 +226,11 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           color: var(--gray-600, #4b5563);
           font-style: italic;
           border-radius: 0 var(--radius-sm, 6px) var(--radius-sm, 6px) 0;
+          text-align: left;
         }
         .article-content .prose blockquote p { margin-bottom: 0; }
-        /* Kode */
+
+        /* ── Kode ── */
         .article-content .prose code {
           background: #f1f5f9;
           color: #be185d;
@@ -197,9 +245,10 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           padding: 1.25rem 1.5rem;
           border-radius: var(--radius-md, 8px);
           overflow-x: auto;
-          margin-bottom: 1.35rem;
+          margin-bottom: 1.6rem;
           font-size: .88rem;
           line-height: 1.7;
+          text-align: left;
         }
         .article-content .prose pre code {
           background: none;
@@ -207,26 +256,30 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           padding: 0;
           font-size: inherit;
         }
-        /* Gambar di dalam konten */
+
+        /* ── Gambar di dalam konten ── */
         .article-content .prose img {
           max-width: 100%;
           height: auto;
           border-radius: var(--radius-md, 8px);
-          margin: 1.5rem 0;
+          margin: 1.75rem auto;
           display: block;
+          box-shadow: 0 4px 16px rgba(0,0,0,.08);
         }
-        /* Tabel */
+
+        /* ── Tabel ── */
         .article-content .prose table {
           width: 100%;
           border-collapse: collapse;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.75rem;
           font-size: .95rem;
           border-radius: var(--radius-md, 8px);
           overflow: hidden;
+          text-align: left;
         }
         .article-content .prose th,
         .article-content .prose td {
-          padding: .65rem 1rem;
+          padding: .7rem 1rem;
           border: 1px solid #e2e8f0;
           text-align: left;
           vertical-align: top;
@@ -239,17 +292,19 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         .article-content .prose tr:nth-child(even) td {
           background: #f8fafc;
         }
-        /* HR */
+
+        /* ── HR ── */
         .article-content .prose hr {
           border: none;
           border-top: 1px solid #e2e8f0;
-          margin: 2.25rem 0;
+          margin: 2.5rem 0;
         }
-        /* Iframe / video embed */
+
+        /* ── Iframe / video embed ── */
         .article-content .prose iframe {
           max-width: 100%;
           border-radius: var(--radius-md, 8px);
-          margin: 1.5rem 0;
+          margin: 1.75rem 0;
           display: block;
         }
 
@@ -260,7 +315,9 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
           padding: 1.25rem 1.5rem; margin-bottom: 2rem;
           font-style: italic; color: var(--gray-600, #4b5563);
-          font-size: 1.05rem; line-height: 1.75;
+          font-size: 1.05rem; line-height: 1.8;
+          text-align: justify;
+          text-justify: inter-word;
         }
 
         /* ── Tags ── */
@@ -339,6 +396,15 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         @media (max-width: 560px) {
           .article-hero { height: 360px; }
           .article-gallery-grid { grid-template-columns: repeat(2,1fr); }
+
+          /* Di layar sempit, justify kadang aneh — fallback ke left */
+          .article-content .prose {
+            text-align: left;
+            hyphens: none;
+          }
+          .article-excerpt-box {
+            text-align: left;
+          }
         }
       `}</style>
 
@@ -391,10 +457,10 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                 <div className="article-excerpt-box">{post.excerpt}</div>
               )}
 
-              {post.content_html ? (
+              {processedContent ? (
                 <div
                   className="prose"
-                  dangerouslySetInnerHTML={{ __html: post.content_html }}
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
               ) : (
                 <div className="prose">
