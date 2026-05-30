@@ -27,13 +27,12 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
             src={imgSrc}
             alt={post.title}
             fill
-            sizes={featured ? '(max-width:768px) 100vw, 50vw' : '(max-width:768px) 100vw, 33vw'}
+            sizes="(max-width:768px) 100vw, 33vw"
             style={{ objectFit: 'cover', transition: 'transform .4s ease' }}
             className="news-img"
             unoptimized
           />
         ) : (
-          /* Fallback placeholder kalau gambar tidak ada */
           <div className="news-img-placeholder">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -89,7 +88,7 @@ export default function BeritaSection({ posts }: Props) {
         .news-all-link:hover { gap: .7rem; color: var(--blue-700); }
         .news-grid {
           display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr;
+          grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
         }
         .news-card {
@@ -116,10 +115,6 @@ export default function BeritaSection({ posts }: Props) {
           overflow: hidden;
           background: #f0f4f8;
         }
-        .news-card.featured .news-img-wrap {
-          aspect-ratio: 4/3;
-        }
-        /* Placeholder saat tidak ada gambar */
         .news-img-placeholder {
           width: 100%;
           height: 100%;
@@ -147,7 +142,6 @@ export default function BeritaSection({ posts }: Props) {
           gap: .4rem;
           flex: 1;
         }
-        .news-card.featured .news-body { padding: 1.5rem; }
         .news-date {
           font-size: .75rem;
           color: var(--gray-500);
@@ -164,10 +158,6 @@ export default function BeritaSection({ posts }: Props) {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        .news-card.featured .news-title {
-          font-size: 1.3rem;
-          -webkit-line-clamp: 3;
-        }
         .news-excerpt {
           font-size: .84rem;
           color: var(--gray-500);
@@ -176,10 +166,6 @@ export default function BeritaSection({ posts }: Props) {
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-        }
-        .news-card.featured .news-excerpt {
-          -webkit-line-clamp: 3;
-          font-size: .9rem;
         }
         .news-read-more {
           font-size: .8rem;
@@ -190,12 +176,9 @@ export default function BeritaSection({ posts }: Props) {
         }
         @media (max-width: 960px) {
           .news-grid { grid-template-columns: 1fr 1fr; }
-          .news-card.featured { grid-column: 1 / -1; }
-          .news-card.featured .news-img-wrap { aspect-ratio: 16/9; }
         }
         @media (max-width: 560px) {
           .news-grid { grid-template-columns: 1fr; }
-          .news-card.featured { grid-column: auto; }
         }
       `}</style>
 
