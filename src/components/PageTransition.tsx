@@ -1,22 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 
 export default function PageTransition() {
   const pathname = usePathname()
   const [loading, setLoading] = useState(false)
-  const [prevPath, setPrevPath] = useState(pathname)
+  const firstRender = useRef(true)
 
   useEffect(() => {
-    if (pathname !== prevPath) {
-      setLoading(true)
-      setPrevPath(pathname)
-      const t = setTimeout(() => setLoading(false), 700)
-      return () => clearTimeout(t)
+    // Skip saat pertama kali load
+    if (firstRender.current) {
+      firstRender.current = false
+      return
     }
-  }, [pathname, prevPath])
+
+    setLoading(true)
+    const t = setTimeout(() => setLoading(false), 700)
+    return () => clearTimeout(t)
+  }, [pathname])
 
   if (!loading) return null
 
@@ -30,7 +33,7 @@ export default function PageTransition() {
           to { transform: rotate(-360deg); }
         }
         @keyframes pulse-logo {
-          0%, 100% { transform: scale(1);   opacity: 1; }
+          0%, 100% { transform: scale(1);    opacity: 1; }
           50%       { transform: scale(1.08); opacity: .85; }
         }
         @keyframes shimmer {
@@ -54,8 +57,6 @@ export default function PageTransition() {
           background: linear-gradient(135deg, #0a1628 0%, #0d2149 50%, #0a1628 100%);
           animation: fade-in .15s ease;
         }
-
-        /* ── rings ── */
         .pt-rings {
           position: relative;
           width: 140px;
@@ -87,8 +88,6 @@ export default function PageTransition() {
           border-right-color: rgba(255,255,255,.25);
           animation: spin-slow 2s linear infinite;
         }
-
-        /* ── logo ── */
         .pt-logo {
           position: relative;
           width: 72px;
@@ -98,8 +97,6 @@ export default function PageTransition() {
           animation: pulse-logo 1.4s ease-in-out infinite;
           box-shadow: 0 0 20px rgba(245,197,24,.35), 0 0 40px rgba(59,130,246,.2);
         }
-
-        /* ── text ── */
         .pt-text {
           display: flex;
           flex-direction: column;
@@ -121,8 +118,6 @@ export default function PageTransition() {
           letter-spacing: .08em;
           text-transform: uppercase;
         }
-
-        /* ── shimmer bar ── */
         .pt-bar-wrap {
           width: 160px;
           height: 3px;
