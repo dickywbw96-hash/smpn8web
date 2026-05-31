@@ -117,6 +117,9 @@ export default function DashboardGuru() {
         }
       `}</style>
 
+      {/* Navbar dengan tombol logout */}
+      <NavbarElkpd guruNama={guru.nama} onLogout={() => { logout(); router.push('/elkpd') }} showGuruBtn={false} />
+
       {/* Overlay gelap */}
       <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.55)', zIndex:-1, pointerEvents:'none' }} />
 
@@ -149,7 +152,7 @@ export default function DashboardGuru() {
             <div style={{ position:'relative', display:'flex', alignItems:'center', gap:16 }}>
               <div
                 className="icon-wrap"
-                style={{ background:'rgba(250,204,21,0.2)', border:'1px solid rgba(250,204,21,0.6)', borderRadius:16, padding:'12px', fontSize:28, flexShrink:0, transition:'background 0.2s, border-color 0.2s' }}
+                style={{ background:'rgba(250,204,21,0.2)', border:'1px solid rgba(250,204,21,0.6)', borderRadius:16, padding:'12px', fontSize:28, flexShrink:0 }}
               >
                 📝
               </div>
@@ -173,7 +176,7 @@ export default function DashboardGuru() {
             <div style={{ position:'relative', display:'flex', alignItems:'center', gap:16 }}>
               <div
                 className="icon-wrap"
-                style={{ background:'rgba(34,197,94,0.2)', border:'1px solid rgba(34,197,94,0.6)', borderRadius:16, padding:'12px', fontSize:28, flexShrink:0, transition:'background 0.2s, border-color 0.2s' }}
+                style={{ background:'rgba(34,197,94,0.2)', border:'1px solid rgba(34,197,94,0.6)', borderRadius:16, padding:'12px', fontSize:28, flexShrink:0 }}
               >
                 📊
               </div>
