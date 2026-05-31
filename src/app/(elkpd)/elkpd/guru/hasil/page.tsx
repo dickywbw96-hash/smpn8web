@@ -1,5 +1,4 @@
 'use client'
-// src/app/(elkpd)/elkpd/guru/hasil/page.tsx
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import PageWrapper from '@/components/elkpd/PageWrapper'
@@ -10,7 +9,6 @@ import { downloadLKPDPdf } from '@/utils/downloadLKPD'
 import { downloadExcel } from '@/utils/downloadExcel'
 import Swal from 'sweetalert2'
 
-// ─── Types ──────────────────────────────────────────────────
 interface Kegiatan {
   id: number
   judul: string
@@ -22,7 +20,6 @@ interface Kegiatan {
   youtube_url?: string
   [key: string]: unknown
 }
-
 interface SoalItem {
   id: string
   tipe: string
@@ -30,7 +27,6 @@ interface SoalItem {
   skor: number
   [key: string]: unknown
 }
-
 interface Jawaban {
   id: number
   nama: string
@@ -43,34 +39,24 @@ interface Jawaban {
   [key: string]: unknown
 }
 
-// ─── DeleteConfirmModal ──────────────────────────────────────
-interface DeleteConfirmModalProps {
-  kegiatan: Kegiatan
-  onConfirm: () => void
-  onCancel: () => void
-  loading: boolean
-}
-
-function DeleteConfirmModal({ kegiatan, onConfirm, onCancel, loading }: DeleteConfirmModalProps) {
+function DeleteConfirmModal({ kegiatan, onConfirm, onCancel, loading }: { kegiatan: Kegiatan; onConfirm: () => void; onCancel: () => void; loading: boolean }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-gray-900 border border-red-500/40 rounded-2xl p-6 max-w-sm w-full shadow-2xl shadow-red-900/30">
-        <div className="flex justify-center mb-4">
-          <div className="bg-red-500/20 border border-red-500/40 rounded-full w-16 h-16 flex items-center justify-center text-3xl">🗑️</div>
+    <div style={{ position:'fixed', inset:0, zIndex:50, display:'flex', alignItems:'center', justifyContent:'center', padding:'0 16px' }}>
+      <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.6)', backdropFilter:'blur(4px)' }} onClick={onCancel} />
+      <div style={{ position:'relative', background:'#111827', border:'1px solid rgba(239,68,68,0.4)', borderRadius:20, padding:24, maxWidth:360, width:'100%', boxShadow:'0 25px 50px rgba(0,0,0,0.5)' }}>
+        <div style={{ display:'flex', justifyContent:'center', marginBottom:16 }}>
+          <div style={{ background:'rgba(239,68,68,0.2)', border:'1px solid rgba(239,68,68,0.4)', borderRadius:'50%', width:64, height:64, display:'flex', alignItems:'center', justifyContent:'center', fontSize:28 }}>🗑️</div>
         </div>
-        <h2 className="text-white font-black text-center text-lg mb-2">Hapus Kegiatan?</h2>
-        <p className="text-yellow-300 font-bold text-center text-sm mb-4 bg-white/5 rounded-xl py-2 px-3">"{kegiatan.judul}"</p>
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-5 space-y-1.5">
-          <p className="text-red-300 font-bold text-sm flex items-center gap-2">⚠️ <span>Tindakan ini tidak bisa dibatalkan!</span></p>
-          <p className="text-red-200/70 text-xs leading-relaxed">
-            Menghapus kegiatan akan menghapus <strong className="text-red-200">semua data jawaban siswa</strong> yang telah mengerjakan, termasuk skor dan hasil mereka secara permanen.
-          </p>
+        <h2 style={{ color:'#fff', fontWeight:900, textAlign:'center', fontSize:18, margin:'0 0 8px' }}>Hapus Kegiatan?</h2>
+        <p style={{ color:'#fde047', fontWeight:700, textAlign:'center', fontSize:14, margin:'0 0 16px', background:'rgba(255,255,255,0.05)', borderRadius:12, padding:'8px 12px' }}>"{kegiatan.judul}"</p>
+        <div style={{ background:'rgba(239,68,68,0.1)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:12, padding:12, marginBottom:20 }}>
+          <p style={{ color:'#fca5a5', fontWeight:700, fontSize:14, margin:'0 0 6px' }}>⚠️ Tindakan ini tidak bisa dibatalkan!</p>
+          <p style={{ color:'rgba(252,165,165,0.7)', fontSize:12, margin:0, lineHeight:1.6 }}>Menghapus kegiatan akan menghapus <strong>semua data jawaban siswa</strong> secara permanen.</p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <button onClick={onCancel} disabled={loading} className="bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition text-sm">Batal</button>
-          <button onClick={onConfirm} disabled={loading} className="bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-900/40">
-            {loading ? <>⏳ Menghapus...</> : <>🗑️ Ya, Hapus</>}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+          <button onClick={onCancel} disabled={loading} style={{ background:'rgba(255,255,255,0.1)', color:'#fff', fontWeight:700, padding:'12px', borderRadius:12, border:'none', cursor:'pointer', fontSize:14 }}>Batal</button>
+          <button onClick={onConfirm} disabled={loading} style={{ background:'#dc2626', color:'#fff', fontWeight:900, padding:'12px', borderRadius:12, border:'none', cursor:'pointer', fontSize:14, opacity: loading ? 0.5 : 1 }}>
+            {loading ? '⏳ Menghapus...' : '🗑️ Ya, Hapus'}
           </button>
         </div>
       </div>
@@ -89,36 +75,30 @@ export default function LihatHasil() {
   const [editSkor, setEditSkor] = useState<Record<number, string>>({})
   const [pdfLoading, setPdfLoading] = useState<number | null>(null)
   const [excelLoading, setExcelLoading] = useState(false)
-
   const [deleteTarget, setDeleteTarget] = useState<Kegiatan | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
-
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [hiddenIds, setHiddenIds] = useState<Set<number>>(new Set())
+  const [savingIds, setSavingIds] = useState<Set<number>>(new Set())
+  const [showDinilai, setShowDinilai] = useState(false)
+  const [editInlineId, setEditInlineId] = useState<number | null>(null)
+  const [editInlineSkor, setEditInlineSkor] = useState('')
+  const [editInlineSaving, setEditInlineSaving] = useState<number | null>(null)
+  const saveTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
+  const inputRefs = useRef<Record<number, HTMLInputElement | null>>({})
+
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
-
-  const [hiddenIds, setHiddenIds] = useState<Set<number>>(new Set())
-  const [savingIds, setSavingIds] = useState<Set<number>>(new Set())
-  const [showDinilai, setShowDinilai] = useState(false)
-  const saveTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
-  const inputRefs = useRef<Record<number, HTMLInputElement | null>>({})
-
-  const [editInlineId, setEditInlineId] = useState<number | null>(null)
-  const [editInlineSkor, setEditInlineSkor] = useState('')
-  const [editInlineSaving, setEditInlineSaving] = useState<number | null>(null)
 
   useEffect(() => {
     if (!selected?.id) return
     try {
       const saved = sessionStorage.getItem(`hiddenIds_${selected.id}`)
       setHiddenIds(saved ? new Set(JSON.parse(saved)) : new Set())
-    } catch {
-      setHiddenIds(new Set())
-    }
+    } catch { setHiddenIds(new Set()) }
     setSavingIds(new Set())
     setShowDinilai(false)
     setEditInlineId(null)
@@ -129,18 +109,13 @@ export default function LihatHasil() {
   }, [selected?.id])
 
   useEffect(() => {
-    if (!guru) return router.push('/guru/login')
+    if (!guru) return router.push('/elkpd/guru/login')
     fetchKegiatan()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guru])
 
   const fetchKegiatan = async () => {
     setLoadingK(true)
-    const { data } = await supabase
-      .from('kegiatan')
-      .select('*')
-      .eq('guru_id', guru!.id)
-      .order('created_at', { ascending: false })
+    const { data } = await supabase.from('kegiatan').select('*').eq('guru_id', guru!.id).order('created_at', { ascending: false })
     setKegiatanList((data as Kegiatan[]) || [])
     setLoadingK(false)
   }
@@ -148,12 +123,7 @@ export default function LihatHasil() {
   const fetchJawaban = async (kegiatan: Kegiatan) => {
     setSelected(kegiatan)
     setLoadingJ(true)
-    const { data } = await supabase
-      .from('jawaban_siswa')
-      .select('*')
-      .eq('kegiatan_id', kegiatan.id)
-      .order('kelas', { ascending: true })
-      .order('nama', { ascending: true })
+    const { data } = await supabase.from('jawaban_siswa').select('*').eq('kegiatan_id', kegiatan.id).order('kelas', { ascending: true }).order('nama', { ascending: true })
     setJawabanList((data as Jawaban[]) || [])
     setEditSkor({})
     setLoadingJ(false)
@@ -162,11 +132,7 @@ export default function LihatHasil() {
   const setHiddenIdsPersist = useCallback((updater: ((prev: Set<number>) => Set<number>) | Set<number>) => {
     setHiddenIds((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (selected?.id) {
-        try {
-          sessionStorage.setItem(`hiddenIds_${selected.id}`, JSON.stringify([...next]))
-        } catch {}
-      }
+      if (selected?.id) { try { sessionStorage.setItem(`hiddenIds_${selected.id}`, JSON.stringify([...next])) } catch {} }
       return next
     })
   }, [selected?.id])
@@ -174,17 +140,9 @@ export default function LihatHasil() {
   const focusNextInput = useCallback((currentId: number) => {
     setJawabanList((prevList) => {
       setHiddenIds((prevHidden) => {
-        const visibleIds = prevList
-          .filter((j) => !prevHidden.has(j.id))
-          .map((j) => j.id)
-        const currentIndex = visibleIds.indexOf(currentId)
-        const nextId = visibleIds[currentIndex + 1]
-        if (nextId && inputRefs.current[nextId]) {
-          setTimeout(() => {
-            inputRefs.current[nextId]?.focus()
-            inputRefs.current[nextId]?.select()
-          }, 50)
-        }
+        const visibleIds = prevList.filter((j) => !prevHidden.has(j.id)).map((j) => j.id)
+        const nextId = visibleIds[visibleIds.indexOf(currentId) + 1]
+        if (nextId && inputRefs.current[nextId]) setTimeout(() => { inputRefs.current[nextId]?.focus(); inputRefs.current[nextId]?.select() }, 50)
         return prevHidden
       })
       return prevList
@@ -193,30 +151,14 @@ export default function LihatHasil() {
 
   const handleSimpanSkor = useCallback(async (jawaban: Jawaban) => {
     if (editSkor[jawaban.id] === undefined) return
-
     const skorUraian = Number(editSkor[jawaban.id] || 0)
     const total = (jawaban.skor_otomatis || 0) + skorUraian
-
-    await supabase
-      .from('jawaban_siswa')
-      .update({ skor_uraian: skorUraian, skor_total: total })
-      .eq('id', jawaban.id)
-
-    setJawabanList((prev) =>
-      prev.map((j) =>
-        j.id === jawaban.id ? { ...j, skor_uraian: skorUraian, skor_total: total } : j
-      )
-    )
-
+    await supabase.from('jawaban_siswa').update({ skor_uraian: skorUraian, skor_total: total }).eq('id', jawaban.id)
+    setJawabanList((prev) => prev.map((j) => j.id === jawaban.id ? { ...j, skor_uraian: skorUraian, skor_total: total } : j))
     setSavingIds((prev) => new Set([...prev, jawaban.id]))
     if (saveTimers.current[jawaban.id]) clearTimeout(saveTimers.current[jawaban.id])
-
     saveTimers.current[jawaban.id] = setTimeout(() => {
-      setSavingIds((prev) => {
-        const next = new Set(prev)
-        next.delete(jawaban.id)
-        return next
-      })
+      setSavingIds((prev) => { const next = new Set(prev); next.delete(jawaban.id); return next })
       setHiddenIdsPersist((prev) => new Set([...prev, jawaban.id]))
     }, 1500)
   }, [editSkor, setHiddenIdsPersist])
@@ -224,151 +166,58 @@ export default function LihatHasil() {
   const handleSimpanEditInline = async (jawaban: Jawaban) => {
     if (editInlineSkor === '' || editInlineSaving) return
     setEditInlineSaving(jawaban.id)
-
     const skorUraian = Number(editInlineSkor || 0)
     const total = (jawaban.skor_otomatis || 0) + skorUraian
-
     try {
-      await supabase
-        .from('jawaban_siswa')
-        .update({ skor_uraian: skorUraian, skor_total: total })
-        .eq('id', jawaban.id)
-
-      setJawabanList((prev) =>
-        prev.map((j) =>
-          j.id === jawaban.id ? { ...j, skor_uraian: skorUraian, skor_total: total } : j
-        )
-      )
-      setEditInlineId(null)
-      setEditInlineSkor('')
-    } catch (err) {
-      alert('Gagal menyimpan: ' + (err instanceof Error ? err.message : String(err)))
-    } finally {
-      setEditInlineSaving(null)
-    }
+      await supabase.from('jawaban_siswa').update({ skor_uraian: skorUraian, skor_total: total }).eq('id', jawaban.id)
+      setJawabanList((prev) => prev.map((j) => j.id === jawaban.id ? { ...j, skor_uraian: skorUraian, skor_total: total } : j))
+      setEditInlineId(null); setEditInlineSkor('')
+    } catch (err) { alert('Gagal menyimpan: ' + (err instanceof Error ? err.message : String(err))) }
+    finally { setEditInlineSaving(null) }
   }
 
-  const getUraianSoal = (soalData: SoalItem[] | null | undefined) =>
-    soalData?.filter((s) => s.tipe === 'uraian') || []
+  const getUraianSoal = (soalData: SoalItem[] | null | undefined) => soalData?.filter((s) => s.tipe === 'uraian') || []
 
   const handleDownloadPDF = async (kegiatan: Kegiatan) => {
     setPdfLoading(kegiatan.id)
-    try {
-      await downloadLKPDPdf({
-        judul: kegiatan.judul,
-        guru,
-        token: kegiatan.token,
-        isiMateri: kegiatan.isi_materi,
-        youtubeUrl: kegiatan.youtube_url,
-        soalList: kegiatan.soal_data,
-      })
-    } catch (err) {
-      alert('Gagal membuat PDF: ' + (err instanceof Error ? err.message : String(err)))
-    } finally {
-      setPdfLoading(null)
-    }
+    try { await downloadLKPDPdf({ judul: kegiatan.judul, guru, token: kegiatan.token, isiMateri: kegiatan.isi_materi, youtubeUrl: kegiatan.youtube_url, soalList: kegiatan.soal_data }) }
+    catch (err) { alert('Gagal membuat PDF: ' + (err instanceof Error ? err.message : String(err))) }
+    finally { setPdfLoading(null) }
   }
 
   const handleDownloadExcel = async () => {
     if (!selected) return
     setExcelLoading(true)
-    try {
-      await downloadExcel({ judul: selected.judul, guru, jawabanList })
-    } catch (err) {
-      alert('Gagal mendownload Excel: ' + (err instanceof Error ? err.message : String(err)))
-    } finally {
-      setExcelLoading(false)
-    }
+    try { await downloadExcel({ judul: selected.judul, guru, jawabanList }) }
+    catch (err) { alert('Gagal download Excel: ' + (err instanceof Error ? err.message : String(err))) }
+    finally { setExcelLoading(false) }
   }
 
   const handleHapusKegiatan = async () => {
     if (!deleteTarget) return
     setDeleteLoading(true)
-    // capture judul before clearing deleteTarget
     const targetJudul = deleteTarget.judul
     const targetId = deleteTarget.id
     try {
-      const { error: errJawaban } = await supabase
-        .from('jawaban_siswa')
-        .delete()
-        .eq('kegiatan_id', targetId)
-      if (errJawaban) throw errJawaban
-
-      const { error: errKegiatan } = await supabase
-        .from('kegiatan')
-        .delete()
-        .eq('id', targetId)
-        .eq('guru_id', guru!.id)
-      if (errKegiatan) throw errKegiatan
-
-      const { data: cekData, error: errCek } = await supabase
-        .from('kegiatan')
-        .select('id')
-        .eq('id', targetId)
-        .maybeSingle()
-      if (errCek) throw errCek
-
-      if (cekData !== null) {
-        setDeleteTarget(null)
-        await Swal.fire({
-          icon: 'error',
-          title: '❌ Hapus Gagal!',
-          html: `<p style="color:#f87171;font-size:14px;margin-bottom:8px;">Data kegiatan <strong>"${targetJudul}"</strong> masih ditemukan di database.</p><p style="color:#9ca3af;font-size:12px;">Kemungkinan penyebab: izin RLS belum diatur atau ada foreign key yang belum terhapus.</p>`,
-          background: '#1f2937', color: '#f3f4f6',
-          confirmButtonColor: '#dc2626', confirmButtonText: 'Tutup',
-        })
-        return
-      }
-
+      const { error: e1 } = await supabase.from('jawaban_siswa').delete().eq('kegiatan_id', targetId)
+      if (e1) throw e1
+      const { error: e2 } = await supabase.from('kegiatan').delete().eq('id', targetId).eq('guru_id', guru!.id)
+      if (e2) throw e2
+      const { data: cek } = await supabase.from('kegiatan').select('id').eq('id', targetId).maybeSingle()
+      if (cek !== null) { setDeleteTarget(null); await Swal.fire({ icon:'error', title:'❌ Hapus Gagal!', background:'#1f2937', color:'#f3f4f6', confirmButtonColor:'#dc2626' }); return }
       try { sessionStorage.removeItem(`hiddenIds_${targetId}`) } catch {}
-
       setKegiatanList((prev) => prev.filter((k) => k.id !== targetId))
       if (selected?.id === targetId) { setSelected(null); setJawabanList([]) }
       setDeleteTarget(null)
-
-      await Swal.fire({
-        icon: 'success',
-        title: '🗑️ Kegiatan Dihapus!',
-        html: `<p style="color:#86efac;font-size:15px;font-weight:600;margin-bottom:6px;">"${targetJudul}"</p><p style="color:#9ca3af;font-size:13px;">Semua data siswa dan jawaban telah dihapus secara permanen.</p>`,
-        background: '#111827', color: '#f9fafb',
-        confirmButtonColor: '#16a34a', confirmButtonText: '✅ Oke, Mengerti',
-        timer: 3000, timerProgressBar: true,
-      })
+      await Swal.fire({ icon:'success', title:'🗑️ Kegiatan Dihapus!', html:`<p style="color:#86efac">"${targetJudul}"</p>`, background:'#111827', color:'#f9fafb', confirmButtonColor:'#16a34a', timer:3000, timerProgressBar:true })
     } catch (err) {
       setDeleteTarget(null)
-      await Swal.fire({
-        icon: 'error', title: '⚠️ Terjadi Kesalahan',
-        html: `<p style="color:#fca5a5;font-size:13px;">${err instanceof Error ? err.message : String(err)}</p>`,
-        background: '#1f2937', color: '#f3f4f6',
-        confirmButtonColor: '#dc2626', confirmButtonText: 'Tutup',
-      })
-    } finally {
-      setDeleteLoading(false)
-    }
+      await Swal.fire({ icon:'error', title:'⚠️ Terjadi Kesalahan', html:`<p style="color:#fca5a5;font-size:13px">${err instanceof Error ? err.message : String(err)}</p>`, background:'#1f2937', color:'#f3f4f6', confirmButtonColor:'#dc2626' })
+    } finally { setDeleteLoading(false) }
   }
 
   const handleShareWA = (kegiatan: Kegiatan) => {
-    const pesan =
-`📚 *KEGIATAN PEMBELAJARAN*
-Mata Pelajaran: *${guru?.mapel || '-'}*
-Guru: *${guru?.nama || '-'}*
-
-Halo, Siswa-Siswi SMPN 8 Probolinggo! 👋
-Berikut token kegiatan LKPD yang bisa kamu akses:
-
-🔑 *Token Kegiatan:*
-*${kegiatan.token}*
-
-🌐 *Link LKPD:*
-https://lkpd-smpn8.vercel.app
-
-Langkah-langkah:
-1️⃣ Buka link di atas
-2️⃣ Masukkan token kegiatan
-3️⃣ Kerjakan LKPD dengan semangat! 💪
-
-_Selamat belajar!_ 🎓`
-
+    const pesan = `📚 *KEGIATAN PEMBELAJARAN*\nMata Pelajaran: *${guru?.mapel || '-'}*\nGuru: *${guru?.nama || '-'}*\n\n🔑 *Token:* *${kegiatan.token}*\n🌐 https://smpn8prob.sch.id/elkpd`
     navigator.clipboard.writeText(pesan).catch(() => {})
     window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank')
   }
@@ -376,280 +225,177 @@ _Selamat belajar!_ 🎓`
   if (!guru) return null
 
   const sudahDinilaiCount = hiddenIds.size
-  const semuaSudahDinilai = jawabanList.length > 0 &&
-    jawabanList.every((j) => hiddenIds.has(j.id)) &&
-    savingIds.size === 0
+  const semuaSudahDinilai = jawabanList.length > 0 && jawabanList.every((j) => hiddenIds.has(j.id)) && savingIds.size === 0
+
+  const btnBase: React.CSSProperties = { fontWeight:700, fontSize:13, borderRadius:12, border:'none', cursor:'pointer', padding:'10px 12px', display:'flex', alignItems:'center', justifyContent:'center', gap:6, transition:'all 0.2s' }
 
   return (
     <PageWrapper>
-      <NavbarElkpd guruNama={guru.nama} onLogout={() => { logout(); router.push('/') }} showGuruBtn={false} />
+      <NavbarElkpd guruNama={guru.nama} onLogout={() => { logout(); router.push('/elkpd') }} showGuruBtn={false} />
 
-      {deleteTarget && (
-        <DeleteConfirmModal
-          kegiatan={deleteTarget}
-          onConfirm={handleHapusKegiatan}
-          onCancel={() => !deleteLoading && setDeleteTarget(null)}
-          loading={deleteLoading}
-        />
-      )}
+      {deleteTarget && <DeleteConfirmModal kegiatan={deleteTarget} onConfirm={handleHapusKegiatan} onCancel={() => !deleteLoading && setDeleteTarget(null)} loading={deleteLoading} />}
 
       {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-5 z-40 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white rounded-2xl w-12 h-12 flex items-center justify-center shadow-xl shadow-blue-900/50 transition-all duration-200 border border-blue-400/30"
-          title="Kembali ke atas"
-        >
+        <button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}
+          style={{ position:'fixed', bottom:24, right:20, zIndex:40, background:'#2563eb', color:'#fff', borderRadius:16, width:48, height:48, display:'flex', alignItems:'center', justifyContent:'center', border:'none', cursor:'pointer', fontSize:18, boxShadow:'0 8px 24px rgba(37,99,235,0.4)' }}>
           ↑
         </button>
       )}
 
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div style={{ maxWidth:680, margin:'0 auto', padding:'24px 16px' }}>
 
-        <div className="flex items-center gap-3 mb-5">
-          <button
-            onClick={() => selected ? setSelected(null) : router.push('/guru/dashboard')}
-            className="bg-white/20 hover:bg-white/30 text-white rounded-xl px-3 py-2 text-sm transition"
-          >
+        {/* Header */}
+        <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
+          <button onClick={() => selected ? setSelected(null) : router.push('/elkpd/guru/dashboard')}
+            style={{ background:'rgba(255,255,255,0.2)', color:'#fff', borderRadius:12, padding:'8px 14px', border:'none', cursor:'pointer', fontWeight:700, fontSize:16 }}>
             ←
           </button>
           <div>
-            <h1 className="text-white font-black text-xl">
-              {selected ? `Hasil: ${selected.judul}` : 'Lihat Hasil'}
-            </h1>
-            <p className="text-white/50 text-sm">{guru.mapel}</p>
+            <h1 style={{ color:'#fff', fontWeight:900, fontSize:20, margin:0 }}>{selected ? `Hasil: ${selected.judul}` : 'Lihat Hasil'}</h1>
+            <p style={{ color:'rgba(255,255,255,0.5)', fontSize:13, margin:0 }}>{guru.mapel}</p>
           </div>
         </div>
 
-        {/* ══ Daftar Kegiatan ══ */}
+        {/* Daftar Kegiatan */}
         {!selected && (
-          <div className="space-y-4">
-            {loadingK && <div className="text-center text-white/50 py-8">⏳ Memuat data...</div>}
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            {loadingK && <div style={{ textAlign:'center', color:'rgba(255,255,255,0.5)', padding:'32px 0' }}>⏳ Memuat data...</div>}
             {!loadingK && kegiatanList.length === 0 && (
-              <div className="text-center text-white/40 py-8">
-                <p className="text-3xl mb-2">📭</p>
+              <div style={{ textAlign:'center', color:'rgba(255,255,255,0.4)', padding:'32px 0' }}>
+                <div style={{ fontSize:36, marginBottom:8 }}>📭</div>
                 <p>Belum ada kegiatan yang dibuat</p>
               </div>
             )}
             {kegiatanList.map((k) => (
-              <div key={k.id} className="w-full bg-white/10 hover:bg-white/[0.13] border border-white/20 rounded-2xl p-4 transition">
-                <button onClick={() => fetchJawaban(k)} className="w-full text-left mb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-white font-bold text-base">{k.judul}</p>
-                      <p className="text-white/50 text-xs mt-1">
-                        Token: <strong className="text-yellow-300 tracking-widest">{k.token}</strong>
-                        <span className="mx-2">·</span>
-                        {new Date(k.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </p>
-                    </div>
-                    <div className="text-white/30 flex-shrink-0 mt-0.5 text-sm">▶</div>
-                  </div>
+              <div key={k.id} style={{ background:'rgba(0,0,0,0.5)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:20, padding:16, backdropFilter:'blur(10px)' }}>
+                <button onClick={() => fetchJawaban(k)} style={{ width:'100%', textAlign:'left', background:'none', border:'none', cursor:'pointer', marginBottom:12 }}>
+                  <p style={{ color:'#fff', fontWeight:700, fontSize:15, margin:'0 0 4px' }}>{k.judul}</p>
+                  <p style={{ color:'rgba(255,255,255,0.5)', fontSize:12, margin:0 }}>
+                    Token: <strong style={{ color:'#fde047', letterSpacing:'0.15em' }}>{k.token}</strong>
+                    <span style={{ margin:'0 8px' }}>·</span>
+                    {new Date(k.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' })}
+                  </p>
                 </button>
-
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <button onClick={() => fetchJawaban(k)} className="bg-blue-600/70 hover:bg-blue-500/70 text-white font-bold text-sm px-3 py-3 rounded-xl transition flex items-center justify-center gap-2">
-                    📊 <span>Hasil Siswa</span>
-                  </button>
-                  <button onClick={() => handleShareWA(k)} className="bg-green-600/80 hover:bg-green-500/80 text-white font-bold text-sm px-3 py-3 rounded-xl transition flex items-center justify-center gap-2">
-                    💬 <span>Bagikan WA</span>
-                  </button>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:8 }}>
+                  <button onClick={() => fetchJawaban(k)} style={{ ...btnBase, background:'rgba(37,99,235,0.7)', color:'#fff' }}>📊 Hasil Siswa</button>
+                  <button onClick={() => handleShareWA(k)} style={{ ...btnBase, background:'rgba(22,163,74,0.8)', color:'#fff' }}>💬 Bagikan WA</button>
                 </div>
-
-                <div className="grid grid-cols-4 gap-2">
-                  <button onClick={() => router.push(`/guru/preview/${k.id}`)} className="bg-white/15 hover:bg-white/25 text-white font-bold text-sm px-2 py-3 rounded-xl transition flex items-center justify-center gap-1">
-                    👁 <span>Preview</span>
-                  </button>
-                  <button onClick={() => router.push(`/guru/edit/${k.id}`)} className="bg-yellow-500/70 hover:bg-yellow-400/70 text-white font-bold text-sm px-2 py-3 rounded-xl transition flex items-center justify-center gap-1">
-                    ✏️ <span>Edit</span>
-                  </button>
-                  <button onClick={() => handleDownloadPDF(k)} disabled={pdfLoading === k.id} className="bg-purple-600/80 hover:bg-purple-500/80 disabled:opacity-50 text-white font-bold text-sm px-2 py-3 rounded-xl transition flex items-center justify-center gap-1">
-                    {pdfLoading === k.id ? '⏳' : '📄'} <span>{pdfLoading === k.id ? '...' : 'PDF'}</span>
-                  </button>
-                  <button onClick={() => setDeleteTarget(k)} className="bg-red-600/70 hover:bg-red-500/80 text-white font-bold text-sm px-2 py-3 rounded-xl transition flex items-center justify-center gap-1">
-                    🗑️ <span>Hapus</span>
-                  </button>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr', gap:8 }}>
+                  <button onClick={() => router.push(`/elkpd/guru/preview/${k.id}`)} style={{ ...btnBase, background:'rgba(255,255,255,0.15)', color:'#fff' }}>👁 Preview</button>
+                  <button onClick={() => router.push(`/elkpd/guru/edit/${k.id}`)} style={{ ...btnBase, background:'rgba(234,179,8,0.7)', color:'#fff' }}>✏️ Edit</button>
+                  <button onClick={() => handleDownloadPDF(k)} disabled={pdfLoading === k.id} style={{ ...btnBase, background:'rgba(124,58,237,0.8)', color:'#fff', opacity: pdfLoading === k.id ? 0.5 : 1 }}>{pdfLoading === k.id ? '⏳' : '📄'} PDF</button>
+                  <button onClick={() => setDeleteTarget(k)} style={{ ...btnBase, background:'rgba(220,38,38,0.7)', color:'#fff' }}>🗑️ Hapus</button>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* ══ Detail Jawaban Siswa ══ */}
+        {/* Detail Jawaban */}
         {selected && (
-          <div className="space-y-4">
-            <div className="bg-blue-500/20 border border-blue-400/30 rounded-2xl p-4">
-              <div className="flex justify-between items-start mb-3">
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            <div style={{ background:'rgba(37,99,235,0.2)', border:'1px solid rgba(96,165,250,0.3)', borderRadius:20, padding:16 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:12 }}>
                 <div>
-                  <p className="text-white font-bold">{selected.judul}</p>
-                  <p className="text-blue-300 text-sm mt-1">
-                    Token: <strong>{selected.token}</strong> — {jawabanList.length} siswa mengerjakan
-                  </p>
+                  <p style={{ color:'#fff', fontWeight:700, margin:'0 0 4px' }}>{selected.judul}</p>
+                  <p style={{ color:'#93c5fd', fontSize:13, margin:0 }}>Token: <strong>{selected.token}</strong> — {jawabanList.length} siswa</p>
                 </div>
                 {jawabanList.length > 0 && (
-                  <button
-                    onClick={handleDownloadExcel}
-                    disabled={excelLoading}
-                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-4 py-2 rounded-xl transition shadow-lg flex items-center gap-2"
-                  >
+                  <button onClick={handleDownloadExcel} disabled={excelLoading}
+                    style={{ ...btnBase, background:'#059669', color:'#fff', opacity: excelLoading ? 0.5 : 1, fontSize:12 }}>
                     {excelLoading ? '⏳...' : '📊 Unduh Excel'}
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-4 gap-2">
-                <button onClick={() => handleShareWA(selected)} className="bg-green-600/70 hover:bg-green-500/70 text-white font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center gap-1">
-                  💬 <span>Bagikan</span>
-                </button>
-                <button onClick={() => router.push(`/guru/preview/${selected.id}`)} className="bg-white/10 hover:bg-white/20 text-white/80 font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center gap-1">
-                  👁 <span>Preview</span>
-                </button>
-                <button onClick={() => router.push(`/guru/edit/${selected.id}`)} className="bg-yellow-500/30 hover:bg-yellow-400/40 text-yellow-200 font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center gap-1">
-                  ✏️ <span>Edit</span>
-                </button>
-                <button onClick={() => setDeleteTarget(selected)} className="bg-red-600/60 hover:bg-red-500/70 text-red-200 font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center gap-1">
-                  🗑️ <span>Hapus</span>
-                </button>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr', gap:8 }}>
+                <button onClick={() => handleShareWA(selected)} style={{ ...btnBase, background:'rgba(22,163,74,0.7)', color:'#fff', fontSize:12 }}>💬 Bagikan</button>
+                <button onClick={() => router.push(`/elkpd/guru/preview/${selected.id}`)} style={{ ...btnBase, background:'rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.8)', fontSize:12 }}>👁 Preview</button>
+                <button onClick={() => router.push(`/elkpd/guru/edit/${selected.id}`)} style={{ ...btnBase, background:'rgba(234,179,8,0.3)', color:'#fde047', fontSize:12 }}>✏️ Edit</button>
+                <button onClick={() => setDeleteTarget(selected)} style={{ ...btnBase, background:'rgba(220,38,38,0.6)', color:'#fca5a5', fontSize:12 }}>🗑️ Hapus</button>
               </div>
             </div>
 
-            {loadingJ && <div className="text-center text-white/50 py-8">⏳ Memuat...</div>}
+            {loadingJ && <div style={{ textAlign:'center', color:'rgba(255,255,255,0.5)', padding:'32px 0' }}>⏳ Memuat...</div>}
 
             {!loadingJ && jawabanList.length === 0 && (
-              <div className="text-center text-white/40 py-10">
-                <p className="text-4xl mb-3">📭</p>
-                <p className="font-bold text-white/50">Belum ada siswa yang mengerjakan LKPD</p>
-                <p className="text-xs mt-1">Bagikan token ke siswa agar mereka bisa mulai</p>
+              <div style={{ textAlign:'center', color:'rgba(255,255,255,0.4)', padding:'40px 0' }}>
+                <div style={{ fontSize:40, marginBottom:12 }}>📭</div>
+                <p style={{ fontWeight:700, color:'rgba(255,255,255,0.5)' }}>Belum ada siswa yang mengerjakan</p>
               </div>
             )}
 
             {!loadingJ && semuaSudahDinilai && (
-              <div className="text-center py-10">
-                <p className="text-4xl mb-3">🎉</p>
-                <p className="font-black text-green-400 text-lg">Semua siswa sudah dinilai!</p>
-                <p className="text-white/40 text-xs mt-1">
-                  {jawabanList.length} siswa · Klik "Tampilkan" di atas untuk review atau edit nilai
-                </p>
-                <button
-                  onClick={handleDownloadExcel}
-                  disabled={excelLoading}
-                  className="mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition shadow-lg flex items-center gap-2 mx-auto"
-                >
+              <div style={{ textAlign:'center', padding:'40px 0' }}>
+                <div style={{ fontSize:40, marginBottom:12 }}>🎉</div>
+                <p style={{ color:'#4ade80', fontWeight:900, fontSize:18, margin:'0 0 4px' }}>Semua siswa sudah dinilai!</p>
+                <button onClick={handleDownloadExcel} disabled={excelLoading}
+                  style={{ ...btnBase, background:'#059669', color:'#fff', margin:'16px auto 0', padding:'10px 24px' }}>
                   {excelLoading ? '⏳...' : '📊 Unduh Rekap Excel'}
                 </button>
               </div>
             )}
 
             {!loadingJ && sudahDinilaiCount > 0 && (
-              <button
-                onClick={() => setShowDinilai((v) => !v)}
-                className="w-full bg-green-500/15 hover:bg-green-500/25 border border-green-500/30 rounded-2xl px-4 py-3 flex items-center justify-between transition"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-green-400 text-lg">✅</span>
-                  <span className="text-green-300 font-bold text-sm">{sudahDinilaiCount} siswa sudah dinilai</span>
-                  <span className="text-green-400/60 text-xs">(disembunyikan)</span>
+              <button onClick={() => setShowDinilai(v => !v)}
+                style={{ width:'100%', background:'rgba(34,197,94,0.15)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:16, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                  <span style={{ color:'#4ade80', fontSize:18 }}>✅</span>
+                  <span style={{ color:'#86efac', fontWeight:700, fontSize:14 }}>{sudahDinilaiCount} siswa sudah dinilai</span>
                 </div>
-                <span className="text-green-400 text-sm font-bold">
-                  {showDinilai ? '▲ Sembunyikan' : '▼ Tampilkan'}
-                </span>
+                <span style={{ color:'#4ade80', fontSize:13, fontWeight:700 }}>{showDinilai ? '▲ Sembunyikan' : '▼ Tampilkan'}</span>
               </button>
             )}
 
             {!loadingJ && showDinilai && sudahDinilaiCount > 0 && (
-              <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-                <div className="px-4 py-2.5 border-b border-white/10 bg-white/5">
-                  <p className="text-white/60 text-xs font-bold uppercase tracking-wider">Daftar Sudah Dinilai</p>
+              <div style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:16, overflow:'hidden' }}>
+                <div style={{ padding:'10px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)', background:'rgba(255,255,255,0.05)' }}>
+                  <p style={{ color:'rgba(255,255,255,0.6)', fontSize:11, fontWeight:700, textTransform:'uppercase', margin:0 }}>Daftar Sudah Dinilai</p>
                 </div>
-                <div className="divide-y divide-white/5">
-                  {jawabanList
-                    .filter((j) => hiddenIds.has(j.id))
-                    .map((j) => {
-                      const isEditOpen = editInlineId === j.id
-                      const isSavingThis = editInlineSaving === j.id
-                      return (
-                        <div key={j.id}>
-                          <div className="flex items-center justify-between px-4 py-2.5">
-                            <div className="flex-1 min-w-0">
-                              <span className="text-white/80 text-sm font-semibold">{j.nama}</span>
-                              <span className="text-white/40 text-xs ml-2">Kelas {j.kelas}</span>
-                            </div>
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                              <div className="text-right">
-                                <p className="text-white/40 text-[9px] uppercase tracking-wider">Otomatis</p>
-                                <p className="text-white/60 font-bold text-sm">{j.skor_otomatis || 0}</p>
-                              </div>
-                              <div className="text-right">
-                                <p className="text-orange-300/60 text-[9px] uppercase tracking-wider">Uraian</p>
-                                <p className="text-orange-300 font-bold text-sm">{j.skor_uraian ?? 0}</p>
-                              </div>
-                              <div className="text-right border-l border-white/10 pl-2">
-                                <p className="text-yellow-400/60 text-[9px] uppercase tracking-wider">Total</p>
-                                <p className="text-yellow-400 font-black text-base">{j.skor_total ?? j.skor_otomatis}</p>
-                              </div>
-                              <button
-                                onClick={() => {
-                                  if (isEditOpen) {
-                                    setEditInlineId(null)
-                                    setEditInlineSkor('')
-                                  } else {
-                                    setEditInlineId(j.id)
-                                    setEditInlineSkor(String(j.skor_uraian ?? 0))
-                                  }
-                                }}
-                                className={`ml-1 text-xs px-2 py-1.5 rounded-lg font-bold transition ${
-                                  isEditOpen
-                                    ? 'bg-white/20 text-white'
-                                    : 'bg-orange-500/20 hover:bg-orange-500/40 text-orange-300'
-                                }`}
-                                title="Edit skor uraian"
-                              >
-                                {isEditOpen ? '✕' : '✏️'}
-                              </button>
-                            </div>
-                          </div>
-
-                          {isEditOpen && (
-                            <div className="px-4 pb-3 bg-orange-500/5 border-t border-orange-500/10">
-                              <p className="text-orange-300/70 text-[10px] uppercase font-bold tracking-wider mt-2.5 mb-1.5">
-                                Edit Skor Uraian
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <div className="flex-1 bg-white/5 rounded-lg px-3 py-1.5 text-xs text-white/50">
-                                  Skor otomatis: <strong className="text-white/70">{j.skor_otomatis || 0}</strong>
-                                  <span className="mx-1.5 text-white/20">+</span>
-                                  Uraian baru: <strong className="text-orange-300">{editInlineSkor !== '' ? Number(editInlineSkor) : '?'}</strong>
-                                  <span className="mx-1.5 text-white/20">=</span>
-                                  Total: <strong className="text-yellow-400">{editInlineSkor !== '' ? (j.skor_otomatis || 0) + Number(editInlineSkor) : '?'}</strong>
-                                </div>
-                              </div>
-                              <div className="flex gap-2 mt-2">
-                                <input
-                                  type="number"
-                                  min={0}
-                                  autoFocus
-                                  value={editInlineSkor}
-                                  onChange={(e) => setEditInlineSkor(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleSimpanEditInline(j)
-                                    if (e.key === 'Escape') { setEditInlineId(null); setEditInlineSkor('') }
-                                  }}
-                                  placeholder="Masukkan skor uraian..."
-                                  className="flex-1 bg-white/15 border border-orange-400/40 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 font-bold placeholder:text-white/30"
-                                />
-                                <button
-                                  onClick={() => handleSimpanEditInline(j)}
-                                  disabled={isSavingThis || editInlineSkor === ''}
-                                  className="bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-white font-black text-sm px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-orange-900/30"
-                                >
-                                  {isSavingThis ? '⏳' : '💾'} <span>{isSavingThis ? 'Menyimpan...' : 'Simpan'}</span>
-                                </button>
-                              </div>
-                              <p className="text-white/20 text-[9px] mt-1.5">Enter = simpan · Esc = batal</p>
-                            </div>
-                          )}
+                {jawabanList.filter((j) => hiddenIds.has(j.id)).map((j) => {
+                  const isEditOpen = editInlineId === j.id
+                  return (
+                    <div key={j.id} style={{ borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
+                      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 16px' }}>
+                        <div>
+                          <span style={{ color:'rgba(255,255,255,0.8)', fontSize:14, fontWeight:600 }}>{j.nama}</span>
+                          <span style={{ color:'rgba(255,255,255,0.4)', fontSize:12, marginLeft:8 }}>Kelas {j.kelas}</span>
                         </div>
-                      )
-                    })}
-                </div>
+                        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                          <div style={{ textAlign:'right' }}>
+                            <p style={{ color:'rgba(255,255,255,0.4)', fontSize:9, textTransform:'uppercase', margin:'0 0 2px' }}>Otomatis</p>
+                            <p style={{ color:'rgba(255,255,255,0.6)', fontWeight:700, fontSize:14, margin:0 }}>{j.skor_otomatis || 0}</p>
+                          </div>
+                          <div style={{ textAlign:'right' }}>
+                            <p style={{ color:'rgba(251,146,60,0.6)', fontSize:9, textTransform:'uppercase', margin:'0 0 2px' }}>Uraian</p>
+                            <p style={{ color:'#fb923c', fontWeight:700, fontSize:14, margin:0 }}>{j.skor_uraian ?? 0}</p>
+                          </div>
+                          <div style={{ textAlign:'right', borderLeft:'1px solid rgba(255,255,255,0.1)', paddingLeft:12 }}>
+                            <p style={{ color:'rgba(250,204,21,0.6)', fontSize:9, textTransform:'uppercase', margin:'0 0 2px' }}>Total</p>
+                            <p style={{ color:'#facc15', fontWeight:900, fontSize:18, margin:0 }}>{j.skor_total ?? j.skor_otomatis}</p>
+                          </div>
+                          <button onClick={() => { if (isEditOpen) { setEditInlineId(null); setEditInlineSkor('') } else { setEditInlineId(j.id); setEditInlineSkor(String(j.skor_uraian ?? 0)) } }}
+                            style={{ background: isEditOpen ? 'rgba(255,255,255,0.2)' : 'rgba(251,146,60,0.2)', color: isEditOpen ? '#fff' : '#fb923c', border:'none', borderRadius:8, padding:'6px 8px', cursor:'pointer', fontSize:13, fontWeight:700 }}>
+                            {isEditOpen ? '✕' : '✏️'}
+                          </button>
+                        </div>
+                      </div>
+                      {isEditOpen && (
+                        <div style={{ padding:'12px 16px', background:'rgba(251,146,60,0.05)', borderTop:'1px solid rgba(251,146,60,0.1)' }}>
+                          <div style={{ display:'flex', gap:8 }}>
+                            <input type="number" min={0} autoFocus value={editInlineSkor} onChange={(e) => setEditInlineSkor(e.target.value)}
+                              onKeyDown={(e) => { if (e.key === 'Enter') handleSimpanEditInline(j); if (e.key === 'Escape') { setEditInlineId(null); setEditInlineSkor('') } }}
+                              placeholder="Skor uraian..."
+                              style={{ flex:1, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(251,146,60,0.4)', color:'#fff', borderRadius:12, padding:'8px 12px', fontSize:14, fontWeight:700 }} />
+                            <button onClick={() => handleSimpanEditInline(j)} disabled={editInlineSaving === j.id || editInlineSkor === ''}
+                              style={{ ...btnBase, background:'#f97316', color:'#fff', opacity: editInlineSaving === j.id || editInlineSkor === '' ? 0.5 : 1 }}>
+                              {editInlineSaving === j.id ? '⏳' : '💾'} Simpan
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
 
@@ -657,74 +403,48 @@ _Selamat belajar!_ 🎓`
               const uraianSoal = getUraianSoal(selected.soal_data)
               const isHidden = hiddenIds.has(j.id)
               const isSaving = savingIds.has(j.id)
-
               if (isHidden && !isSaving) return null
-
               return (
-                <div
-                  key={j.id}
-                  className={`bg-white/10 border border-white/20 rounded-2xl p-4 flex gap-4 transition-all duration-500 ${
-                    isSaving ? 'opacity-40 scale-[0.97] pointer-events-none' : 'opacity-100 scale-100'
-                  }`}
-                >
-                  <div className="flex-1">
-                    <p className="text-white font-bold text-lg mb-1">
+                <div key={j.id} style={{ background:'rgba(0,0,0,0.5)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:20, padding:16, display:'flex', gap:16, backdropFilter:'blur(8px)', opacity: isSaving ? 0.4 : 1, transition:'all 0.5s' }}>
+                  <div style={{ flex:1 }}>
+                    <p style={{ color:'#fff', fontWeight:700, fontSize:16, margin:'0 0 4px' }}>
                       {idx + 1}. {j.nama}
-                      {isSaving && <span className="ml-2 text-green-400 text-xs font-normal animate-pulse">✅ Tersimpan...</span>}
-                      <span className="font-normal text-white/50 text-sm ml-2 bg-white/10 px-2 py-0.5 rounded-md">Kelas {j.kelas}</span>
+                      {isSaving && <span style={{ color:'#4ade80', fontSize:12, fontWeight:400, marginLeft:8 }}>✅ Tersimpan...</span>}
+                      <span style={{ color:'rgba(255,255,255,0.5)', fontSize:13, fontWeight:400, marginLeft:8, background:'rgba(255,255,255,0.1)', padding:'2px 8px', borderRadius:8 }}>Kelas {j.kelas}</span>
                     </p>
-
                     {uraianSoal.length > 0 ? (
-                      <div className="mt-3 space-y-2">
-                        {uraianSoal.map((soal, i) => {
-                          const jawSiswa = j.jawaban_data?.[soal.id] || '(tidak dijawab)'
-                          return (
-                            <div key={soal.id} className="bg-white/5 rounded-lg px-3 py-2 text-sm text-white/80">
-                              <span className="text-orange-300 font-bold text-xs mr-2">Uraian {i + 1}:</span>
-                              {jawSiswa}
-                            </div>
-                          )
-                        })}
+                      <div style={{ marginTop:12, display:'flex', flexDirection:'column', gap:8 }}>
+                        {uraianSoal.map((soal, i) => (
+                          <div key={soal.id} style={{ background:'rgba(255,255,255,0.05)', borderRadius:10, padding:'8px 12px', fontSize:13, color:'rgba(255,255,255,0.8)' }}>
+                            <span style={{ color:'#fb923c', fontWeight:700, fontSize:11, marginRight:8 }}>Uraian {i + 1}:</span>
+                            {j.jawaban_data?.[soal.id] || '(tidak dijawab)'}
+                          </div>
+                        ))}
                       </div>
                     ) : (
-                      <p className="text-white/40 text-xs mt-2 italic">Tidak ada soal uraian.</p>
+                      <p style={{ color:'rgba(255,255,255,0.4)', fontSize:12, marginTop:8, fontStyle:'italic' }}>Tidak ada soal uraian.</p>
                     )}
                   </div>
-
-                  <div className="w-32 flex flex-col justify-between border-l border-white/10 pl-4 py-1">
-                    <div className="text-right">
-                      <p className="text-white/50 text-[10px] uppercase font-bold tracking-wider">Skor Sementara</p>
-                      <p className="text-white font-bold text-xl">{j.skor_otomatis || 0}</p>
+                  <div style={{ width:120, display:'flex', flexDirection:'column', justifyContent:'space-between', borderLeft:'1px solid rgba(255,255,255,0.1)', paddingLeft:16 }}>
+                    <div style={{ textAlign:'right' }}>
+                      <p style={{ color:'rgba(255,255,255,0.5)', fontSize:9, textTransform:'uppercase', fontWeight:700, margin:'0 0 2px' }}>Skor Sementara</p>
+                      <p style={{ color:'#fff', fontWeight:700, fontSize:22, margin:0 }}>{j.skor_otomatis || 0}</p>
                     </div>
-
                     {uraianSoal.length > 0 && (
-                      <div className="text-right mt-3">
-                        <p className="text-orange-300 text-[10px] uppercase font-bold tracking-wider mb-1">+ Skor Uraian</p>
-                        <input
-                          ref={(el) => { inputRefs.current[j.id] = el }}
-                          type="number"
-                          min={0}
+                      <div style={{ textAlign:'right', marginTop:12 }}>
+                        <p style={{ color:'#fb923c', fontSize:9, textTransform:'uppercase', fontWeight:700, margin:'0 0 4px' }}>+ Skor Uraian</p>
+                        <input ref={(el) => { inputRefs.current[j.id] = el }} type="number" min={0}
                           value={editSkor[j.id] ?? j.skor_uraian ?? ''}
                           onChange={(e) => setEditSkor((prev) => ({ ...prev, [j.id]: e.target.value }))}
                           onBlur={() => handleSimpanSkor(j)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault()
-                              focusNextInput(j.id)
-                              handleSimpanSkor(j)
-                            }
-                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); focusNextInput(j.id); handleSimpanSkor(j) } }}
                           placeholder="0"
-                          className="w-full bg-white/20 border border-white/30 text-white rounded-lg px-2 py-1.5 text-center focus:outline-none focus:ring-2 focus:ring-orange-400 font-bold"
-                          title="Ketik angka lalu tekan Enter untuk lanjut ke siswa berikutnya"
-                        />
-                        <p className="text-white/30 text-[9px] mt-1">Enter = lanjut siswa berikutnya</p>
+                          style={{ width:'100%', background:'rgba(255,255,255,0.2)', border:'1px solid rgba(255,255,255,0.3)', color:'#fff', borderRadius:10, padding:'6px 8px', textAlign:'center', fontWeight:700, fontSize:14, boxSizing:'border-box' }} />
                       </div>
                     )}
-
-                    <div className="text-right mt-3 pt-3 border-t border-white/10">
-                      <p className="text-yellow-400 text-[10px] uppercase font-bold tracking-wider">Total Akhir</p>
-                      <p className="text-yellow-400 font-black text-2xl">{j.skor_total ?? j.skor_otomatis}</p>
+                    <div style={{ textAlign:'right', marginTop:12, paddingTop:12, borderTop:'1px solid rgba(255,255,255,0.1)' }}>
+                      <p style={{ color:'rgba(250,204,21,0.7)', fontSize:9, textTransform:'uppercase', fontWeight:700, margin:'0 0 2px' }}>Total Akhir</p>
+                      <p style={{ color:'#facc15', fontWeight:900, fontSize:26, margin:0 }}>{j.skor_total ?? j.skor_otomatis}</p>
                     </div>
                   </div>
                 </div>
@@ -733,8 +453,7 @@ _Selamat belajar!_ 🎓`
           </div>
         )}
       </div>
-
-      <p className="text-white/30 text-xs text-center py-4">created by dhickz666</p>
+      <p style={{ color:'rgba(255,255,255,0.3)', fontSize:11, textAlign:'center', padding:'16px 0' }}>created by dhickz666</p>
     </PageWrapper>
   )
 }

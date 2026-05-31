@@ -129,7 +129,7 @@ interface ValidationModalProps {
 function ValidationModal({ errors, warnings, onConfirm, onCancel }: ValidationModalProps) {
   const hasErrors = errors.length > 0
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
       <div className="bg-gray-900 border border-white/20 rounded-2xl w-full max-w-sm shadow-2xl p-5">
         <div className="text-center mb-4">
           <div className="text-4xl mb-2">{hasErrors ? '🚫' : '⚠️'}</div>
@@ -144,7 +144,7 @@ function ValidationModal({ errors, warnings, onConfirm, onCancel }: ValidationMo
         </div>
 
         {errors.length > 0 && (
-          <div className="bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 mb-3 space-y-1.5">
+          <div className="bg-red-500/20 border border-red-500/40 rounded-xl px-4 py-3 mb-3 space-y-1.5">
             {errors.map((e, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span className="text-red-400 text-xs mt-0.5 shrink-0">✕</span>
@@ -155,7 +155,7 @@ function ValidationModal({ errors, warnings, onConfirm, onCancel }: ValidationMo
         )}
 
         {warnings.length > 0 && (
-          <div className="bg-yellow-500/10 border border-yellow-400/30 rounded-xl px-4 py-3 mb-3 space-y-1.5">
+          <div className="bg-yellow-500/15 border border-yellow-400/30 rounded-xl px-4 py-3 mb-3 space-y-1.5">
             {warnings.map((w, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span className="text-yellow-400 text-xs mt-0.5 shrink-0">⚠</span>
@@ -276,50 +276,50 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
     onGenerate(form)
   }
 
-  const inp = 'w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-400/60 transition'
+  const inp = 'w-full bg-gray-800 border border-white/20 rounded-xl px-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-400/60 transition'
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center px-0 sm:px-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center px-0 sm:px-4">
       <div className="bg-gray-900 border border-white/20 rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[92vh] overflow-y-auto shadow-2xl">
-        <div className="sticky top-0 bg-gray-900/98 border-b border-white/10 px-5 py-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-gray-900 border-b border-white/10 px-5 py-4 flex items-center justify-between z-10">
           <div>
             <p className="text-yellow-400 font-black text-base">
               {isMateri ? '✨ Generate Materi dengan AI' : '✨ Generate Soal LKPD dengan AI'}
             </p>
-            <p className="text-white/40 text-xs mt-0.5">Isi detail agar hasil lebih akurat & hemat token</p>
+            <p className="text-white/50 text-xs mt-0.5">Isi detail agar hasil lebih akurat & hemat token</p>
           </div>
           <button onClick={onClose} className="text-white/40 hover:text-white text-2xl ml-3">✕</button>
         </div>
 
         <div className="px-5 py-4 space-y-4">
           <div className="space-y-3">
-            <p className="text-white/40 text-xs font-bold uppercase tracking-widest">📚 Informasi Dasar</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-widest">📚 Informasi Dasar</p>
             <div>
-              <label className="text-white/60 text-xs font-semibold">Mata Pelajaran *</label>
+              <label className="text-white/70 text-xs font-semibold">Mata Pelajaran *</label>
               <input value={form.mapel} onChange={e => set('mapel', e.target.value)}
                 placeholder="cth: Matematika, IPA, Bahasa Indonesia..." className={inp + ' mt-1'} />
             </div>
             <div>
-              <label className="text-white/60 text-xs font-semibold">Topik / Materi Pokok *</label>
+              <label className="text-white/70 text-xs font-semibold">Topik / Materi Pokok *</label>
               <input value={form.topik} onChange={e => set('topik', e.target.value)}
                 placeholder="cth: Fotosintesis, SPLDV, Teks Prosedur..." className={inp + ' mt-1'} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-white/60 text-xs font-semibold">Jenjang *</label>
+                <label className="text-white/70 text-xs font-semibold">Jenjang *</label>
                 <select value={form.jenjang} onChange={e => set('jenjang', e.target.value)} className={inp + ' mt-1'}>
-                  <option value="">Pilih...</option>
-                  {JENJANG.map(j => <option key={j} value={j}>{j}</option>)}
+                  <option value="" className="bg-gray-900">Pilih...</option>
+                  {JENJANG.map(j => <option key={j} value={j} className="bg-gray-900">{j}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-white/60 text-xs font-semibold">Kelas *</label>
+                <label className="text-white/70 text-xs font-semibold">Kelas *</label>
                 <input value={form.kelas} onChange={e => set('kelas', e.target.value)}
                   placeholder="cth: 7, 10, XI..." className={inp + ' mt-1'} />
               </div>
             </div>
             <div>
-              <label className="text-white/60 text-xs font-semibold">Catatan Tambahan (opsional)</label>
+              <label className="text-white/70 text-xs font-semibold">Catatan Tambahan (opsional)</label>
               <textarea value={form.keterangan} onChange={e => set('keterangan', e.target.value)}
                 placeholder={isMateri
                   ? 'cth: fokus contoh sehari-hari, pakai analogi sederhana...'
@@ -330,7 +330,7 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
 
           {isMateri && (
             <div className="space-y-3">
-              <p className="text-white/40 text-xs font-bold uppercase tracking-widest">📖 Gaya Penulisan</p>
+              <p className="text-white/50 text-xs font-bold uppercase tracking-widest">📖 Gaya Penulisan</p>
               <div className="grid grid-cols-3 gap-2">
                 {([
                   { val: 'ringkas' as GayaMateri, label: '⚡ Ringkas', desc: 'Padat & to the point' },
@@ -340,7 +340,7 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
                   <button key={o.val} onClick={() => set('gaya', o.val)}
                     className={`p-2 rounded-xl border text-center text-xs transition ${form.gaya === o.val
                       ? 'bg-yellow-400/20 border-yellow-400 text-yellow-300'
-                      : 'bg-white/5 border-white/20 text-white/60 hover:border-white/40'}`}>
+                      : 'bg-gray-800 border-white/20 text-white/60 hover:border-white/40'}`}>
                     <div className="font-bold">{o.label}</div>
                     <div className="text-white/40 text-[10px] mt-0.5">{o.desc}</div>
                   </button>
@@ -358,29 +358,29 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
 
           {!isMateri && (
             <div className="space-y-3">
-              <p className="text-white/40 text-xs font-bold uppercase tracking-widest">📋 Pengaturan Soal</p>
+              <p className="text-white/50 text-xs font-bold uppercase tracking-widest">📋 Pengaturan Soal</p>
               <div>
-                <label className="text-white/60 text-xs font-semibold">Jumlah Soal: {form.jumlahSoal} soal</label>
+                <label className="text-white/70 text-xs font-semibold">Jumlah Soal: {form.jumlahSoal} soal</label>
                 <input type="range" min={3} max={20} value={form.jumlahSoal}
                   onChange={e => set('jumlahSoal', Number(e.target.value))}
                   className="w-full accent-yellow-400 mt-1" />
                 <div className="flex justify-between text-white/30 text-xs"><span>3</span><span>20</span></div>
               </div>
               <div>
-                <label className="text-white/60 text-xs font-semibold">Tipe Soal (bisa lebih dari satu)</label>
+                <label className="text-white/70 text-xs font-semibold">Tipe Soal (bisa lebih dari satu)</label>
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   {TIPE_SOAL.map(o => (
                     <button key={o.value} onClick={() => toggleTipe(o.value)}
                       className={`p-2 rounded-xl border text-left text-xs transition ${form.tipeSoal.includes(o.value)
                         ? 'bg-yellow-400/20 border-yellow-400 text-yellow-300'
-                        : 'bg-white/5 border-white/20 text-white/60 hover:border-white/40'}`}>
+                        : 'bg-gray-800 border-white/20 text-white/60 hover:border-white/40'}`}>
                       {o.label}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="text-white/60 text-xs font-semibold">Level Kesulitan</label>
+                <label className="text-white/70 text-xs font-semibold">Level Kesulitan</label>
                 <div className="grid grid-cols-3 gap-2 mt-1">
                   {([
                     { val: 'mudah' as LevelKesulitan, label: '🟢 Mudah' },
@@ -390,7 +390,7 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
                     <button key={o.val} onClick={() => set('levelKesulitan', o.val)}
                       className={`py-2 rounded-xl border text-xs font-bold transition ${form.levelKesulitan === o.val
                         ? 'bg-yellow-400/20 border-yellow-400 text-yellow-300'
-                        : 'bg-white/5 border-white/20 text-white/60 hover:border-white/40'}`}>
+                        : 'bg-gray-800 border-white/20 text-white/60 hover:border-white/40'}`}>
                       {o.label}
                     </button>
                   ))}
@@ -399,7 +399,7 @@ function AIModal({ mode, mapelDefault, judulDefault, onGenerate, onClose }: AIMo
             </div>
           )}
 
-          <div className="bg-blue-500/10 border border-blue-400/30 rounded-xl px-4 py-3">
+          <div className="bg-blue-900/60 border border-blue-400/30 rounded-xl px-4 py-3">
             <p className="text-blue-300 text-xs">
               💡 <strong>Hemat token:</strong> Makin spesifik topik & catatan, makin akurat hasilnya — tanpa perlu generate ulang.
             </p>
@@ -485,68 +485,31 @@ export default function SiapkanKegiatan() {
   const [aiError, setAiError] = useState('')
 
   const uploadFile = async (file: File | null, folder: string): Promise<string | null> => {
-    if (!file) {
-      console.log(`⏭️ Skip upload [${folder}] — tidak ada file dipilih`)
-      return null
-    }
-
-    console.log(`📁 File dipilih untuk [${folder}]:`, file.name, `(${(file.size / 1024).toFixed(1)} KB)`)
-
-    if (file.size > 5 * 1024 * 1024) {
-      throw new Error(`File ${file.name} terlalu besar! Maksimal 5 MB.`)
-    }
-
+    if (!file) return null
+    if (file.size > 5 * 1024 * 1024) throw new Error(`File ${file.name} terlalu besar! Maksimal 5 MB.`)
     const ext = file.name.split('.').pop()
     const path = `${folder}/${Date.now()}.${ext}`
-
-    console.log(`📤 Mengupload ke bucket lkpd-files, path: ${path}`)
-
-    const { data: uploadData, error } = await supabase.storage
-      .from('lkpd-files')
-      .upload(path, file)
-
-    if (error) {
-      console.error(`❌ Upload gagal [${folder}]:`, error)
-      throw error
-    }
-
-    console.log(`✅ Upload sukses [${folder}]:`, uploadData)
-
-    const { data: urlData } = supabase.storage
-      .from('lkpd-files')
-      .getPublicUrl(path)
-
-    console.log(`🔗 Public URL [${folder}]:`, urlData.publicUrl)
-
+    const { data: uploadData, error } = await supabase.storage.from('lkpd-files').upload(path, file)
+    if (error) throw error
+    const { data: urlData } = supabase.storage.from('lkpd-files').getPublicUrl(path)
     return urlData.publicUrl
   }
 
   const handleFileMateri = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null
-    console.log('📂 Input file materi berubah:', file ? `${file.name} (${(file.size / 1024).toFixed(1)} KB)` : 'tidak ada file')
-    setFileMateri(file)
+    setFileMateri(e.target.files?.[0] ?? null)
   }
 
   const handleFileTugas = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null
-    console.log('📂 Input file tugas berubah:', file ? `${file.name} (${(file.size / 1024).toFixed(1)} KB)` : 'tidak ada file')
-    setFileTugas(file)
+    setFileTugas(e.target.files?.[0] ?? null)
   }
 
   const doSimpan = async () => {
     setSaving(true)
     try {
-      console.log('💾 Mulai proses simpan kegiatan...')
-      console.log('📋 Data:', { judul, token, guru_id: guru!.id })
-      console.log('📁 fileMateri state:', fileMateri ? fileMateri.name : 'null')
-      console.log('📁 fileTugas state:', fileTugas ? fileTugas.name : 'null')
-
       const fileMateriUrl = await uploadFile(fileMateri, 'materi')
       const fileTugasUrl  = await uploadFile(fileTugas, 'tugas')
 
-      console.log('📝 Insert ke tabel kegiatan...')
-
-      const { data: insertData, error } = await supabase.from('kegiatan').insert({
+      const { error } = await supabase.from('kegiatan').insert({
         token,
         guru_id: guru!.id,
         judul,
@@ -556,14 +519,11 @@ export default function SiapkanKegiatan() {
         soal_data: soalList,
         file_tugas_url: fileTugasUrl,
         aktif: true,
-      }).select()
+      })
 
       if (error) throw error
-
-      console.log('✅ Kegiatan berhasil disimpan:', insertData)
       setShowTokenModal(true)
     } catch (err) {
-      console.error('💥 Error saat simpan:', err)
       alert('Gagal menyimpan: ' + (err instanceof Error ? err.message : String(err)))
     } finally {
       setSaving(false)
@@ -595,9 +555,6 @@ export default function SiapkanKegiatan() {
 
     ctx.strokeStyle = '#facc15'; ctx.lineWidth = 3
     canvasRoundRect(ctx, 2, 2, W - 4, H - 4, 18); ctx.stroke()
-
-    ctx.fillStyle = 'rgba(250, 204, 21, 0.15)'
-    canvasRoundRect(ctx, 0, 0, W, 6, 0); ctx.fill()
 
     ctx.textAlign = 'center'
     ctx.fillStyle = '#fde68a'; ctx.font = 'bold 12px Arial, sans-serif'
@@ -708,14 +665,21 @@ _Selamat belajar!_ 🎓`
   const totalSkor = soalList.reduce((s, q) => s + (Number(q.skor) || 0), 0)
   const skorOver  = totalSkor > 100
 
+  // ── shared input style ──────────────────────────────────────
+  const inp = 'w-full bg-gray-800 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 transition'
+
   return (
     <PageWrapper>
       <NavbarElkpd guruNama={guru.nama} onLogout={() => { logout(); router.push('/') }} showGuruBtn={false} />
 
+      {/* ── Overlay gelap agar konten tidak tenggelam di background ── */}
+      <div className="fixed inset-0 bg-black/60 -z-10 pointer-events-none" />
+
+      {/* ── Tombol kembali ── */}
       <div className="max-w-2xl mx-auto px-4 pt-3">
         <button
-          onClick={() => router.push('/guru/dashboard')}
-          className="flex items-center gap-2 text-white/60 hover:text-white text-sm transition mb-1"
+          onClick={() => { window.location.href = '/elkpd/guru/dashboard' }}
+          className="flex items-center gap-2 bg-gray-900/80 hover:bg-gray-800 border border-white/20 text-white/80 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl transition mb-1"
         >
           ← Kembali ke Dashboard
         </button>
@@ -744,8 +708,9 @@ _Selamat belajar!_ 🎓`
 
       <div className="max-w-2xl mx-auto px-4 py-6">
 
+        {/* ── AI Error ── */}
         {aiError && (
-          <div className="bg-red-500/20 border border-red-500/50 rounded-xl px-4 py-3 mb-4 flex items-start gap-3">
+          <div className="bg-red-900/80 border border-red-500/60 rounded-xl px-4 py-3 mb-4 flex items-start gap-3">
             <span className="text-red-400 text-lg">⚠️</span>
             <div>
               <p className="text-red-300 font-bold text-sm">Generate AI gagal</p>
@@ -755,7 +720,8 @@ _Selamat belajar!_ 🎓`
           </div>
         )}
 
-        <div className="bg-gradient-to-r from-blue-600/40 to-purple-600/40 border border-blue-400/50 rounded-2xl p-4 mb-5 flex items-center justify-between">
+        {/* ── Token card ── */}
+        <div className="bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/50 rounded-2xl p-4 mb-5 flex items-center justify-between shadow-xl">
           <div>
             <p className="text-white/60 text-xs">Token Kegiatan Ini</p>
             <p className="text-yellow-300 font-black text-3xl tracking-[0.3em]">{token}</p>
@@ -764,23 +730,23 @@ _Selamat belajar!_ 🎓`
           <div className="text-4xl">🔑</div>
         </div>
 
+        {/* ── Judul ── */}
         <div className="mb-4">
-          <label className="text-white/80 text-sm font-semibold block mb-2">📌 Judul Kegiatan *</label>
+          <label className="text-white font-semibold text-sm block mb-2">📌 Judul Kegiatan *</label>
           <input
             type="text"
             value={judul}
             onChange={e => setJudul(e.target.value)}
             placeholder="Contoh: Bab 3 - Sistem Tata Surya"
-            className={`w-full bg-white/20 border text-white placeholder-white/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition ${
-              !judul.trim() ? 'border-white/30' : 'border-green-500/50'
-            }`}
+            className={`${inp} ${!judul.trim() ? 'border-white/20' : 'border-green-500/60'}`}
           />
           {!judul.trim() && (
             <p className="text-white/40 text-xs mt-1 ml-1">* Wajib diisi</p>
           )}
         </div>
 
-        <div className="flex bg-white/10 rounded-2xl p-1 mb-5">
+        {/* ── Tab switcher ── */}
+        <div className="flex bg-gray-900/90 border border-white/10 rounded-2xl p-1 mb-5">
           <button onClick={() => setTab('materi')}
             className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition ${tab === 'materi' ? 'bg-yellow-400 text-gray-900' : 'text-white/60 hover:text-white'}`}>
             📖 Materi
@@ -791,26 +757,29 @@ _Selamat belajar!_ 🎓`
           </button>
         </div>
 
+        {/* ══════════════ TAB MATERI ══════════════ */}
         {tab === 'materi' && (
           <div className="space-y-4">
             <button
               onClick={() => setShowAIModal('materi')}
-              className="w-full bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-500/80 hover:to-blue-500/80 border border-purple-400/50 text-white font-black py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition shadow-lg"
+              className="w-full bg-gradient-to-r from-purple-800 to-blue-800 hover:from-purple-700 hover:to-blue-700 border border-purple-500/50 text-white font-black py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition shadow-lg"
             >
               <span className="text-xl">✨</span>
               <span>Buat Materi dengan AI</span>
               <span className="text-white/50 font-normal text-xs ml-1">(Gemini)</span>
             </button>
 
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+            {/* YouTube */}
+            <div className="bg-gray-900/90 border border-white/15 rounded-2xl p-4 shadow">
               <label className="text-white font-bold text-sm block mb-2">▶ Link Video YouTube</label>
               <input type="url" value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="w-full bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400" />
-              {youtubeUrl && <p className="text-green-300 text-xs mt-2">✅ URL terisi{youtubeUrl.includes('youtube') ? ' (YouTube)' : ''}</p>}
+                className={inp} />
+              {youtubeUrl && <p className="text-green-400 text-xs mt-2">✅ URL terisi{youtubeUrl.includes('youtube') ? ' (YouTube)' : ''}</p>}
             </div>
 
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+            {/* Upload file materi */}
+            <div className="bg-gray-900/90 border border-white/15 rounded-2xl p-4 shadow">
               <label className="text-white font-bold text-sm block mb-2">📄 Upload File Materi (PDF)</label>
               <input
                 type="file"
@@ -819,13 +788,14 @@ _Selamat belajar!_ 🎓`
                 className="w-full text-white/70 text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-gray-900 file:font-bold file:cursor-pointer"
               />
               {fileMateri && (
-                <p className="text-green-300 text-xs mt-2">
+                <p className="text-green-400 text-xs mt-2">
                   ✅ {fileMateri.name} <span className="text-white/40">({(fileMateri.size / 1024).toFixed(1)} KB)</span>
                 </p>
               )}
             </div>
 
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+            {/* Teks materi */}
+            <div className="bg-gray-900/90 border border-white/15 rounded-2xl p-4 shadow">
               <div className="flex items-center justify-between mb-2">
                 <label className="text-white font-bold text-sm">📝 Materi / Ringkasan Teks</label>
                 {isiMateri && <span className="text-green-400 text-xs">✅ Terisi AI</span>}
@@ -833,11 +803,11 @@ _Selamat belajar!_ 🎓`
               <textarea value={isiMateri} onChange={e => setIsiMateri(e.target.value)}
                 placeholder="Tulis ringkasan materi atau klik ✨ Buat Materi dengan AI di atas..."
                 rows={8}
-                className="w-full bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" />
+                className={`${inp} resize-none`} />
             </div>
 
             {!isiMateri.trim() && !youtubeUrl.trim() && !fileMateri && (
-              <div className="bg-orange-500/10 border border-orange-400/30 rounded-xl px-4 py-3 flex items-start gap-2">
+              <div className="bg-orange-900/60 border border-orange-500/40 rounded-xl px-4 py-3 flex items-start gap-2">
                 <span className="text-orange-300 text-sm shrink-0">⚠️</span>
                 <p className="text-orange-200 text-xs">
                   Belum ada materi. Isi minimal salah satu: teks materi, link YouTube, atau upload file PDF.
@@ -845,15 +815,16 @@ _Selamat belajar!_ 🎓`
               </div>
             )}
 
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+            {/* Upload file tugas */}
+            <div className="bg-gray-900/90 border border-white/15 rounded-2xl p-4 shadow">
               <label className="text-white font-bold text-sm block mb-2">📎 Upload File Tugas (opsional)</label>
               <input
                 type="file"
                 onChange={handleFileTugas}
-                className="w-full text-white/70 text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-400 file:text-white file:font-bold file:cursor-pointer"
+                className="w-full text-white/70 text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-500 file:text-white file:font-bold file:cursor-pointer"
               />
               {fileTugas && (
-                <p className="text-green-300 text-xs mt-2">
+                <p className="text-green-400 text-xs mt-2">
                   ✅ {fileTugas.name} <span className="text-white/40">({(fileTugas.size / 1024).toFixed(1)} KB)</span>
                 </p>
               )}
@@ -861,11 +832,12 @@ _Selamat belajar!_ 🎓`
           </div>
         )}
 
+        {/* ══════════════ TAB SOAL ══════════════ */}
         {tab === 'soal' && (
           <div className="space-y-4">
             <button
               onClick={() => setShowAIModal('lkpd')}
-              className="w-full bg-gradient-to-r from-green-600/80 to-teal-600/80 hover:from-green-500/80 hover:to-teal-500/80 border border-green-400/50 text-white font-black py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition shadow-lg"
+              className="w-full bg-gradient-to-r from-green-800 to-teal-800 hover:from-green-700 hover:to-teal-700 border border-green-500/50 text-white font-black py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition shadow-lg"
             >
               <span className="text-xl">✨</span>
               <span>Generate Soal LKPD dengan AI</span>
@@ -873,7 +845,7 @@ _Selamat belajar!_ 🎓`
             </button>
 
             {soalList.length > 0 && (
-              <div className="bg-blue-500/10 border border-blue-400/30 rounded-xl px-4 py-2.5 flex items-center gap-2">
+              <div className="bg-blue-900/60 border border-blue-400/30 rounded-xl px-4 py-2.5 flex items-center gap-2">
                 <span className="text-blue-300 text-sm">ℹ️</span>
                 <p className="text-blue-200 text-xs">
                   Soal AI akan <strong>ditambahkan di bawah</strong> soal yang sudah ada. Hapus manual jika tidak diinginkan.
@@ -881,12 +853,13 @@ _Selamat belajar!_ 🎓`
               </div>
             )}
 
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+            {/* Tambah manual */}
+            <div className="bg-gray-900/90 border border-white/15 rounded-2xl p-4 shadow">
               <p className="text-white font-bold text-sm mb-3">➕ Tambah Soal Manual:</p>
               <div className="grid grid-cols-2 gap-2">
                 {TIPE_SOAL.map(t => (
                   <button key={t.value} type="button" onClick={() => addSoal(t.value)}
-                    className="bg-white/15 hover:bg-white/30 border border-white/20 rounded-xl p-3 text-left transition">
+                    className="bg-gray-800 hover:bg-gray-700 border border-white/20 rounded-xl p-3 text-left transition">
                     <p className="text-white font-bold text-xs">{t.label}</p>
                     <p className="text-white/50 text-xs mt-0.5">{t.desc}</p>
                   </button>
@@ -894,9 +867,10 @@ _Selamat belajar!_ 🎓`
               </div>
             </div>
 
+            {/* Total skor */}
             {soalList.length > 0 && (
-              <div className={`rounded-xl px-4 py-3 flex items-center justify-between ${
-                skorOver ? 'bg-red-500/20 border border-red-500/60' : 'bg-white/10 border border-white/20'
+              <div className={`rounded-xl px-4 py-3 flex items-center justify-between shadow ${
+                skorOver ? 'bg-red-900/80 border border-red-500/60' : 'bg-gray-900/90 border border-white/15'
               }`}>
                 <div>
                   <p className={`text-xs font-semibold ${skorOver ? 'text-red-400' : 'text-white/60'}`}>Total Skor Kegiatan</p>
@@ -910,7 +884,7 @@ _Selamat belajar!_ 🎓`
             )}
 
             {soalList.length === 0 ? (
-              <div className="text-center text-white/40 py-8">
+              <div className="bg-gray-900/80 border border-white/10 rounded-2xl text-center text-white/40 py-10">
                 <p className="text-3xl mb-2">📭</p>
                 <p className="text-sm">Belum ada soal. Generate dengan AI atau tambah manual!</p>
               </div>
@@ -924,6 +898,7 @@ _Selamat belajar!_ 🎓`
           </div>
         )}
 
+        {/* ── Tombol simpan ── */}
         <div className="mt-6">
           <button
             onClick={handleSimpan}
@@ -935,12 +910,13 @@ _Selamat belajar!_ 🎓`
         </div>
       </div>
 
+      {/* ══════════════ TOKEN MODAL ══════════════ */}
       {showTokenModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-          <div className="bg-gray-900/98 border border-white/20 rounded-3xl w-full max-w-sm shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+          <div className="bg-gray-900 border border-white/20 rounded-3xl w-full max-w-sm shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-5">
               <h3 className="text-white font-black text-xl text-center mb-4">🎉 Kegiatan Tersimpan!</h3>
-              <div className="bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl p-5 text-center mb-4 border-2 border-yellow-400">
+              <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-5 text-center mb-4 border-2 border-yellow-400">
                 <img src="/logo.png" alt="Logo" className="h-10 w-10 object-contain mx-auto mb-1.5" />
                 <p className="text-yellow-300 font-bold text-[10px]">PLATFORM PEMBELAJARAN JARAK JAUH</p>
                 <p className="text-white/80 text-[10px] mb-2">SMP NEGERI 8 PROBOLINGGO</p>
@@ -955,21 +931,21 @@ _Selamat belajar!_ 🎓`
 
               <div className="grid grid-cols-3 gap-2 mb-2">
                 <button onClick={handleShareWA}
-                  className="bg-green-500 hover:bg-green-400 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
+                  className="bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
                   <span className="text-base">💬</span><span className="text-xs">Kirim WA</span>
                 </button>
                 <button onClick={downloadToken}
-                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
                   <span className="text-base">🖼</span><span className="text-xs">Token PNG</span>
                 </button>
                 <button onClick={handleDownloadPDF} disabled={pdfLoading}
-                  className="bg-purple-600 hover:bg-purple-500 disabled:opacity-60 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
+                  className="bg-purple-700 hover:bg-purple-600 disabled:opacity-60 text-white font-bold py-2.5 rounded-xl text-sm transition flex flex-col items-center justify-center gap-0.5">
                   <span className="text-base">{pdfLoading ? '⏳' : '📄'}</span>
                   <span className="text-xs">{pdfLoading ? '...' : 'PDF'}</span>
                 </button>
               </div>
               <button
-                onClick={() => { setShowTokenModal(false); router.push('/guru/dashboard') }}
+                onClick={() => { setShowTokenModal(false); window.location.href = '/elkpd/guru/dashboard' }}
                 className="w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-2.5 rounded-xl text-sm transition"
               >
                 ✅ Selesai
@@ -998,8 +974,10 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
   const update = (field: string, value: unknown) =>
     onUpdate(s => ({ ...s, [field]: value } as Soal))
 
+  const inp = 'bg-gray-800 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 transition'
+
   return (
-    <div className="bg-white/10 border border-white/20 rounded-2xl p-4">
+    <div className="bg-gray-900/95 border border-white/15 rounded-2xl p-4 shadow">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="bg-yellow-400 text-gray-900 font-black text-xs px-2 py-1 rounded-lg">#{nomor}</span>
@@ -1009,19 +987,19 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
           <span className="text-white/50 text-xs">Skor:</span>
           <input type="number" value={soal.skor}
             onChange={e => update('skor', Number(e.target.value))}
-            className="w-14 bg-white/20 border border-white/30 text-white rounded-lg px-2 py-1 text-xs text-center focus:outline-none" />
+            className="w-14 bg-gray-800 border border-white/20 text-white rounded-lg px-2 py-1 text-xs text-center focus:outline-none" />
           <button onClick={onRemove} className="text-red-400 hover:text-red-300 text-lg leading-none">✕</button>
         </div>
       </div>
 
       <textarea value={soal.pertanyaan} onChange={e => update('pertanyaan', e.target.value)}
         placeholder="Tulis soal / pertanyaan..." rows={2}
-        className={`w-full bg-white/20 border text-white placeholder-white/40 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none mb-3 ${
-          !soal.pertanyaan?.trim() ? 'border-orange-400/40' : 'border-white/30'
+        className={`w-full bg-gray-800 border text-white placeholder-white/30 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none mb-3 ${
+          !soal.pertanyaan?.trim() ? 'border-orange-500/50' : 'border-white/20'
         }`} />
 
       {!soal.pertanyaan?.trim() && (
-        <p className="text-orange-400/70 text-xs -mt-2 mb-3 ml-1">⚠ Pertanyaan belum diisi</p>
+        <p className="text-orange-400/80 text-xs -mt-2 mb-3 ml-1">⚠ Pertanyaan belum diisi</p>
       )}
 
       {soal.tipe === 'pilgan' && (() => {
@@ -1037,7 +1015,7 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
                 <input type="text" value={p.teks}
                   onChange={e => update('pilihan', s.pilihan.map((x: PilihanItem) => x.id === p.id ? { ...x, teks: e.target.value } : x))}
                   placeholder={`Pilihan ${String.fromCharCode(65 + i)}`}
-                  className="flex-1 bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                  className={`flex-1 ${inp}`} />
               </div>
             ))}
             <p className="text-yellow-300 text-xs">● = Kunci Jawaban</p>
@@ -1051,7 +1029,7 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
           <div className="grid grid-cols-2 gap-2">
             {(['benar', 'salah'] as const).map(v => (
               <button key={v} type="button" onClick={() => update('kunci', v)}
-                className={`py-2 rounded-xl font-bold text-sm transition ${s.kunci === v ? 'bg-yellow-400 text-gray-900' : 'bg-white/20 text-white'}`}>
+                className={`py-2 rounded-xl font-bold text-sm transition ${s.kunci === v ? 'bg-yellow-400 text-gray-900' : 'bg-gray-800 border border-white/20 text-white hover:bg-gray-700'}`}>
                 {v === 'benar' ? '✅ Benar' : '❌ Salah'}
               </button>
             ))}
@@ -1071,12 +1049,10 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
               <div key={p.kiri_id} className="grid grid-cols-2 gap-2">
                 <input value={p.kiri}
                   onChange={e => update('pasangan', s.pasangan.map((x: PasanganItem) => x.kiri_id === p.kiri_id ? { ...x, kiri: e.target.value } : x))}
-                  placeholder={`Kiri ${i + 1}`}
-                  className="bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                  placeholder={`Kiri ${i + 1}`} className={inp} />
                 <input value={p.kanan}
                   onChange={e => update('pasangan', s.pasangan.map((x: PasanganItem) => x.kiri_id === p.kiri_id ? { ...x, kanan: e.target.value } : x))}
-                  placeholder={`Kanan ${i + 1}`}
-                  className="bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                  placeholder={`Kanan ${i + 1}`} className={inp} />
               </div>
             ))}
             <button type="button"
@@ -1094,12 +1070,11 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
               <div key={k.id} className="grid grid-cols-2 gap-2">
                 <input value={k.petunjuk}
                   onChange={e => update('kotak', s.kotak.map((x: KotakItem) => x.id === k.id ? { ...x, petunjuk: e.target.value } : x))}
-                  placeholder={`Petunjuk ${i + 1}`}
-                  className="bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                  placeholder={`Petunjuk ${i + 1}`} className={inp} />
                 <input value={k.jawaban}
                   onChange={e => update('kotak', s.kotak.map((x: KotakItem) => x.id === k.id ? { ...x, jawaban: e.target.value } : x))}
                   placeholder={`Jawaban ${i + 1}`}
-                  className="bg-white/20 border border-green-500/50 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                  className={`${inp} border-green-500/50`} />
               </div>
             ))}
             <button type="button"
@@ -1118,8 +1093,7 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
               {s.item.map((it, i) => (
                 <input key={it.id} value={it.teks}
                   onChange={e => update('item', s.item.map((x: DragItem) => x.id === it.id ? { ...x, teks: e.target.value } : x))}
-                  placeholder={`Item ${i + 1}`}
-                  className="w-full bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none mb-1" />
+                  placeholder={`Item ${i + 1}`} className={`w-full ${inp} mb-1`} />
               ))}
               <button type="button"
                 onClick={() => update('item', [...s.item, { id: generateId(), teks: '' }])}
@@ -1131,14 +1105,13 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
                 <div key={sl.id} className="grid grid-cols-2 gap-2 mb-1">
                   <input value={sl.label}
                     onChange={e => update('slot', s.slot.map((x: SlotItem) => x.id === sl.id ? { ...x, label: e.target.value } : x))}
-                    placeholder={`Label slot ${i + 1}`}
-                    className="bg-white/20 border border-white/30 text-white placeholder-white/40 rounded-lg px-3 py-1.5 text-sm focus:outline-none" />
+                    placeholder={`Label slot ${i + 1}`} className={inp} />
                   <select value={sl.jawaban_item_id}
                     onChange={e => update('slot', s.slot.map((x: SlotItem) => x.id === sl.id ? { ...x, jawaban_item_id: e.target.value } : x))}
-                    className="bg-white/20 border border-green-500/50 text-white rounded-lg px-2 py-1.5 text-sm focus:outline-none">
-                    <option value="" className="bg-gray-800">-- Jawaban --</option>
+                    className="bg-gray-800 border border-green-500/50 text-white rounded-lg px-2 py-1.5 text-sm focus:outline-none">
+                    <option value="" className="bg-gray-900">-- Jawaban --</option>
                     {s.item.map((it: DragItem) => (
-                      <option key={it.id} value={it.id} className="bg-gray-800">{it.teks || `Item (${it.id.slice(0, 4)})`}</option>
+                      <option key={it.id} value={it.id} className="bg-gray-900">{it.teks || `Item (${it.id.slice(0, 4)})`}</option>
                     ))}
                   </select>
                 </div>
@@ -1154,7 +1127,6 @@ function SoalEditor({ soal, nomor, onUpdate, onRemove }: SoalEditorProps) {
       {soal.tipe === 'uraian' && (
         <p className="text-orange-300 text-xs">✍ Jawaban uraian akan dinilai manual oleh guru</p>
       )}
-
     </div>
   )
 }
