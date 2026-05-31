@@ -1,12 +1,7 @@
 // src/components/elkpd/soal/TTSSoal.tsx
-'use client'
-interface Kotak { id: string; petunjuk: string; jawaban: string }
-interface Soal { id: string; pertanyaan?: string; kotak?: Kotak[]; skor?: number }
-interface Props { soal: Soal; nomor: number; jawaban: Record<string, string>; onChange: (id: string, val: Record<string, string>) => void }
-
+interface Props { soal: any; nomor: number; jawaban: Record<string, string>; onChange: (id: string, val: any) => void }
 export default function TTSSoal({ soal, nomor, jawaban = {}, onChange }: Props) {
-  const update = (kotakId: string, nilai: string) => onChange(soal.id, { ...jawaban, [kotakId]: nilai })
-
+  const update = (kotakId: string, val: string) => onChange(soal.id, { ...jawaban, [kotakId]: val })
   return (
     <div className="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4">
       <div className="flex items-start gap-2 mb-3">
@@ -17,7 +12,7 @@ export default function TTSSoal({ soal, nomor, jawaban = {}, onChange }: Props) 
         </div>
       </div>
       <div className="space-y-3 ml-2">
-        {soal.kotak?.map((k, i) => (
+        {soal.kotak?.map((k: any, i: number) => (
           <div key={k.id} className="flex items-center gap-3">
             <span className="text-white/60 text-sm min-w-[20px] font-bold">{i + 1}.</span>
             <div className="flex-1">

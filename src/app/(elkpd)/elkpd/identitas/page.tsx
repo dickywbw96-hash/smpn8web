@@ -24,7 +24,6 @@ export default function IdentitasSiswa() {
   }, [router])
 
   const handleTingkat = (t: string) => { setTingkat(t); setKelas('') }
-  const handleKelas = (k: string) => setKelas(k)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,6 +38,7 @@ export default function IdentitasSiswa() {
     <PageWrapper>
       <div className="flex flex-col items-center justify-center min-h-screen px-4 py-10">
         <div className="bg-white/15 backdrop-blur-lg border border-white/30 rounded-3xl shadow-2xl p-8 w-full max-w-md">
+
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 bg-green-500/30 border border-green-400/50 rounded-full px-4 py-1 mb-3">
               <span className="text-green-300 text-sm font-bold">📚 {kegiatan.guru?.mapel}</span>
@@ -53,7 +53,9 @@ export default function IdentitasSiswa() {
             <div className="grid grid-cols-3 gap-3">
               {['7', '8', '9'].map((t) => (
                 <button key={t} type="button" onClick={() => handleTingkat(t)}
-                  className={`py-3 rounded-xl font-black text-lg transition-all ${tingkat === t ? 'bg-yellow-400 text-gray-900 shadow-lg scale-105' : 'bg-white/20 text-white hover:bg-white/30'}`}>
+                  className={`py-3 rounded-xl font-black text-lg transition-all ${
+                    tingkat === t ? 'bg-yellow-400 text-gray-900 shadow-lg scale-105' : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}>
                   Kelas {t}
                 </button>
               ))}
@@ -66,8 +68,10 @@ export default function IdentitasSiswa() {
               <label className="text-white/80 text-sm font-semibold block mb-2">Pilih Kelas</label>
               <div className="grid grid-cols-3 gap-2">
                 {KELAS_OPTIONS[tingkat].map((k) => (
-                  <button key={k} type="button" onClick={() => handleKelas(k)}
-                    className={`py-2.5 rounded-xl font-bold text-sm transition-all ${kelas === k ? 'bg-yellow-400 text-gray-900 shadow-lg scale-105' : 'bg-white/20 text-white hover:bg-white/30'}`}>
+                  <button key={k} type="button" onClick={() => setKelas(k)}
+                    className={`py-2.5 rounded-xl font-bold text-sm transition-all ${
+                      kelas === k ? 'bg-yellow-400 text-gray-900 shadow-lg scale-105' : 'bg-white/20 text-white hover:bg-white/30'
+                    }`}>
                     {k}
                   </button>
                 ))}

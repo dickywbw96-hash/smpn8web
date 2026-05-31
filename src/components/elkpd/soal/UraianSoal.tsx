@@ -1,8 +1,5 @@
 // src/components/elkpd/soal/UraianSoal.tsx
-'use client'
-interface Soal { id: string; pertanyaan: string; skor?: number }
-interface Props { soal: Soal; nomor: number; jawaban: string; onChange: (id: string, val: string) => void }
-
+interface Props { soal: any; nomor: number; jawaban: string; onChange: (id: string, val: any) => void }
 export default function UraianSoal({ soal, nomor, jawaban = '', onChange }: Props) {
   return (
     <div className="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4">
