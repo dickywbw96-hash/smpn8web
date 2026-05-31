@@ -1,17 +1,10 @@
 // src/components/elkpd/PageWrapper.tsx
 export default function PageWrapper({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div
-      className={`min-h-screen w-full relative ${className}`}
-      style={{
-        backgroundImage: 'url(/bg1.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-0" />
-      <div className="relative z-10">{children}</div>
+    <div className={`min-h-screen w-full ${className}`} style={{ position: 'relative', isolation: 'isolate' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: 'url(/bg1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(1px)' }} />
+      <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
     </div>
   )
 }
