@@ -37,11 +37,7 @@ const BADGE_STYLE: Record<string, { bg: string; color: string }> = {
  */
 function formatContent(content: string): string {
   if (!content) return ''
-
-  // Jika sudah HTML, kembalikan langsung
   if (/<[a-z][\s\S]*>/i.test(content)) return content
-
-  // Plain text: split per baris kosong (paragraf), wrap tiap paragraf ke <p>
   return content
     .split(/\n{2,}/)
     .map((para) =>
@@ -69,7 +65,6 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
   const related = relatedPosts.filter((p) => p.slug !== post.slug).slice(0, 3)
   const heroImg = getImageUrl(post.featured_image_url)
 
-  // Proses konten: gunakan content_html jika ada, fallback ke content (plain text)
   const rawContent = post.content_html || (post as any).content || ''
   const processedContent = formatContent(rawContent)
 
@@ -138,12 +133,8 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           line-height: 1.9;
           color: var(--gray-700, #374151);
           word-break: break-word;
-
-          /* Rata kanan-kiri */
           text-align: justify;
           text-justify: inter-word;
-
-          /* Hyphenation otomatis supaya justify tidak aneh */
           hyphens: auto;
           -webkit-hyphens: auto;
           overflow-wrap: break-word;
@@ -152,7 +143,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         /* ── Paragraf ── */
         .article-content .prose p {
           margin-top: 0;
-          margin-bottom: 1.6rem;   /* jarak antar paragraf */
+          margin-bottom: 1.6rem;
         }
         .article-content .prose p:last-child { margin-bottom: 0; }
 
@@ -169,7 +160,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           line-height: 1.35;
           margin-top: 2.25rem;
           margin-bottom: .85rem;
-          text-align: left;  /* heading tetap left-align */
+          text-align: left;
         }
         .article-content .prose h1 { font-size: 1.9rem; }
         .article-content .prose h2 { font-size: 1.55rem; }
@@ -183,7 +174,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         .article-content .prose ol {
           padding-left: 1.75rem;
           margin-bottom: 1.6rem;
-          text-align: left;  /* list tetap left-align supaya terlihat rapi */
+          text-align: left;
         }
         .article-content .prose ul { list-style: disc; }
         .article-content .prose ol { list-style: decimal; }
@@ -199,10 +190,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
 
         /* ── Inline ── */
         .article-content .prose strong,
-        .article-content .prose b {
-          font-weight: 700;
-          color: var(--gray-900, #111827);
-        }
+        .article-content .prose b { font-weight: 700; color: var(--gray-900, #111827); }
         .article-content .prose em,
         .article-content .prose i { font-style: italic; }
         .article-content .prose u { text-decoration: underline; }
@@ -232,32 +220,21 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
 
         /* ── Kode ── */
         .article-content .prose code {
-          background: #f1f5f9;
-          color: #be185d;
-          padding: .15rem .4rem;
-          border-radius: 4px;
-          font-size: .9em;
-          font-family: 'Courier New', monospace;
+          background: #f1f5f9; color: #be185d;
+          padding: .15rem .4rem; border-radius: 4px;
+          font-size: .9em; font-family: 'Courier New', monospace;
         }
         .article-content .prose pre {
-          background: #1e293b;
-          color: #e2e8f0;
-          padding: 1.25rem 1.5rem;
-          border-radius: var(--radius-md, 8px);
-          overflow-x: auto;
-          margin-bottom: 1.6rem;
-          font-size: .88rem;
-          line-height: 1.7;
-          text-align: left;
+          background: #1e293b; color: #e2e8f0;
+          padding: 1.25rem 1.5rem; border-radius: var(--radius-md, 8px);
+          overflow-x: auto; margin-bottom: 1.6rem;
+          font-size: .88rem; line-height: 1.7; text-align: left;
         }
         .article-content .prose pre code {
-          background: none;
-          color: inherit;
-          padding: 0;
-          font-size: inherit;
+          background: none; color: inherit; padding: 0; font-size: inherit;
         }
 
-        /* ── Gambar di dalam konten ── */
+        /* ── Gambar standalone (<img> langsung) ── */
         .article-content .prose img {
           max-width: 100%;
           height: auto;
@@ -267,45 +244,54 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           box-shadow: 0 4px 16px rgba(0,0,0,.08);
         }
 
+        /* ── Figure + Figcaption (dari tombol Sisipkan Gambar) ── */
+        .article-content .prose figure {
+          margin: 1.75rem auto;
+          text-align: center;
+        }
+        .article-content .prose figure img {
+          /* reset margin dari selector img di atas agar figure yang atur posisi */
+          margin: 0 auto;
+          display: block;
+          max-width: 100%;
+          height: auto;
+          border-radius: var(--radius-md, 8px);
+          box-shadow: 0 4px 16px rgba(0,0,0,.08);
+        }
+        .article-content .prose figcaption {
+          font-size: .82rem;
+          color: var(--gray-400, #9ca3af);
+          margin-top: .45rem;
+          font-style: italic;
+          line-height: 1.5;
+          text-align: center;
+        }
+
         /* ── Tabel ── */
         .article-content .prose table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 1.75rem;
-          font-size: .95rem;
-          border-radius: var(--radius-md, 8px);
-          overflow: hidden;
-          text-align: left;
+          width: 100%; border-collapse: collapse;
+          margin-bottom: 1.75rem; font-size: .95rem;
+          border-radius: var(--radius-md, 8px); overflow: hidden; text-align: left;
         }
         .article-content .prose th,
         .article-content .prose td {
-          padding: .7rem 1rem;
-          border: 1px solid #e2e8f0;
-          text-align: left;
-          vertical-align: top;
+          padding: .7rem 1rem; border: 1px solid #e2e8f0;
+          text-align: left; vertical-align: top;
         }
         .article-content .prose th {
-          background: #eff6ff;
-          font-weight: 700;
-          color: var(--blue-900, #0c2461);
+          background: #eff6ff; font-weight: 700; color: var(--blue-900, #0c2461);
         }
-        .article-content .prose tr:nth-child(even) td {
-          background: #f8fafc;
-        }
+        .article-content .prose tr:nth-child(even) td { background: #f8fafc; }
 
         /* ── HR ── */
         .article-content .prose hr {
-          border: none;
-          border-top: 1px solid #e2e8f0;
-          margin: 2.5rem 0;
+          border: none; border-top: 1px solid #e2e8f0; margin: 2.5rem 0;
         }
 
         /* ── Iframe / video embed ── */
         .article-content .prose iframe {
-          max-width: 100%;
-          border-radius: var(--radius-md, 8px);
-          margin: 1.75rem 0;
-          display: block;
+          max-width: 100%; border-radius: var(--radius-md, 8px);
+          margin: 1.75rem 0; display: block;
         }
 
         /* ── Excerpt box ── */
@@ -316,8 +302,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           padding: 1.25rem 1.5rem; margin-bottom: 2rem;
           font-style: italic; color: var(--gray-600, #4b5563);
           font-size: 1.05rem; line-height: 1.8;
-          text-align: justify;
-          text-justify: inter-word;
+          text-align: justify; text-justify: inter-word;
         }
 
         /* ── Tags ── */
@@ -327,8 +312,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           border-top: 1px solid var(--gray-100, #f3f4f6);
         }
         .article-tag {
-          background: var(--gray-100, #f3f4f6);
-          color: var(--gray-600, #4b5563);
+          background: var(--gray-100, #f3f4f6); color: var(--gray-600, #4b5563);
           padding: .3rem .8rem; border-radius: 100px;
           font-size: .75rem; font-weight: 600;
         }
@@ -396,14 +380,18 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         @media (max-width: 560px) {
           .article-hero { height: 360px; }
           .article-gallery-grid { grid-template-columns: repeat(2,1fr); }
-
-          /* Di layar sempit, justify kadang aneh — fallback ke left */
           .article-content .prose {
             text-align: left;
             hyphens: none;
           }
-          .article-excerpt-box {
-            text-align: left;
+          .article-excerpt-box { text-align: left; }
+
+          /* Gambar inline: paksa 100% di layar kecil */
+          .article-content .prose figure {
+            width: 100% !important;
+          }
+          .article-content .prose figure img {
+            width: 100% !important;
           }
         }
       `}</style>

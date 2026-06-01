@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { uploadFile } from '@/lib/supabase'
@@ -22,6 +22,188 @@ function slugify(text: string) {
     .trim()
 }
 
+/** Buat tag <figure> untuk disisipkan ke content_html */
+function buildImageHtml(url: string, caption: string, width: string) {
+  const widthStyle =
+    width === 'full'
+      ? 'width:100%;'
+      : width === 'half'
+      ? 'width:50%;'
+      : 'width:33%;'
+
+  const figStyle = `display:block;margin:1.75rem auto;${widthStyle}text-align:center;`
+  const imgStyle = `max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);`
+
+  if (caption.trim()) {
+    return `<figure style="${figStyle}"><img src="${url}" alt="${caption}" style="${imgStyle}" /><figcaption style="font-size:.82rem;color:#6b7280;margin-top:.4rem;">${caption}</figcaption></figure>`
+  }
+  return `<figure style="${figStyle}"><img src="${url}" alt="" style="${imgStyle}" /></figure>`
+}
+
+// ─── Modal Sisipkan Gambar ───────────────────────────────────────────────────
+interface InsertImageModalProps {
+  onClose: () => void
+  onInsert: (html: string, position: 'before' | 'after' | 'cursor') => void
+  uploadFileFn: (bucket: string, path: string, file: File) => Promise<string | null>
+}
+
+function InsertImageModal({ onClose, onInsert, uploadFileFn }: InsertImageModalProps) {
+  const [step, setStep] = useState<'upload' | 'options'>('upload')
+  const [uploading, setUploading] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
+  const [caption, setCaption] = useState('')
+  const [width, setWidth] = useState<'full' | 'half' | 'third'>('full')
+  const [position, setPosition] = useState<'before' | 'after' | 'cursor'>('cursor')
+
+  async function handleFile(file: File) {
+    setUploading(true)
+    const path = `posts/inline/${Date.now()}-${file.name}`
+    const url = await uploadFileFn('media', path, file)
+    if (url) {
+      setImageUrl(url)
+      setStep('options')
+    }
+    setUploading(false)
+  }
+
+  function handleInsert() {
+    const html = buildImageHtml(imageUrl, caption, width)
+    onInsert(html, position)
+    onClose()
+  }
+
+  return (
+    <div style={overlay} onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={modalBox}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#030f2b' }}>
+            📷 Sisipkan Gambar ke Konten
+          </h3>
+          <button onClick={onClose} style={{ border: 'none', background: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#6b7280' }}>×</button>
+        </div>
+
+        {step === 'upload' ? (
+          <div>
+            <div
+              style={{
+                border: '2px dashed #d1d5db', borderRadius: '10px', padding: '2.5rem',
+                textAlign: 'center', background: '#f9fafb', cursor: 'pointer',
+              }}
+              onDragOver={e => e.preventDefault()}
+              onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f) }}
+            >
+              {uploading ? (
+                <p style={{ color: '#6b7280', margin: 0 }}>⏳ Mengupload gambar...</p>
+              ) : (
+                <>
+                  <p style={{ color: '#9ca3af', fontSize: '2rem', margin: '0 0 .5rem' }}>🖼️</p>
+                  <p style={{ color: '#374151', fontWeight: 600, margin: '0 0 .25rem', fontSize: '.9rem' }}>
+                    Drag & drop gambar di sini
+                  </p>
+                  <p style={{ color: '#9ca3af', fontSize: '.8rem', margin: '0 0 1rem' }}>atau klik tombol di bawah</p>
+                  <label style={{
+                    display: 'inline-block', padding: '.5rem 1.25rem',
+                    background: '#0d2a5e', color: 'white', borderRadius: '8px',
+                    fontSize: '.85rem', fontWeight: 600, cursor: 'pointer',
+                  }}>
+                    Pilih Gambar
+                    <input type="file" accept="image/*" style={{ display: 'none' }}
+                      onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
+                  </label>
+                </>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* Preview */}
+            <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+              <img
+                src={imageUrl}
+                alt="preview"
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '180px',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  border: '1px solid #e5e7eb',
+                }}
+              />
+            </div>
+
+            {/* Caption */}
+            <label style={labelStyle}>Caption (opsional)</label>
+            <input
+              value={caption}
+              onChange={e => setCaption(e.target.value)}
+              placeholder="Tulis keterangan gambar..."
+              style={{ ...inputStyle, marginBottom: '1rem' }}
+            />
+
+            {/* Ukuran */}
+            <label style={labelStyle}>Ukuran Gambar</label>
+            <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1rem' }}>
+              {([
+                { val: 'full', label: '↔ Penuh', desc: '100%' },
+                { val: 'half', label: '⬛ Sedang', desc: '50%' },
+                { val: 'third', label: '▪ Kecil', desc: '33%' },
+              ] as const).map(opt => (
+                <button
+                  key={opt.val}
+                  onClick={() => setWidth(opt.val)}
+                  style={{
+                    flex: 1, padding: '.5rem', border: `2px solid ${width === opt.val ? '#0d2a5e' : '#e5e7eb'}`,
+                    borderRadius: '8px', background: width === opt.val ? '#eff6ff' : 'white',
+                    cursor: 'pointer', fontSize: '.78rem', fontWeight: 600,
+                    color: width === opt.val ? '#0d2a5e' : '#6b7280',
+                  }}
+                >
+                  <div>{opt.label}</div>
+                  <div style={{ fontSize: '.7rem', fontWeight: 400, marginTop: '.15rem' }}>{opt.desc}</div>
+                </button>
+              ))}
+            </div>
+
+            {/* Posisi */}
+            <label style={labelStyle}>Posisi Sisipan</label>
+            <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1.25rem' }}>
+              {([
+                { val: 'before', label: '⬆ Awal Konten' },
+                { val: 'cursor', label: '✦ Di Sini (kursor)' },
+                { val: 'after', label: '⬇ Akhir Konten' },
+              ] as const).map(opt => (
+                <button
+                  key={opt.val}
+                  onClick={() => setPosition(opt.val)}
+                  style={{
+                    flex: 1, padding: '.5rem', border: `2px solid ${position === opt.val ? '#0d2a5e' : '#e5e7eb'}`,
+                    borderRadius: '8px', background: position === opt.val ? '#eff6ff' : 'white',
+                    cursor: 'pointer', fontSize: '.75rem', fontWeight: 600,
+                    color: position === opt.val ? '#0d2a5e' : '#6b7280',
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '.5rem' }}>
+              <button onClick={() => setStep('upload')} style={{ ...btnSecondary, flex: 1 }}>
+                ← Ganti Gambar
+              </button>
+              <button onClick={handleInsert} style={{ ...btnPrimary, flex: 2 }}>
+                ✓ Sisipkan Gambar
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Main Page ───────────────────────────────────────────────────────────────
 export default function NewPostPage() {
   const supabase = getSupabaseBrowser()
   const router = useRouter()
@@ -29,6 +211,8 @@ export default function NewPostPage() {
   const [userId, setUserId] = useState('')
   const [uploading, setUploading] = useState(false)
   const [galleryUploading, setGalleryUploading] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const [form, setForm] = useState({
     title: '',
@@ -81,6 +265,39 @@ export default function NewPostPage() {
     setTagInput('')
   }
 
+  /** Sisipkan HTML gambar ke textarea di posisi yang dipilih */
+  function handleInsertImage(html: string, position: 'before' | 'after' | 'cursor') {
+    const ta = textareaRef.current
+    const current = form.content_html
+
+    let newContent = current
+    if (position === 'before') {
+      newContent = html + '\n' + current
+    } else if (position === 'after') {
+      newContent = current + '\n' + html
+    } else {
+      // Posisi kursor
+      if (ta) {
+        const start = ta.selectionStart ?? current.length
+        newContent = current.slice(0, start) + '\n' + html + '\n' + current.slice(start)
+      } else {
+        newContent = current + '\n' + html
+      }
+    }
+
+    setForm(f => ({ ...f, content_html: newContent }))
+
+    // Focus & scroll ke posisi sisipan setelah render
+    setTimeout(() => {
+      if (ta) {
+        ta.focus()
+        if (position === 'before') {
+          ta.setSelectionRange(html.length + 1, html.length + 1)
+        }
+      }
+    }, 50)
+  }
+
   async function handleSave(status: string) {
     if (!form.title || !form.category) {
       alert('Judul dan kategori wajib diisi.')
@@ -109,12 +326,9 @@ export default function NewPostPage() {
       return
     }
 
-    // Insert tags
     if (tags.length > 0) {
       await supabase.from('posts_tags').insert(tags.map(tag => ({ post_id: post.id, tag })))
     }
-
-    // Insert gallery
     if (gallery.length > 0) {
       await supabase.from('posts_gallery').insert(
         gallery.map((g, i) => ({ post_id: post.id, image_url: g.image_url, caption: g.caption, order_index: i }))
@@ -126,6 +340,14 @@ export default function NewPostPage() {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '900px' }}>
+      {showImageModal && (
+        <InsertImageModal
+          onClose={() => setShowImageModal(false)}
+          onInsert={handleInsertImage}
+          uploadFileFn={uploadFile}
+        />
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/posts" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Kembali</Link>
@@ -168,8 +390,24 @@ export default function NewPostPage() {
 
           {/* Konten */}
           <div style={card}>
-            <label style={labelStyle}>Konten Berita (HTML)</label>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+              <label style={{ ...labelStyle, marginBottom: 0 }}>Konten Berita (HTML)</label>
+              <button
+                onClick={() => setShowImageModal(true)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '.35rem',
+                  padding: '.35rem .75rem', background: '#eff6ff', color: '#0d2a5e',
+                  border: '1px solid #bfdbfe', borderRadius: '6px',
+                  fontSize: '.78rem', fontWeight: 700, cursor: 'pointer',
+                  transition: 'background .15s',
+                }}
+                title="Sisipkan gambar ke dalam konten"
+              >
+                📷 Sisipkan Gambar
+              </button>
+            </div>
             <textarea
+              ref={textareaRef}
               value={form.content_html}
               onChange={e => setForm(f => ({ ...f, content_html: e.target.value }))}
               placeholder="<p>Tulis konten berita di sini...</p>"
@@ -177,7 +415,7 @@ export default function NewPostPage() {
               style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: '0.8rem' }}
             />
             <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.5rem' }}>
-              Mendukung HTML. Gunakan &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;img&gt;, dll.
+              Mendukung HTML. Gunakan &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;img&gt;, dll. Klik <strong>Sisipkan Gambar</strong> untuk menambah gambar langsung ke konten.
             </p>
           </div>
 
@@ -252,7 +490,6 @@ export default function NewPostPage() {
 
         {/* Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Publish actions */}
           <div style={card}>
             <label style={labelStyle}>Status</label>
             <select value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))} style={selectStyle}>
@@ -276,7 +513,6 @@ export default function NewPostPage() {
             </div>
           </div>
 
-          {/* Kategori */}
           <div style={card}>
             <label style={labelStyle}>Kategori *</label>
             <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} style={selectStyle}>
@@ -284,7 +520,6 @@ export default function NewPostPage() {
             </select>
           </div>
 
-          {/* Featured image */}
           <div style={card}>
             <label style={labelStyle}>Foto Utama</label>
             <input type="file" accept="image/*" onChange={e => e.target.files?.[0] && handleFeaturedImageUpload(e.target.files[0])} style={{ fontSize: '0.8rem' }} />
@@ -312,6 +547,17 @@ export default function NewPostPage() {
   )
 }
 
+// ─── Styles ──────────────────────────────────────────────────────────────────
+const overlay: React.CSSProperties = {
+  position: 'fixed', inset: 0, background: 'rgba(0,0,0,.45)',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  zIndex: 9999, padding: '1rem',
+}
+const modalBox: React.CSSProperties = {
+  background: 'white', borderRadius: '14px', padding: '1.5rem',
+  width: '100%', maxWidth: '480px', boxShadow: '0 20px 60px rgba(0,0,0,.2)',
+  maxHeight: '90vh', overflowY: 'auto',
+}
 const card: React.CSSProperties = { background: 'white', borderRadius: '10px', padding: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
 const labelStyle: React.CSSProperties = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '0.4rem' }
 const inputStyle: React.CSSProperties = { width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }
