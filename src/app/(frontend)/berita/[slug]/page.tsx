@@ -72,7 +72,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
     <>
       <style>{`
         /* ── Spacer ── */
-        .article-spacer { height: 120px; }
+        .article-spacer { height: 136px; }
 
         /* ── Hero ── */
         .article-hero {
