@@ -59,7 +59,8 @@ export default function PostsPage() {
     if (filterCategory) query = query.eq('category', filterCategory)
     if (filterStatus) query = query.eq('status', filterStatus)
 
-    const { data, count } = await query
+    const { data, count, error } = await query
+    if (error) console.error('FETCH ERROR:', JSON.stringify(error, null, 2))
     setPosts(data ?? [])
     setTotalCount(count ?? 0)
     setLoading(false)
