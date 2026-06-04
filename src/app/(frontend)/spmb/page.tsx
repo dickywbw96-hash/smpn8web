@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import type { Metadata } from 'next'
+import { useState, useRef } from 'react'
 import PageHero from '@/components/ui/PageHero'
 
 /* ─── DATA ─────────────────────────────────────────────────────────────── */
@@ -191,7 +190,6 @@ function SectionHead({ icon, title }: { icon: string; title: string }) {
 function TabBeranda() {
   return (
     <div>
-      {/* Portal link */}
       <a href="https://spmb.probolinggokota.go.id" className="spmb-portal-btn" target="_blank" rel="noreferrer">
         <span>🌐</span>
         <span>Buka Portal Pendaftaran SPMB</span>
@@ -201,7 +199,6 @@ function TabBeranda() {
         <strong>⏰ Jam Layanan Panitia: 07.00 – 14.30 WIB</strong> (Senin–Jumat hari kerja). Pendaftaran online dapat dilakukan kapan saja melalui portal di atas.
       </Alert>
 
-      {/* Quick strip */}
       <div className="spmb-qstrip">
         {[
           { icon:'📅', label:'Daftar Afirmasi/Mutasi/Prestasi', val:'17–20 Jun 2026', gold:true },
@@ -218,7 +215,6 @@ function TabBeranda() {
         ))}
       </div>
 
-      {/* Timeline */}
       <SectionHead icon="📅" title="Jadwal & Tahapan SPMB" />
       <div className="spmb-card" style={{ padding: '1.5rem' }}>
         <div className="spmb-tl">
@@ -293,7 +289,7 @@ function TabKuota() {
           </thead>
           <tbody>
             {SCHOOLS.map((s) => (
-              <tr key={s.no} className={s.no === 8 ? 'highlight' : ''}>
+              <tr key={s.no} className={s.border ? 'highlight' : ''}>
                 <td>{s.no}</td>
                 <td className="td-name">{s.name}</td>
                 <td>{s.addr}</td>
@@ -306,7 +302,7 @@ function TabKuota() {
         </table>
       </div>
       <Alert type="blue">
-        <strong>✦</strong> Satuan Pendidikan Perbatasan — menerima 5% kuota dari luar Kota Probolinggo. Kuota per rombongan belajar = <strong>32 murid</strong>. Baris <strong>SMP N 8</strong> adalah sekolah ini.
+        <strong>✦</strong> Satuan Pendidikan Perbatasan — menerima 5% kuota dari luar Kota Probolinggo. Kuota per rombongan belajar = <strong>32 murid</strong>.
       </Alert>
 
       <div style={{ marginTop: '1.75rem' }}>
@@ -629,8 +625,8 @@ function FloatingWA() {
         <div className="spmb-wa-menu">
           <div className="spmb-wa-hour">⏰ Layanan: 07.00 – 14.30 WIB</div>
           {[
-            { label: 'Contact Person 1', number: '0852-5729-9389', wa: 'https://wa.me/6285257299389' },
-            { label: 'Contact Person 2', number: '0833-1131-886',  wa: 'https://wa.me/628331131886'  },
+            { label: 'Contact Person 1', number: '0852-5729-9389', wa: 'https://wa.me/6285257299389?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...' },
+            { label: 'Contact Person 2', number: '0833-1131-886',  wa: 'https://wa.me/628331131886?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...'  },
           ].map((cp, i) => (
             <a key={i} href={cp.wa} className="spmb-wa-c" target="_blank" rel="noreferrer">
               <div className="spmb-wa-cdot">
@@ -659,6 +655,23 @@ function FloatingWA() {
 
 export default function SpmbPage() {
   const [activeTab, setActiveTab] = useState('beranda')
+  const navRef = useRef<HTMLDivElement>(null)
+
+  const activeIdx = TABS.findIndex(t => t.id === activeTab)
+  const isFirst   = activeIdx === 0
+  const isLast    = activeIdx === TABS.length - 1
+
+  function goTo(id: string) {
+    setActiveTab(id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setTimeout(() => {
+      const el = document.getElementById(`tab-${id}`)
+      el?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+    }, 30)
+  }
+
+  function goPrev() { if (!isFirst) goTo(TABS[activeIdx - 1].id) }
+  function goNext() { if (!isLast)  goTo(TABS[activeIdx + 1].id) }
 
   const tabContent: Record<string, React.ReactNode> = {
     beranda:  <TabBeranda />,
@@ -673,26 +686,45 @@ export default function SpmbPage() {
   return (
     <>
       <style>{`
-        /* ── Tabs ── */
+        /* ── Nav wrapper: flex row with arrow buttons ── */
         .spmb-nav-wrap {
           position: sticky; top: 0; z-index: 50;
           background: var(--blue-950, #020c1f);
-          padding: .6rem 1rem;
+          padding: .5rem .6rem;
           border-bottom: 1px solid rgba(255,255,255,.08);
+          display: flex; align-items: center; gap: .4rem;
         }
+
+        /* ── Arrow buttons ── */
+        .spmb-nav-arrow {
+          flex-shrink: 0;
+          width: 34px; height: 34px; border-radius: 8px;
+          background: rgba(255,255,255,.09);
+          border: 1px solid rgba(255,255,255,.14);
+          color: #fff; font-size: 1.1rem; line-height: 1;
+          cursor: pointer; display: flex; align-items: center; justify-content: center;
+          transition: background .15s, opacity .15s;
+          font-family: inherit;
+        }
+        .spmb-nav-arrow:hover:not(:disabled) { background: rgba(255,255,255,.18); }
+        .spmb-nav-arrow:disabled { opacity: .25; cursor: default; }
+
+        /* ── Scrollable tab strip ── */
         .spmb-nav {
-          max-width: 960px; margin: 0 auto;
-          display: flex; gap: .4rem;
+          flex: 1; display: flex; gap: .35rem;
           overflow-x: auto; scrollbar-width: none;
           -webkit-overflow-scrolling: touch;
+          scroll-behavior: smooth;
         }
         .spmb-nav::-webkit-scrollbar { display: none; }
+
+        /* ── Tab buttons ── */
         .spmb-nav-btn {
           flex-shrink: 0;
           background: rgba(255,255,255,.06);
           border: 1px solid rgba(255,255,255,.1);
           color: rgba(255,255,255,.65);
-          padding: .42rem 1rem; border-radius: 100px;
+          padding: .4rem 1rem; border-radius: 100px;
           font-size: .78rem; font-weight: 600; cursor: pointer;
           transition: all .18s; white-space: nowrap;
           font-family: inherit;
@@ -702,7 +734,24 @@ export default function SpmbPage() {
           background: var(--blue-500, #1e72d4);
           border-color: var(--blue-400, #4a92e8);
           color: #fff;
-          box-shadow: 0 2px 12px rgba(30,114,212,.35);
+          box-shadow: 0 2px 10px rgba(30,114,212,.4);
+        }
+
+        /* ── Page indicator dots (mobile) ── */
+        .spmb-dots {
+          display: none;
+          justify-content: center; gap: .3rem;
+          padding: .45rem 0 .15rem;
+          background: var(--blue-950, #020c1f);
+        }
+        .spmb-dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: rgba(255,255,255,.25); transition: background .2s, width .2s;
+        }
+        .spmb-dot.active { background: #1e72d4; width: 18px; border-radius: 3px; }
+
+        @media (max-width: 600px) {
+          .spmb-dots { display: flex; }
         }
 
         /* ── Outer bg ── */
@@ -905,20 +954,42 @@ export default function SpmbPage() {
         accent="🎓"
       />
 
-      {/* Sticky tab bar */}
+      {/* ── Sticky nav: arrow + scrollable tabs + arrow ── */}
       <nav className="spmb-nav-wrap">
-        <div className="spmb-nav">
+        <button
+          className="spmb-nav-arrow"
+          onClick={goPrev}
+          disabled={isFirst}
+          aria-label="Tab sebelumnya"
+        >‹</button>
+
+        <div className="spmb-nav" ref={navRef}>
           {TABS.map((t) => (
             <button
               key={t.id}
+              id={`tab-${t.id}`}
               className={`spmb-nav-btn${activeTab === t.id ? ' active' : ''}`}
-              onClick={() => { setActiveTab(t.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+              onClick={() => goTo(t.id)}
             >
               {t.label}
             </button>
           ))}
         </div>
+
+        <button
+          className="spmb-nav-arrow"
+          onClick={goNext}
+          disabled={isLast}
+          aria-label="Tab berikutnya"
+        >›</button>
       </nav>
+
+      {/* ── Dot indicator (mobile only) ── */}
+      <div className="spmb-dots" aria-hidden="true">
+        {TABS.map((t) => (
+          <div key={t.id} className={`spmb-dot${activeTab === t.id ? ' active' : ''}`} />
+        ))}
+      </div>
 
       {/* Content */}
       <section className="spmb-section">
@@ -927,7 +998,6 @@ export default function SpmbPage() {
         </div>
       </section>
 
-      {/* Floating WA */}
       <FloatingWA />
     </>
   )
