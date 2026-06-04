@@ -595,8 +595,8 @@ function TabLarangan() {
         <SectionHead icon="📞" title="Kontak Panitia SPMB" />
         <div className="spmb-grid2">
           {[
-            { label: 'Contact Person 1', number: '0852-5729-9389', wa: 'https://wa.me/6285257299389' },
-            { label: 'Contact Person 2', number: '0833-1131-886',  wa: 'https://wa.me/628331131886'  },
+            { label: 'Contact Person 1', number: '0852-5729-9389', wa: 'https://wa.me/6285257299389?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...' },
+            { label: 'Contact Person 2', number: '0833-1131-886',  wa: 'https://wa.me/628331131886?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...'  },
           ].map((cp, i) => (
             <a key={i} href={cp.wa} className="spmb-cp-card" target="_blank" rel="noreferrer">
               <div className="spmb-cp-avatar">
