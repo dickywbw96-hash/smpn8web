@@ -13,7 +13,7 @@ interface Props {
 export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋', backgroundImage }: Props) {
   const divStyle = backgroundImage
     ? {
-        backgroundImage: `linear-gradient(135deg, rgba(3,15,43,.82) 0%, rgba(19,69,160,.75) 60%, rgba(7,30,74,.88) 100%), url('${backgroundImage}')`,
+        backgroundImage: `linear-gradient(135deg, rgba(3,15,43,.93) 0%, rgba(19,69,160,.88) 60%, rgba(7,30,74,.95) 100%), url('${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

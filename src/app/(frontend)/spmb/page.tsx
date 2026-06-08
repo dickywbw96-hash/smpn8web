@@ -192,28 +192,43 @@ function SectionHead({ icon, title }: { icon: string; title: string }) {
   )
 }
 
+/* ─── FLYER ROW WITH LIGHTBOX ───────────────────────────────────────────── */
+
+const FLYERS = [
+  { src: 'https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%205%20Jun%202026,%2012.47.20.png', alt: 'Flyer SPMB 2026' },
+  { src: 'https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2011.23.08.png', alt: 'Alur Pengambilan Token SPMB' },
+  { src: 'https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.11.03.png', alt: 'Syarat Pengambilan Token SPMB' },
+]
+
+function FlyerRow() {
+  const [active, setActive] = useState<number | null>(null)
+  return (
+    <>
+      <div className="spmb-flyer-row">
+        {FLYERS.map((f, i) => (
+          <button key={i} className="spmb-flyer-item" onClick={() => setActive(i)} aria-label={`Perbesar: ${f.alt}`}>
+            <img src={f.src} alt={f.alt} className="spmb-flyer-img" />
+            <span className="spmb-flyer-zoom">🔍</span>
+          </button>
+        ))}
+      </div>
+      {active !== null && (
+        <div className="spmb-lb" onClick={() => setActive(null)}>
+          <button className="spmb-lb-close" onClick={() => setActive(null)}>✕</button>
+          <img src={FLYERS[active].src} alt={FLYERS[active].alt} className="spmb-lb-img" onClick={e => e.stopPropagation()} />
+        </div>
+      )}
+    </>
+  )
+}
+
 /* ─── TAB CONTENT COMPONENTS ───────────────────────────────────────────── */
 
 function TabBeranda() {
   return (
     <div>
-      {/* Flyer images side by side */}
-      <div className="spmb-flyer-row">
-        <div className="spmb-flyer-item">
-          <img
-            src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%205%20Jun%202026,%2012.47.20.png"
-            alt="Flyer SPMB 2026"
-            className="spmb-flyer-img"
-          />
-        </div>
-        <div className="spmb-flyer-item">
-          <img
-            src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2011.23.08.png"
-            alt="Alur Pengambilan Token SPMB"
-            className="spmb-flyer-img"
-          />
-        </div>
-      </div>
+      {/* Flyer images 3 sejajar + lightbox */}
+      <FlyerRow />
 
       <a href="https://spmb.probolinggokota.go.id" className="spmb-portal-btn" target="_blank" rel="noreferrer">
         <span>🌐</span>
@@ -239,15 +254,6 @@ function TabBeranda() {
             <span className={`spmb-qbox-val${q.gold ? ' gold' : ''}`}>{q.val}</span>
           </div>
         ))}
-      </div>
-
-      {/* Syarat image */}
-      <div className="spmb-syarat-img-wrap">
-        <img
-          src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.11.03.png"
-          alt="Syarat SPMB 2026"
-          className="spmb-syarat-img"
-        />
       </div>
 
       <SectionHead icon="📅" title="Jadwal & Tahapan SPMB" />
@@ -798,52 +804,64 @@ export default function SpmbPage() {
           min-height: 60vh;
         }
 
-        /* ── Flyer row (side by side landscape images) ── */
+        /* ── Flyer row 3 cols + lightbox ── */
         .spmb-flyer-row {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: .6rem;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: .5rem;
           margin-bottom: 1rem;
         }
         .spmb-flyer-item {
+          position: relative;
           border-radius: 10px;
           overflow: hidden;
           border: 1px solid #e8e8e8;
-          background: #fff;
+          background: #f8f8f8;
           box-shadow: 0 2px 6px rgba(0,0,0,.06);
+          cursor: pointer;
+          padding: 0;
+          display: block;
+          transition: box-shadow .18s, transform .18s;
         }
+        .spmb-flyer-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,.12); transform: translateY(-2px); }
         .spmb-flyer-img {
           width: 100%;
-          height: auto;
+          aspect-ratio: 4/3;
+          object-fit: cover;
           display: block;
-          max-height: 180px;
-          object-fit: contain;
-          background: #f8f8f8;
         }
-        @media (max-width: 600px) {
-          .spmb-flyer-img { max-height: 120px; }
+        .spmb-flyer-zoom {
+          position: absolute; bottom: 4px; right: 5px;
+          font-size: .75rem; background: rgba(0,0,0,.45);
+          color: #fff; border-radius: 4px; padding: 1px 4px;
+          pointer-events: none;
         }
-
-        /* ── Syarat image ── */
-        .spmb-syarat-img-wrap {
+        /* ── Lightbox ── */
+        .spmb-lb {
+          position: fixed; inset: 0; z-index: 9999;
+          background: rgba(0,0,0,.85);
+          display: flex; align-items: center; justify-content: center;
+          padding: 1rem;
+          animation: spmbFadeUp .15s ease;
+        }
+        .spmb-lb-img {
+          max-width: min(90vw, 700px);
+          max-height: 85vh;
           border-radius: 12px;
-          overflow: hidden;
-          border: 1px solid #e8e8e8;
-          background: #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,.06);
-          margin-bottom: 1.25rem;
-          max-width: 320px;
-          margin-left: auto;
-          margin-right: auto;
+          box-shadow: 0 8px 40px rgba(0,0,0,.5);
+          object-fit: contain;
         }
-        .spmb-syarat-img {
-          width: 100%;
-          height: auto;
-          display: block;
+        .spmb-lb-close {
+          position: absolute; top: 1rem; right: 1rem;
+          width: 36px; height: 36px; border-radius: 50%;
+          background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+          color: #fff; font-size: 1rem; cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          transition: background .15s;
         }
-        @media (max-width: 600px) {
-          .spmb-syarat-img-wrap { max-width: 240px; }
-        }
+        .spmb-lb-close:hover { background: rgba(255,255,255,.25); }
+
+        /* syarat image moved to FlyerRow */
 
         /* ── Section header ── */
         .spmb-sh { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; }
