@@ -814,28 +814,35 @@ export default function SpmbPage() {
         }
         .spmb-flyer-img {
           width: 100%;
-          height: 140px;
+          height: auto;
           display: block;
-          object-fit: cover;
-          object-position: top;
+          max-height: 180px;
+          object-fit: contain;
+          background: #f8f8f8;
         }
         @media (max-width: 600px) {
-          .spmb-flyer-img { height: 100px; }
+          .spmb-flyer-img { max-height: 120px; }
         }
 
         /* ── Syarat image ── */
         .spmb-syarat-img-wrap {
-          border-radius: 14px;
+          border-radius: 12px;
           overflow: hidden;
           border: 1px solid #e8e8e8;
           background: #fff;
-          box-shadow: 0 2px 10px rgba(0,0,0,.06);
+          box-shadow: 0 2px 8px rgba(0,0,0,.06);
           margin-bottom: 1.25rem;
+          max-width: 320px;
+          margin-left: auto;
+          margin-right: auto;
         }
         .spmb-syarat-img {
           width: 100%;
           height: auto;
           display: block;
+        }
+        @media (max-width: 600px) {
+          .spmb-syarat-img-wrap { max-width: 240px; }
         }
 
         /* ── Section header ── */
@@ -1028,7 +1035,7 @@ export default function SpmbPage() {
         subtitle="Sistem Penerimaan Murid Baru SMP Negeri Kota Probolinggo. Kepwk. No. 100.3.3.3/151/KEP/425.012/2026"
         breadcrumbs={[{ label: 'SPMB' }]}
         accent="🎓"
-
+        backgroundImage="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.19.09.png"
       />
 
       {/* ── Sticky nav: arrow + scrollable tabs + arrow ── */}
