@@ -24,11 +24,18 @@ const TIMELINE = [
     badge: '✔ Selesai',
   },
   {
+    date: '12 – 15 Juni 2026',
+    phase: 'Pengambilan Token Pendaftaran',
+    desc: 'Calon murid mengambil token akses pendaftaran online melalui sekolah asal (SD/MI). Token digunakan untuk login ke portal SPMB saat pendaftaran dibuka.',
+    status: 'now',
+    badge: '⚡ Sedang Berlangsung',
+  },
+  {
     date: '17 Juni – 20 Juni 2026',
     phase: 'Pendaftaran Jalur Afirmasi, Mutasi & Prestasi',
     desc: 'Afirmasi & Prestasi: Online di spmb.probolinggokota.go.id — isi data, pilih 3 sekolah, unggah dokumen. Mutasi: Offline di sekolah tujuan — isi formulir, serahkan fotokopi dokumen.',
-    status: 'now',
-    badge: '⚡ Sedang Berlangsung',
+    status: 'upcoming',
+    badge: 'Online + Offline',
   },
   {
     date: '22 Juni 2026 — Pukul 13.00 WIB',
@@ -190,18 +197,37 @@ function SectionHead({ icon, title }: { icon: string; title: string }) {
 function TabBeranda() {
   return (
     <div>
+      {/* Flyer images side by side */}
+      <div className="spmb-flyer-row">
+        <div className="spmb-flyer-item">
+          <img
+            src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%205%20Jun%202026,%2012.47.20.png"
+            alt="Flyer SPMB 2026"
+            className="spmb-flyer-img"
+          />
+        </div>
+        <div className="spmb-flyer-item">
+          <img
+            src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2011.23.08.png"
+            alt="Alur Pengambilan Token SPMB"
+            className="spmb-flyer-img"
+          />
+        </div>
+      </div>
+
       <a href="https://spmb.probolinggokota.go.id" className="spmb-portal-btn" target="_blank" rel="noreferrer">
         <span>🌐</span>
         <span>Buka Portal Pendaftaran SPMB</span>
         <span className="arrow">→</span>
       </a>
       <Alert type="amber">
-        <strong>⏰ Jam Layanan Panitia: 07.00 – 14.30 WIB</strong> (Senin–Jumat hari kerja). Pendaftaran online dapat dilakukan kapan saja melalui portal di atas.
+        <strong>⏰ Jam Layanan Panitia: 08.00 – 13.00 WIB</strong> (Senin–Jumat hari kerja). Pendaftaran online dapat dilakukan kapan saja melalui portal di atas.
       </Alert>
 
       <div className="spmb-qstrip">
         {[
-          { icon:'📅', label:'Daftar Afirmasi/Mutasi/Prestasi', val:'17–20 Jun 2026', gold:true },
+          { icon:'🔑', label:'Pengambilan Token',               val:'12–15 Jun 2026', gold:true },
+          { icon:'📅', label:'Daftar Afirmasi/Mutasi/Prestasi', val:'17–20 Jun 2026' },
           { icon:'📣', label:'Pengumuman Jalur Awal',           val:'22 Jun 2026' },
           { icon:'📍', label:'Daftar Jalur Domisili',           val:'1–4 Jul 2026' },
           { icon:'📋', label:'Daftar Ulang',                    val:'8–11 Jul 2026' },
@@ -213,6 +239,15 @@ function TabBeranda() {
             <span className={`spmb-qbox-val${q.gold ? ' gold' : ''}`}>{q.val}</span>
           </div>
         ))}
+      </div>
+
+      {/* Syarat image */}
+      <div className="spmb-syarat-img-wrap">
+        <img
+          src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.11.03.png"
+          alt="Syarat SPMB 2026"
+          className="spmb-syarat-img"
+        />
       </div>
 
       <SectionHead icon="📅" title="Jadwal & Tahapan SPMB" />
@@ -608,7 +643,7 @@ function TabLarangan() {
           ))}
         </div>
         <Alert type="amber">
-          <strong>⏰ Jam Layanan: 07.00 – 14.30 WIB</strong> (Senin–Jumat, hari kerja). Di luar jam layanan, silakan kirim pesan WhatsApp.
+          <strong>⏰ Jam Layanan: 08.00 – 13.00 WIB</strong> (Senin–Jumat, hari kerja). Di luar jam layanan, silakan kirim pesan WhatsApp.
         </Alert>
       </div>
     </div>
@@ -623,7 +658,7 @@ function FloatingWA() {
     <div className="spmb-wa-fab">
       {open && (
         <div className="spmb-wa-menu">
-          <div className="spmb-wa-hour">⏰ Layanan: 07.00 – 14.30 WIB</div>
+          <div className="spmb-wa-hour">⏰ Layanan: 08.00 – 13.00 WIB</div>
           {[
             { label: 'Contact Person 1', number: '0852-5729-9389', wa: 'https://wa.me/6285257299389?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...' },
             { label: 'Contact Person 2', number: '0833-1131-886',  wa: 'https://wa.me/628331131886?text=Halo%20Admin%20SPMB%20SMP%20Negeri%208%20Probolinggo%2C%20saya%20ingin%20bertanya%20terkait%20SPMB...'  },
@@ -686,6 +721,24 @@ export default function SpmbPage() {
   return (
     <>
       <style>{`
+        /* ── Hero cover image ── */
+        .spmb-hero-cover {
+          width: 100%;
+          overflow: hidden;
+          max-height: 300px;
+          background: #020c1f;
+        }
+        .spmb-hero-cover-img {
+          width: 100%;
+          height: 300px;
+          object-fit: cover;
+          object-position: center;
+          display: block;
+        }
+        @media (max-width: 600px) {
+          .spmb-hero-cover-img { height: 180px; }
+        }
+
         /* ── Nav wrapper: flex row with arrow buttons ── */
         .spmb-nav-wrap {
           position: sticky; top: 0; z-index: 50;
@@ -763,6 +816,45 @@ export default function SpmbPage() {
           min-height: 60vh;
         }
 
+        /* ── Flyer row (side by side landscape images) ── */
+        .spmb-flyer-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: .75rem;
+          margin-bottom: 1rem;
+        }
+        .spmb-flyer-item {
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid #e8e8e8;
+          background: #fff;
+          box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+        .spmb-flyer-img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+        }
+        @media (max-width: 600px) {
+          .spmb-flyer-row { grid-template-columns: 1fr; }
+        }
+
+        /* ── Syarat image ── */
+        .spmb-syarat-img-wrap {
+          border-radius: 14px;
+          overflow: hidden;
+          border: 1px solid #e8e8e8;
+          background: #fff;
+          box-shadow: 0 2px 10px rgba(0,0,0,.06);
+          margin-bottom: 1.25rem;
+        }
+        .spmb-syarat-img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+
         /* ── Section header ── */
         .spmb-sh { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; }
         .spmb-sh-icon { font-size: 1.1rem; }
@@ -796,8 +888,8 @@ export default function SpmbPage() {
 
         /* ── Quick strip ── */
         .spmb-qstrip {
-          display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
-          gap: .7rem; margin-bottom: 1.75rem;
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+          gap: .7rem; margin-bottom: 1.25rem;
         }
         .spmb-qbox {
           background: #fff; border: 1px solid #e8e8e8;
@@ -834,6 +926,7 @@ export default function SpmbPage() {
         .spmb-tlbadge     { display: inline-block; font-size: .67rem; font-weight: 700; padding: .15rem .5rem; border-radius: 100px; margin-top: .3rem; }
         .spmb-tlbadge.done { background: #f4f4f4; color: #666; }
         .spmb-tlbadge.now  { background: #faeeda; color: #854f0b; }
+        .spmb-tlbadge.gold { background: #faeeda; color: #854f0b; }
         .spmb-tlbadge.blue,.spmb-tlbadge.upcoming { background: #eaf4fd; color: #10407f; }
         .spmb-tlbadge.gray { background: #f4f4f4; color: #666; }
 
@@ -952,7 +1045,17 @@ export default function SpmbPage() {
         subtitle="Sistem Penerimaan Murid Baru SMP Negeri Kota Probolinggo. Kepwk. No. 100.3.3.3/151/KEP/425.012/2026"
         breadcrumbs={[{ label: 'SPMB' }]}
         accent="🎓"
+
       />
+
+      {/* ── Hero cover image ── */}
+      <div className="spmb-hero-cover">
+        <img
+          src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.19.09.png"
+          alt="SPMB 2026 Cover"
+          className="spmb-hero-cover-img"
+        />
+      </div>
 
       {/* ── Sticky nav: arrow + scrollable tabs + arrow ── */}
       <nav className="spmb-nav-wrap">
