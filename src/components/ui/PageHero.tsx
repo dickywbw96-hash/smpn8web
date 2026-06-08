@@ -11,6 +11,15 @@ interface Props {
 }
 
 export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋', backgroundImage }: Props) {
+  const divStyle = backgroundImage
+    ? {
+        backgroundImage: `linear-gradient(135deg, rgba(3,15,43,.82) 0%, rgba(19,69,160,.75) 60%, rgba(7,30,74,.88) 100%), url('${backgroundImage}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }
+    : undefined
+
   return (
     <>
       <style>{`
@@ -36,16 +45,6 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
             );
           pointer-events: none;
           z-index: 1;
-        }
-        .ph-bg-img {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center;
-          opacity: .35;
-          z-index: 0;
         }
         .ph-inner { position: relative; z-index: 2; }
         .ph-accent {
@@ -107,10 +106,7 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
         @media (max-width: 640px) { .ph-deco { display: none; } }
       `}</style>
 
-      <div className="ph">
-        {backgroundImage && (
-          <img src={backgroundImage} alt="" className="ph-bg-img" aria-hidden="true" />
-        )}
+      <div className="ph" style={divStyle}>
         <div className="container ph-inner">
           <span className="ph-accent">{accent}</span>
           <h1>{title}</h1>

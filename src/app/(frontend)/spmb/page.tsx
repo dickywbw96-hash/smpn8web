@@ -802,24 +802,25 @@ export default function SpmbPage() {
         .spmb-flyer-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: .75rem;
+          gap: .6rem;
           margin-bottom: 1rem;
         }
         .spmb-flyer-item {
-          border-radius: 12px;
+          border-radius: 10px;
           overflow: hidden;
           border: 1px solid #e8e8e8;
           background: #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,.06);
+          box-shadow: 0 2px 6px rgba(0,0,0,.06);
         }
         .spmb-flyer-img {
           width: 100%;
-          height: auto;
+          height: 140px;
           display: block;
           object-fit: cover;
+          object-position: top;
         }
         @media (max-width: 600px) {
-          .spmb-flyer-row { grid-template-columns: 1fr; }
+          .spmb-flyer-img { height: 100px; }
         }
 
         /* ── Syarat image ── */
