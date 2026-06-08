@@ -7,9 +7,10 @@ interface Props {
   subtitle?: string
   breadcrumbs?: Crumb[]
   accent?: string
+  backgroundImage?: string
 }
 
-export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋' }: Props) {
+export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋', backgroundImage }: Props) {
   return (
     <>
       <style>{`
@@ -34,8 +35,19 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
               rgba(255,255,255,.01) 41px
             );
           pointer-events: none;
+          z-index: 1;
         }
-        .ph-inner { position: relative; }
+        .ph-bg-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          opacity: .35;
+          z-index: 0;
+        }
+        .ph-inner { position: relative; z-index: 2; }
         .ph-accent {
           font-size: 3.5rem;
           margin-bottom: .5rem;
@@ -81,6 +93,7 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
           padding-right: 3rem;
           pointer-events: none;
           overflow: hidden;
+          z-index: 2;
         }
         .ph-deco-circle {
           width: 300px; height: 300px;
@@ -95,6 +108,9 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
       `}</style>
 
       <div className="ph">
+        {backgroundImage && (
+          <img src={backgroundImage} alt="" className="ph-bg-img" aria-hidden="true" />
+        )}
         <div className="container ph-inner">
           <span className="ph-accent">{accent}</span>
           <h1>{title}</h1>

@@ -721,24 +721,6 @@ export default function SpmbPage() {
   return (
     <>
       <style>{`
-        /* ── Hero cover image ── */
-        .spmb-hero-cover {
-          width: 100%;
-          overflow: hidden;
-          max-height: 300px;
-          background: #020c1f;
-        }
-        .spmb-hero-cover-img {
-          width: 100%;
-          height: 300px;
-          object-fit: cover;
-          object-position: center;
-          display: block;
-        }
-        @media (max-width: 600px) {
-          .spmb-hero-cover-img { height: 180px; }
-        }
-
         /* ── Nav wrapper: flex row with arrow buttons ── */
         .spmb-nav-wrap {
           position: sticky; top: 0; z-index: 50;
@@ -1047,15 +1029,6 @@ export default function SpmbPage() {
         accent="🎓"
 
       />
-
-      {/* ── Hero cover image ── */}
-      <div className="spmb-hero-cover">
-        <img
-          src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/spmb/ChatGPT%20Image%208%20Jun%202026,%2016.19.09.png"
-          alt="SPMB 2026 Cover"
-          className="spmb-hero-cover-img"
-        />
-      </div>
 
       {/* ── Sticky nav: arrow + scrollable tabs + arrow ── */}
       <nav className="spmb-nav-wrap">
