@@ -40,9 +40,9 @@ const MENU_ITEMS = [
     children: [
       { label: '8LMS',          href: '/inovasi/8lms' },
       { label: 'BATOLU',        href: '/inovasi/batolu' },
-      { label: 'REMUS',         href: '/inovasi/remus' },
+      { label: 'REMUS TUBAYA',         href: '/inovasi/remus' },
       { label: 'PAMER SI WOLU', href: '/inovasi/pamer-si-wolu' },
-      { label: 'INOVASI LIMA',  href: '/inovasi/inovasi-lima' },
+      { label: 'KOALA WOLU',  href: '/inovasi/inovasi-lima' },
     ],
   },
   { label: 'Kontak', href: '/kontak' },
