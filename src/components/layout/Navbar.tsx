@@ -35,6 +35,16 @@ const MENU_ITEMS = [
       { label: 'Artikel',             href: '/berita/artikel' },
     ],
   },
+  {
+    label: 'Inovasi', href: '/inovasi',
+    children: [
+      { label: '8LMS',          href: '/inovasi/8lms' },
+      { label: 'BATOLU',        href: '/inovasi/batolu' },
+      { label: 'REMUS',         href: '/inovasi/remus' },
+      { label: 'PAMER SI WOLU', href: '/inovasi/pamer-si-wolu' },
+      { label: 'INOVASI LIMA',  href: '/inovasi/inovasi-lima' },
+    ],
+  },
   { label: 'Kontak', href: '/kontak' },
   {
     label: 'PPID', href: '/ppid',
@@ -46,7 +56,6 @@ const MENU_ITEMS = [
       { label: 'Daftar Informasi Publik',   href: '/ppid/daftar-informasi' },
     ],
   },
-  { label: 'SPMB', href: '/spmb' },
   { label: 'LMS',  href: '/lms' },
 ]
 
