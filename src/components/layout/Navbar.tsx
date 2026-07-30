@@ -56,6 +56,7 @@ const MENU_ITEMS = [
       { label: 'Daftar Informasi Publik',   href: '/ppid/daftar-informasi' },
     ],
   },
+  { label: 'JURNALISTIK',  href: '/jurnalistik' },
   { label: 'LMS',  href: '/lms' },
 ]
 
