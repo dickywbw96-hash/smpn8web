@@ -13,6 +13,9 @@ export interface InovasiItem {
   // Jika diisi, akan ditampilkan di halaman detail menggantikan
   // description + highlights standar.
   content?: string
+  // URL foto sampul (opsional). Jika diisi, dipakai sebagai background
+  // hero halaman detail (menggantikan gradient biru polos).
+  coverImage?: string
 }
 
 export const INOVASI_LIST: InovasiItem[] = [
@@ -71,6 +74,8 @@ export const INOVASI_LIST: InovasiItem[] = [
       'Memacu semangat berkarya',
       'Menjadi ajang apresiasi sekolah',
     ],
+    coverImage:
+      'https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/posts/1785673283301-ChatGPT%20Image%20Aug%202,%202026,%2007_20_22%20PM.png',
     content: `
 <p><strong>PROBOLINGGO</strong> — Dalam upaya tiada henti meningkatkan mutu dan kualitas pendidikan, sebuah inovasi pembelajaran kreatif berbasis media kini hadir membawa perubahan positif di lingkungan sekolah. Melalui program bertajuk <strong>"Pamer Si Wolu" (Pembelajaran by Media Real Aksi SMP Wolu)</strong> yang digagas oleh <strong>Bu Nurul Istifadah</strong>, proses belajar mengajar kini tidak lagi terkurung dalam sekat-sekat ruang kelas yang kaku, melainkan menjadi pengalaman yang menyegarkan bagi para siswa.</p>
 <p>Dalam kegiatan pembelajaran sehari-hari, pengkajian terhadap media merupakan hal yang sangat krusial. Seorang guru dituntut untuk dapat meningkatkan mutu pendidikan dengan mulai menerapkan penggunaan media interaktif. Melalui media tersebut, guru dapat menuangkan pesan-pesan edukatif ke dalam bentuk simbol-simbol visual maupun tekstual yang intuitif, sehingga pesan pembelajaran dapat ditafsirkan dan diserap dengan lebih mudah oleh peserta didik.</p>

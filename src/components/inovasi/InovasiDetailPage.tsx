@@ -61,6 +61,7 @@ export default function InovasiDetailPage({ item }: Props) {
         subtitle={item.tagline}
         breadcrumbs={[{ label: 'Inovasi', href: '/inovasi' }, { label: item.shortLabel }]}
         accent={item.icon}
+        backgroundImage={item.coverImage}
       />
 
       <section className="inovasi-section">
