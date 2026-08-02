@@ -30,6 +30,15 @@ export default function InovasiDetailPage({ item }: Props) {
           font-size: .92rem; color: var(--gray-700);
         }
         .inovasi-highlight::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; }
+        .inovasi-article {
+          color: var(--gray-700);
+          line-height: 1.85;
+          font-size: 1rem;
+        }
+        .inovasi-article p { margin: 0 0 1.1rem; }
+        .inovasi-article p:last-child { margin-bottom: 0; }
+        .inovasi-article img { display: block; }
+        .inovasi-article blockquote { border-radius: var(--radius-md); }
         .inovasi-others { max-width: 760px; margin: 0 auto; }
         .inovasi-others-title {
           font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
@@ -58,12 +67,21 @@ export default function InovasiDetailPage({ item }: Props) {
         <div className="container">
           <div className="inovasi-card">
             <span className="inovasi-icon">{item.icon}</span>
-            <p className="inovasi-desc">{item.description}</p>
-            <div className="inovasi-highlights">
-              {item.highlights.map((h) => (
-                <div key={h} className="inovasi-highlight">{h}</div>
-              ))}
-            </div>
+            {item.content ? (
+              <div
+                className="inovasi-article"
+                dangerouslySetInnerHTML={{ __html: item.content }}
+              />
+            ) : (
+              <>
+                <p className="inovasi-desc">{item.description}</p>
+                <div className="inovasi-highlights">
+                  {item.highlights.map((h) => (
+                    <div key={h} className="inovasi-highlight">{h}</div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           <div className="inovasi-others">
