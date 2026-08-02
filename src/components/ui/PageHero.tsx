@@ -13,7 +13,7 @@ interface Props {
 export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋', backgroundImage }: Props) {
   const divStyle = backgroundImage
     ? {
-        backgroundImage: `linear-gradient(135deg, rgba(3,15,43,.93) 0%, rgba(19,69,160,.88) 60%, rgba(7,30,74,.95) 100%), url('${backgroundImage}')`,
+        backgroundImage: `linear-gradient(180deg, rgba(3,15,43,.45) 0%, rgba(7,30,74,.15) 30%, rgba(7,30,74,.2) 65%, rgba(3,15,43,.55) 100%), url('${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -66,6 +66,14 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
           max-width: 560px;
           line-height: 1.65;
         }
+        .ph-has-image .ph-accent,
+        .ph-has-image h1,
+        .ph-has-image p,
+        .ph-has-image .ph-breadcrumb a,
+        .ph-has-image .ph-breadcrumb span {
+          text-shadow: 0 2px 10px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.5);
+        }
+        .ph-has-image p { opacity: .92; }
         .ph-breadcrumb {
           display: flex;
           align-items: center;
@@ -106,7 +114,7 @@ export default function PageHero({ title, subtitle, breadcrumbs, accent = '📋'
         @media (max-width: 640px) { .ph-deco { display: none; } }
       `}</style>
 
-      <div className="ph" style={divStyle}>
+      <div className={`ph${backgroundImage ? ' ph-has-image' : ''}`} style={divStyle}>
         <div className="container ph-inner">
           <span className="ph-accent">{accent}</span>
           <h1>{title}</h1>
