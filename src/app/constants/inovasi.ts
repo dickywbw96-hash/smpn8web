@@ -137,17 +137,95 @@ export const INOVASI_LIST: InovasiItem[] = [
   },
   {
     slug: 'remus',
-    label: 'REMUS',
-    shortLabel: 'REMUS',
-    icon: '📚',
-    tagline: 'Program inovasi unggulan SMP Negeri 8 Probolinggo.',
+    label: 'REMUS TUBAYA',
+    shortLabel: 'REMUS TUBAYA',
+    icon: '🕌',
+    tagline: 'Program Tuntas Baca Al-Qur\'an Remaja Musholla SMP Negeri 8 Probolinggo.',
     description:
-      'REMUS adalah program inovasi SMP Negeri 8 Probolinggo yang mendukung kegiatan akademik maupun non-akademik demi kemajuan sekolah.',
+      'REMUS TUBAYA (Tuntas Baca Al-Qur\'an) adalah program unggulan Remaja Musholla (REMUS) SMP Negeri 8 Probolinggo yang dirancang untuk memastikan seluruh peserta didik mampu membaca Al-Qur\'an dengan baik dan benar melalui pendampingan terstruktur dan berjenjang.',
     highlights: [
-      'Mendukung kegiatan sekolah',
-      'Berbasis kebutuhan siswa dan guru',
-      'Terus dikembangkan dari waktu ke waktu',
+      'Pendampingan baca Al-Qur\'an berjenjang bagi seluruh siswa',
+      'Diluncurkan langsung oleh Wali Kota Probolinggo',
+      'Terintegrasi dengan program BTQ dan Sahabat Qur\'an REMUS',
     ],
+    coverImage:
+      'https://res.cloudinary.com/dugvpuniy/image/upload/v1786426096/WhatsApp_Image_2026-08-11_at_08.44.52_kpr1xh.jpg',
+    content: `
+<p><strong>PROBOLINGGO</strong> — Remaja Musholla (REMUS) SMP Negeri 8 Kota Probolinggo resmi meluncurkan program <strong>REMUS TUBAYA (Tuntas Baca Al-Qur'an)</strong>, sebuah inovasi pendampingan membaca Al-Qur'an yang dirancang agar seluruh peserta didik dapat membaca Al-Qur'an dengan baik dan benar sebelum lulus dari jenjang SMP. Program ini diluncurkan secara simbolis langsung oleh <strong>Wali Kota Probolinggo</strong> di lingkungan sekolah.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786426096/WhatsApp_Image_2026-08-11_at_08.44.52_kpr1xh.jpg" alt="Launching program REMUS TUBAYA oleh Wali Kota Probolinggo" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Wali Kota Probolinggo secara simbolis meluncurkan program REMUS TUBAYA di SMP Negeri 8 Probolinggo.</figcaption>
+</figure>
+
+<p>Kepala SMP Negeri 8 Probolinggo, <strong>Andik Sasmitro, S.Pd., M.Pd.</strong>, mengatakan kehadiran REMUS TUBAYA menjadi jawaban atas masih adanya peserta didik yang belum lancar membaca Al-Qur'an ketika masuk jenjang SMP, sehingga dibutuhkan pendampingan yang lebih terstruktur dan berkelanjutan.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Kami ingin memastikan tidak ada lagi siswa yang lulus dari sekolah ini tanpa kemampuan membaca Al-Qur'an yang memadai. REMUS TUBAYA hadir sebagai ikhtiar bersama seluruh warga sekolah untuk mewujudkan hal itu," ujar Andik.
+</blockquote>
+
+<p>Ia menambahkan, program ini sejalan dengan visi sekolah untuk mencetak peserta didik yang religius, berkarakter, dan menjadi teladan, sekaligus memperkuat fungsi musholla sebagai pusat pembinaan karakter Islami peserta didik.</p>
+
+<h3>Pendampingan Berjenjang dan Berkelanjutan</h3>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786426114/WhatsApp_Image_2026-08-11_at_08.52.45_qt9hqd.jpg" alt="Kegiatan pendampingan REMUS TUBAYA" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Kegiatan pendampingan baca Al-Qur'an dalam program REMUS TUBAYA di musholla sekolah.</figcaption>
+</figure>
+
+<p>Pembina REMUS menjelaskan bahwa program TUBAYA memetakan kemampuan membaca Al-Qur'an setiap siswa sejak awal tahun ajaran, kemudian mengelompokkan mereka ke dalam beberapa jenjang pendampingan sesuai kemampuan, mulai dari pengenalan huruf hijaiyah, tajwid dasar, hingga kelancaran membaca.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Setiap siswa didampingi oleh kakak kelas atau pengurus REMUS yang sudah lancar mengaji melalui program Sahabat Qur'an. Jadi pendampingannya rutin setiap pekan lewat kegiatan BTQ, tidak hanya mengandalkan jam pelajaran agama," jelas pembina REMUS.
+</blockquote>
+
+<p>Progres membaca setiap siswa dicatat secara berkala, sehingga guru dan pembina dapat memantau perkembangan serta memberikan perhatian lebih kepada siswa yang membutuhkan pendampingan ekstra.</p>
+
+<h3>Petunjuk Teknis Program REMUS TUBAYA</h3>
+
+<figure style="display:block;margin:1.75rem auto;width:38%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786426032/ChatGPT_Image_Aug_11_2026_12_26_13_PM_fdj20y.png" alt="Infografis petunjuk teknis program REMUS TUBAYA" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Infografis alur pelaksanaan program REMUS TUBAYA bagi pengurus, pembina, dan peserta didik.</figcaption>
+</figure>
+
+<p><strong>Alur bagi Pengurus dan Pembina REMUS:</strong></p>
+<ol>
+  <li>Melakukan pemetaan awal kemampuan membaca Al-Qur'an seluruh peserta didik di awal tahun ajaran.</li>
+  <li>Mengelompokkan siswa ke dalam jenjang pendampingan sesuai hasil pemetaan.</li>
+  <li>Menugaskan pengurus REMUS/kakak pendamping pada tiap kelompok melalui program Sahabat Qur'an.</li>
+  <li>Melaksanakan pendampingan rutin setiap pekan lewat kegiatan BTQ di musholla.</li>
+  <li>Mencatat dan mengevaluasi perkembangan tiap siswa secara berkala.</li>
+</ol>
+
+<p><strong>Alur bagi Peserta Didik:</strong></p>
+<ol>
+  <li>Mengikuti tes pemetaan kemampuan membaca Al-Qur'an di awal program.</li>
+  <li>Bergabung dalam kelompok pendampingan sesuai jenjang yang ditentukan.</li>
+  <li>Mengikuti sesi BTQ rutin setiap pekan bersama pendamping.</li>
+  <li>Naik jenjang setelah dinyatakan lulus evaluasi bacaan oleh pembina.</li>
+  <li>Mendapatkan apresiasi/sertifikat saat berhasil mencapai target kelancaran membaca.</li>
+</ol>
+
+<h3>Dampak Nyata bagi Karakter dan Budaya Sekolah</h3>
+
+<p>Andik menyebut, REMUS TUBAYA turut memperkuat budaya religius di lingkungan sekolah dan menjadi salah satu wujud nyata pembinaan karakter Islami yang selama ini digagas melalui REMUS, sejalan dengan misi menjadikan musholla sebagai pusat pembinaan karakter peserta didik.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Dukungan Bapak Wali Kota dalam peluncuran program ini menjadi motivasi besar bagi kami untuk terus konsisten mendampingi anak-anak, karena kemampuan membaca Al-Qur'an adalah bekal yang akan mereka bawa seumur hidup," ujar Andik.
+</blockquote>
+
+<p>Pihak sekolah berharap REMUS TUBAYA dapat terus berjalan berkelanjutan setiap tahun ajaran dan menjadi contoh praktik baik pembinaan keagamaan yang bisa direplikasi oleh sekolah lain di Kota Probolinggo.</p>
+
+<h3>Layanan dan Informasi Lebih Lanjut</h3>
+
+<p>Masyarakat maupun sekolah lain yang ingin mengetahui lebih jauh mengenai program REMUS TUBAYA dapat mengakses informasi resmi SMP Negeri 8 Kota Probolinggo melalui kanal berikut:</p>
+<ul>
+  <li><strong>Website:</strong> smpn8prob.sch.id</li>
+  <li><strong>Alamat Sekolah:</strong> Jl. Salak No. 137, Kelurahan Jrebeng Kidul, Kecamatan Wonoasih, Kota Probolinggo</li>
+  <li><strong>Email:</strong> smpn8.prob@gmail.com</li>
+  <li><strong>Media Sosial:</strong> @smpn8probolinggo</li>
+</ul>
+    `,
   },
   {
     slug: 'pamer-si-wolu',
