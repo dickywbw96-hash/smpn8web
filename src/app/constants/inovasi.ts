@@ -24,14 +24,102 @@ export const INOVASI_LIST: InovasiItem[] = [
     label: '8LMS',
     shortLabel: '8LMS',
     icon: '💻',
-    tagline: 'Platform pembelajaran digital SMP Negeri 8 Probolinggo.',
+    tagline: 'Sistem pembelajaran dan asesmen digital terintegrasi SMP Negeri 8 Probolinggo.',
     description:
-      '8LMS adalah inovasi pembelajaran digital yang dikembangkan untuk mendukung proses belajar-mengajar di SMP Negeri 8 Probolinggo secara lebih fleksibel dan terarah.',
+      '8LMS (Wolu Learning Management System) adalah sistem pembelajaran daring sekaligus asesmen digital terintegrasi yang dikembangkan secara mandiri oleh guru SMP Negeri 8 Probolinggo untuk mendukung PTS, PAS, dan pembelajaran harian berbasis komputer.',
     highlights: [
-      'Materi pembelajaran terstruktur',
-      'Akses mudah bagi siswa dan guru',
-      'Mendukung pembelajaran daring & luring',
+      'Satu platform untuk materi, tugas, dan ujian',
+      'PTS & PAS serentak berbasis komputer',
+      'Rekap nilai dan analisis butir soal otomatis',
     ],
+    coverImage:
+      'https://res.cloudinary.com/dugvpuniy/image/upload/v1786416384/Screenshot_2026-08-11_094437_jm7jy0.png',
+    content: `
+<p><strong>PROBOLINGGO</strong> — SMP Negeri 8 Kota Probolinggo kini memiliki sistem pembelajaran dan asesmen digital terintegrasi bernama <strong>Wolu Learning Management System (8LMS)</strong>. Inovasi ini dikembangkan secara mandiri oleh salah satu guru sekolah tersebut untuk menjawab kebutuhan pembelajaran daring sekaligus pelaksanaan ujian berbasis komputer yang selama ini masih dilakukan secara konvensional.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786416384/Screenshot_2026-08-11_094437_jm7jy0.png" alt="Siswa mengerjakan ujian berbasis komputer menggunakan 8LMS" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Peserta didik SMP Negeri 8 Probolinggo mengerjakan asesmen secara serentak di laboratorium komputer menggunakan 8LMS.</figcaption>
+</figure>
+
+<p>Kepala SMP Negeri 8 Probolinggo, <strong>Andik Sasmitro, S.Pd., M.Pd.</strong>, mengatakan kehadiran 8LMS menjadi jawaban atas berbagai kendala yang selama ini dihadapi sekolah, mulai dari materi pembelajaran yang tersebar di berbagai media hingga proses koreksi ujian manual yang memakan waktu lama.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Sebelum ada 8LMS, guru kami kesulitan memantau progres siswa karena tugas dan materi tersebar di berbagai aplikasi yang tidak terhubung satu sama lain. Koreksi lembar jawaban PTS dan PAS juga masih manual, sehingga butuh waktu lama dan rawan salah skor," ujar Andik.
+</blockquote>
+
+<p>Ia menambahkan, sistem ini kini telah diterapkan secara serentak untuk seluruh peserta didik dalam pelaksanaan Penilaian Tengah Semester (PTS) maupun Penilaian Akhir Semester (PAS) di laboratorium komputer sekolah.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Seratus persen siswa kami sudah aktif menggunakan akun 8LMS dalam kegiatan asesmen. Lebih dari 70 persen tugas dan ujian kini dilakukan lewat sistem ini, sehingga penggunaan kertas jauh berkurang," katanya.
+</blockquote>
+
+<h3>Dikembangkan Sendiri oleh Guru Sekolah</h3>
+
+<p>Inisiator sekaligus pengembang 8LMS, <strong>Ibnu Wahyudi, S.Kom., M.MPd.</strong>, menjelaskan bahwa sistem ini dibangun dengan mengadaptasi platform <em>Learning Management System</em> berbasis Moodle yang disesuaikan dengan kebutuhan riil sekolah.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:90%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786416393/Screenshot_1382_hivww2.png" alt="Tampilan dashboard 8LMS" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Tampilan dasbor 8LMS tempat guru mengelola materi, tugas, dan hasil asesmen peserta didik.</figcaption>
+</figure>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "8LMS ini punya dua fungsi sekaligus, sebagai media pembelajaran daring harian dan sebagai instrumen resmi pelaksanaan asesmen sumatif seperti PTS dan PAS. Karena dikembangkan sendiri oleh internal sekolah, kami bisa menyesuaikan fitur dengan cepat sesuai kebutuhan di lapangan, tanpa bergantung pihak ketiga," jelas Ibnu, inovator di balik program 8LMS.
+</blockquote>
+
+<p>Menurut Ibnu, guru dapat mengunggah video pembelajaran, dokumen, tautan sumber belajar, forum diskusi, hingga kuis interaktif dengan skor otomatis melalui satu platform. Untuk ujian, hasil jawaban peserta didik langsung terekap dalam sistem begitu waktu pengerjaan berakhir, tanpa perlu proses input ulang.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Sistem kami juga otomatis menganalisis tingkat kesulitan tiap butir soal berdasarkan pola jawaban seluruh siswa. Ini jadi bahan refleksi guru untuk memperbaiki kualitas soal dan strategi mengajar," tambahnya.
+</blockquote>
+
+<h3>Petunjuk Teknis Penggunaan 8LMS</h3>
+
+<figure style="display:block;margin:1.75rem auto;width:55%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786416199/ChatGPT_Image_Aug_11_2026_09_39_49_AM_snc5vy.png" alt="Infografis petunjuk teknis penggunaan 8LMS" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Infografis alur penggunaan 8LMS bagi guru, peserta didik, dan operator sekolah.</figcaption>
+</figure>
+
+<p><strong>Alur bagi Guru:</strong></p>
+<ol>
+  <li>Login ke 8LMS menggunakan akun masing-masing dan memilih kelas/mata pelajaran.</li>
+  <li>Mengunggah materi (video, dokumen, tautan) dan membuat penugasan daring dengan batas waktu.</li>
+  <li>Menyusun bank soal pada modul kuis/ujian lengkap dengan kunci jawaban dan bobot nilai.</li>
+  <li>Memantau progres pengerjaan siswa secara <em>real time</em> lewat dasbor.</li>
+  <li>Mengunduh rekap nilai dan laporan analisis butir soal setelah ujian selesai.</li>
+</ol>
+
+<p><strong>Alur bagi Peserta Didik:</strong></p>
+<ol>
+  <li>Menempati laboratorium komputer sesuai jadwal saat pelaksanaan PTS/PAS.</li>
+  <li>Login menggunakan akun yang telah didaftarkan operator sekolah.</li>
+  <li>Mengerjakan soal ujian secara daring sesuai batas waktu sistem.</li>
+  <li>Jawaban tersimpan dan terkunci otomatis begitu waktu habis atau siswa mengumpulkan.</li>
+  <li>Nilai dapat langsung diketahui tanpa menunggu koreksi manual.</li>
+</ol>
+
+<p>Sekolah menegaskan, sebelum hari pelaksanaan asesmen, operator sekolah lebih dulu menyiapkan jadwal, ruang laboratorium, akun pengguna, serta memastikan kesiapan jaringan dan perangkat komputer.</p>
+
+<h3>Dampak Nyata bagi Sekolah dan Lingkungan</h3>
+
+<p>Andik menyebut, penerapan 8LMS turut mendukung capaian SMP Negeri 8 Probolinggo sebagai peraih penghargaan Adiwiyata Nasional 2025, karena berkurangnya penggunaan kertas dalam pelaksanaan ujian juga berdampak pada efisiensi anggaran sekolah.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Ini bukan cuma soal digitalisasi, tapi juga soal efisiensi biaya cetak soal dan waktu koreksi yang dulu bisa berhari-hari. Sekarang jauh lebih cepat dan transparan, orang tua pun bisa melihat capaian belajar anaknya lebih jelas," ujarnya.
+</blockquote>
+
+<p>Ibnu berharap 8LMS dapat terus disempurnakan dan menjadi contoh praktik baik yang bisa direplikasi sekolah lain di Kota Probolinggo dalam mendukung transformasi digital layanan pendidikan.</p>
+
+<h3>Layanan dan Informasi Lebih Lanjut</h3>
+
+<p>Masyarakat maupun sekolah lain yang ingin mengetahui lebih jauh mengenai inovasi 8LMS dapat mengakses informasi resmi SMP Negeri 8 Kota Probolinggo melalui kanal berikut:</p>
+<ul>
+  <li><strong>Website:</strong> smpn8prob.sch.id</li>
+  <li><strong>Alamat Sekolah:</strong> Jl. Salak No. 137, Kelurahan Jrebeng Kidul, Kecamatan Wonoasih, Kota Probolinggo</li>
+  <li><strong>Email:</strong> smpn8.prob@gmail.com</li>
+  <li><strong>Media Sosial:</strong> @smpn8probolinggo</li>
+</ul>
+    `,
   },
   {
     slug: 'batolu',
