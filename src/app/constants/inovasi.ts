@@ -234,39 +234,200 @@ export const INOVASI_LIST: InovasiItem[] = [
     icon: '🏆',
     tagline: 'Pembelajaran by Media Real Aksi SMP Wolu.',
     description:
-      'PAMER SI WOLU adalah program inovasi yang menjadi wadah bagi siswa SMP Negeri 8 Probolinggo untuk menampilkan karya dan prestasi terbaiknya.',
+      'PAMER SI WOLU (Pembelajaran by Media Real Aksi SMP Wolu) adalah inovasi literasi berbasis media pembelajaran kreatif yang disebar di dalam dan luar kelas, dirancang untuk menumbuhkan budaya berliterasi bagi seluruh warga sekolah tanpa terasa seperti belajar.',
     highlights: [
-      'Menampilkan karya & prestasi siswa',
-      'Memacu semangat berkarya',
-      'Menjadi ajang apresiasi sekolah',
+      'Media literasi tersebar di kelas, koridor, hingga mading',
+      'Melibatkan guru, siswa, dan wali murid dalam pembuatan media',
+      'Menjawab tantangan rendahnya skor literasi PISA',
     ],
     coverImage:
-      'https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/posts/1785673283301-ChatGPT%20Image%20Aug%202,%202026,%2007_20_22%20PM.png',
+      'https://res.cloudinary.com/dugvpuniy/image/upload/v1786888024/WhatsApp_Image_2026-08-02_at_15.06.24_3_hafg1t.jpg',
     content: `
-<p><strong>PROBOLINGGO</strong> — Dalam upaya tiada henti meningkatkan mutu dan kualitas pendidikan, sebuah inovasi pembelajaran kreatif berbasis media kini hadir membawa perubahan positif di lingkungan sekolah. Melalui program bertajuk <strong>"Pamer Si Wolu" (Pembelajaran by Media Real Aksi SMP Wolu)</strong> yang digagas oleh <strong>Bu Nurul Istifadah</strong>, proses belajar mengajar kini tidak lagi terkurung dalam sekat-sekat ruang kelas yang kaku, melainkan menjadi pengalaman yang menyegarkan bagi para siswa.</p>
-<p>Dalam kegiatan pembelajaran sehari-hari, pengkajian terhadap media merupakan hal yang sangat krusial. Seorang guru dituntut untuk dapat meningkatkan mutu pendidikan dengan mulai menerapkan penggunaan media interaktif. Melalui media tersebut, guru dapat menuangkan pesan-pesan edukatif ke dalam bentuk simbol-simbol visual maupun tekstual yang intuitif, sehingga pesan pembelajaran dapat ditafsirkan dan diserap dengan lebih mudah oleh peserta didik.</p>
-<figure style="display:block;margin:1.75rem auto;width:50%;text-align:center;"><img src="https://xgbrgzpojexzuuxulljj.supabase.co/storage/v1/object/public/media/posts/inline/1785673293747-WhatsApp%20Image%202026-08-02%20at%2015.06.23.jpeg" alt="" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" /></figure>
-<p>Menariknya, inovasi yang dikembangkan oleh Bu Nurul Istifadah ini tidak membatasi penerapannya hanya di dalam area kelas. Media pembelajaran juga sengaja ditempatkan di luar ruangan, seperti di koridor, taman, dan area santai sekolah. Tujuan utamanya adalah memberikan peluang emas bagi peserta didik untuk memanfaatkan waktu beristirahat mereka sambil berliterasi secara santai, menyenangkan, dan sepenuhnya bebas dari rasa tertekan.</p>
+<p><strong>PROBOLINGGO</strong> — SMP Negeri 8 Kota Probolinggo menghadirkan inovasi literasi bertajuk <strong>PAMER SI WOLU (Pembelajaran by Media Real Aksi SMP Wolu)</strong>, yang telah diterapkan sejak 2 Mei 2025. Inovasi ini digagas untuk menjawab rendahnya minat dan kemampuan literasi peserta didik, sekaligus mendorong kreativitas guru dalam merancang media pembelajaran yang dekat dengan keseharian murid.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786888024/WhatsApp_Image_2026-08-02_at_15.06.24_3_hafg1t.jpg" alt="Media pembelajaran PAMER SI WOLU di lingkungan sekolah" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Media literasi PAMER SI WOLU dipasang di berbagai titik lingkungan SMP Negeri 8 Probolinggo agar mudah diakses seluruh warga sekolah.</figcaption>
+</figure>
+
+<p>Inisiator program, <strong>Dra. Nurul Istifadah</strong>, mengatakan inovasi ini lahir dari keprihatinan terhadap hasil Programme for International Student Assessment (PISA) 2022, di mana Indonesia berada di peringkat 68 dengan skor membaca yang masih rendah, sekaligus dari persoalan literasi yang ia amati langsung di lingkungan sekolah.</p>
+
 <blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
-    "Media tidak hanya terbatas ditempatkan di dalam kelas, tetapi beberapa akan diletakkan di luar ruang dengan tujuan memberi peluang bagi peserta didik untuk beristirahat dan berliterasi secara santai, tanpa ada tekanan untuk berliterasi," ujar Bu Nurul Istifadah, inovator di balik program Pamer Si Wolu.
+  "Kurangnya fasilitas literasi di sekitar peserta didik membuat mereka malas berliterasi, apalagi harus bergerak dulu ke perpustakaan. Waktu istirahat yang hanya 15 menit pun lebih banyak dipakai untuk jajan ke kantin," ujar Nurul.
 </blockquote>
-<p>Materi yang ditampilkan pada media-media tersebut tidak sembarangan. Seluruh konten diangkat dari fenomena dan kehidupan sehari-hari yang dikorelasikan langsung dengan materi pembelajaran di sekolah. Agar tidak terkesan kaku dan menjenuhkan, seluruh materi dikemas secara menarik dengan visual yang memikat serta penggunaan bahasa yang sederhana. Dengan cara ini, para siswa dapat menyerap pengetahuan secara tidak sadar (<em>effortless learning</em>) tanpa merasa sedang dituntut untuk belajar keras.</p>
-<p>Melalui terobosan Pamer Si Wolu ini, Bu Nurul Istifadah berharap dapat membangun budaya literasi yang kuat dan natural di kalangan siswa. Inovasi ini membuktikan bahwa dengan pendekatan media yang tepat, kegiatan belajar dapat berlangsung kapan saja dan di mana saja tanpa menghilangkan kebahagiaan masa sekolah peserta didik.</p>
+
+<p>Ia menambahkan, rendahnya literasi guru turut membuat pembelajaran yang disajikan kurang menarik, sehingga kreativitas guru dalam mengemas materi menjadi tantangan tersendiri yang perlu dijawab lewat inovasi ini.</p>
+
+<h3>Belajar Tanpa Merasa Belajar</h3>
+
+<p>Nurul menjelaskan, media pembelajaran dalam PAMER SI WOLU sengaja tidak dibatasi hanya berada di dalam kelas, melainkan juga dipasang di koridor, taman, mading, dan tembok-tembok terbuka sekolah agar mudah diakses kapan saja oleh peserta didik.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Media tidak hanya terbatas ditempatkan di dalam kelas, tetapi beberapa akan diletakkan di luar ruang dengan tujuan memberi peluang bagi peserta didik untuk beristirahat dan berliterasi secara santai, tanpa ada tekanan untuk berliterasi," ujar Nurul, inovator di balik program PAMER SI WOLU.
+</blockquote>
+
+<p>Materi yang ditampilkan diangkat dari kehidupan sehari-hari yang tetap terkait dengan materi pembelajaran, dikemas dengan bahasa sederhana agar tidak terkesan seperti sedang belajar. Media juga bisa dibuat oleh guru sendiri maupun melalui penugasan kepada siswa, kemudian dibagikan lewat grup WhatsApp kelas agar wali murid turut bisa mendampingi anak belajar di rumah.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:1.75rem 0;">
+  <div style="flex:1 1 45%;min-width:220px;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786888024/WhatsApp_Image_2026-08-02_at_15.06.24_2_gjcstt.jpg" alt="Kegiatan PAMER SI WOLU 1" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+  <div style="flex:1 1 45%;min-width:220px;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786888024/WhatsApp_Image_2026-08-02_at_15.06.23_1_moihq3.jpg" alt="Kegiatan PAMER SI WOLU 2" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+  <div style="flex:1 1 100%;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786888024/WhatsApp_Image_2026-08-02_at_15.06.24_3_hafg1t.jpg" alt="Kegiatan PAMER SI WOLU 3" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+</div>
+<p style="margin-top:-1.25rem;font-size:.875rem;color:#666;text-align:center;">Suasana peserta didik memanfaatkan media literasi PAMER SI WOLU pada waktu luang di lingkungan sekolah.</p>
+
+<h3>Alur Pelaksanaan Inovasi</h3>
+
+<p>Pelaksanaan PAMER SI WOLU diawali dengan rapat koordinasi pembentukan panitia yang dituangkan dalam SK, lalu dibagi menjadi kelompok Pengelola yang menyiapkan materi dan kemasan media, serta kelompok Pelaksana yang bertanggung jawab memasang, mensosialisasikan, dan mengevaluasi pemanfaatan media di lapangan.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786888135/ChatGPT_Image_16_Agu_2026_20.48.36_r8yktc.png" alt="Infografis tahapan inovasi PAMER SI WOLU" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Infografis tahapan pelaksanaan inovasi PAMER SI WOLU dari perencanaan hingga evaluasi.</figcaption>
+</figure>
+
+<p><strong>Alur bagi Kelompok Pengelola:</strong></p>
+<ol>
+  <li>Menyusun rencana inovasi dan menetapkan panitia melalui SK.</li>
+  <li>Mengumpulkan dan mengembangkan materi bersama tim literasi, duta perpustakaan, kader PMR, Adiwiyata, dan OSIS.</li>
+  <li>Menentukan bentuk kemasan media (banner, poster, hiasan kelas, atau kreasi lainnya).</li>
+  <li>Berkoordinasi dengan pembina ekstrakurikuler untuk mengemas materi menjadi media yang kreatif.</li>
+  <li>Mensosialisasikan media yang telah selesai kepada seluruh warga sekolah.</li>
+</ol>
+
+<p><strong>Alur bagi Kelompok Pelaksana:</strong></p>
+<ol>
+  <li>Mempersiapkan pemasangan media di kelas, dinding luar kelas, mading, hingga kanal digital sekolah.</li>
+  <li>Merancang pemanfaatan media dalam pembelajaran, gerakan literasi, atau pembiasaan sekolah.</li>
+  <li>Mengajak peserta didik memberi komentar atau tanggapan atas materi pada media.</li>
+  <li>Memantau dan menjaga keberlangsungan media yang telah dipasang.</li>
+  <li>Menyusun laporan pelaksanaan kegiatan sebagai bahan evaluasi panitia.</li>
+</ol>
+
+<h3>Dampak Nyata bagi Budaya Literasi Sekolah</h3>
+
+<p>Nurul menyebut, kehadiran media yang tersebar di berbagai titik memberi kesempatan bagi seluruh warga sekolah untuk berliterasi tanpa dibatasi ruang maupun waktu, sekaligus mendorong tumbuhnya rasa tanggung jawab bersama untuk menjaga media itu sendiri.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Kami berharap ketertarikan pada media yang terpasang ini akan meningkatkan kemampuan literasi, sehingga kecakapan literasi menjadi jiwa bagi peserta didik dan guru, dan pada akhirnya kita semua menjadi pembelajar sejati," kata Nurul.
+</blockquote>
+
+<p>Sekolah berharap PAMER SI WOLU dapat terus dikembangkan dan menjadi contoh praktik baik penguatan budaya literasi berbasis media kreatif yang bisa direplikasi oleh sekolah lain di Kota Probolinggo.</p>
+
+<h3>Layanan dan Informasi Lebih Lanjut</h3>
+
+<p>Masyarakat maupun sekolah lain yang ingin mengetahui lebih jauh mengenai inovasi PAMER SI WOLU dapat mengakses informasi resmi SMP Negeri 8 Kota Probolinggo melalui kanal berikut:</p>
+<ul>
+  <li><strong>Website:</strong> smpn8prob.sch.id</li>
+  <li><strong>Alamat Sekolah:</strong> Jl. Salak No. 137, Kelurahan Jrebeng Kidul, Kecamatan Wonoasih, Kota Probolinggo</li>
+  <li><strong>Email:</strong> smpn8@probolinggokota.go.id</li>
+  <li><strong>Media Sosial:</strong> @smpn8probolinggo</li>
+</ul>
     `,
   },
   {
-    slug: 'inovasi-lima',
-    label: 'INOVASI LIMA',
-    shortLabel: 'INOVASI LIMA',
-    icon: '✨',
-    tagline: 'Program inovasi unggulan SMP Negeri 8 Probolinggo.',
+    slug: 'koala-si-wolu',
+    label: 'KOALA SI WOLU',
+    shortLabel: 'KOALA SI WOLU',
+    icon: '♻️',
+    tagline: 'Kompos Alami SMP Negeri 8 Probolinggo dari limbah daun dan sisa makanan.',
     description:
-      'INOVASI LIMA merupakan salah satu program unggulan SMP Negeri 8 Probolinggo dalam upaya terus berinovasi meningkatkan kualitas pendidikan.',
+      'KOALA SI WOLU (Kompos Alami SMP Negeri 8 Probolinggo) adalah inovasi pengolahan limbah daun kering dan sisa makanan menjadi kompos alami, sekaligus menjadi wahana pembelajaran sains, penguatan karakter, dan kewirausahaan yang inklusif bagi seluruh murid.',
     highlights: [
-      'Bagian dari komitmen sekolah berinovasi',
-      'Mendukung visi & misi sekolah',
-      'Dikembangkan bersama warga sekolah',
+      'Mengubah limbah daun & sisa makanan jadi kompos alami',
+      'Experiential learning: murid belajar sains sambil bergerak',
+      'Inklusif — setiap murid punya peran sesuai potensinya',
     ],
+    coverImage:
+      'https://res.cloudinary.com/dugvpuniy/image/upload/v1786887477/WhatsApp_Image_2026-08-16_at_20.36.46_mscdqj.jpg',
+    content: `
+<p><strong>PROBOLINGGO</strong> — SMP Negeri 8 Kota Probolinggo mulai menguji coba inovasi pengelolaan sampah organik bertajuk <strong>KOALA SI WOLU (Kompos Alami SMP Negeri 8 Probolinggo)</strong> pada Tahun Pelajaran 2026/2027. Inovasi ini mengolah limbah daun kering dan sisa makanan dari lingkungan sekolah menjadi kompos alami, sekaligus dirancang sebagai wahana pembelajaran sains, penguatan karakter, dan kewirausahaan yang melibatkan seluruh murid secara inklusif.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786887477/WhatsApp_Image_2026-08-16_at_20.36.46_mscdqj.jpg" alt="Kegiatan pengolahan kompos KOALA SI WOLU" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Kader KOALA SI WOLU mengolah limbah daun dan sisa makanan menjadi kompos alami di lingkungan sekolah.</figcaption>
+</figure>
+
+<p>Koordinator sekaligus inisiator program, <strong>Rafi Iqbal Rahmatulloh, S.Pd.</strong>, mengatakan inovasi ini lahir dari persoalan limbah organik yang selama ini dibiarkan menumpuk di lingkungan sekolah, sementara pembelajaran sains tentang daur ulang materi organik masih bersifat teoretis dan kurang melibatkan murid secara aktif.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Karakter murid kami cenderung aktif secara fisik dan kurang tertarik pada pembelajaran teoretis di dalam kelas, jadi kami butuh pendekatan belajar yang bergerak, konkret, dan bermakna, bukan sekadar membaca teori," ujar Rafi.
+</blockquote>
+
+<p>Ia menambahkan, persoalan sampah organik juga menjadi tantangan di tingkat kota. Tempat Pemrosesan Akhir (TPA) Bestari di Jalan Anggrek menerima sekitar 70 ton sampah per hari, sementara total timbulan sampah kota diperkirakan mencapai 144 ton per hari, sehingga pengurangan sampah dari sumber, termasuk dari sekolah, menjadi penting untuk digalakkan.</p>
+
+<h3>Belajar Sains sambil Bergerak</h3>
+
+<p>Rafi menjelaskan, melalui KOALA SI WOLU limbah organik dikumpulkan, dipilah, dan diolah secara terjadwal oleh Kader KOALA SI WOLU menjadi kompos alami melalui siklus <em>experiential learning</em> yang menggerakkan fisik murid. Setiap murid, termasuk yang berkebutuhan atau berkemampuan belajar beragam, memperoleh peran bermakna sesuai potensinya, mulai dari kegiatan fisik, pencatatan jurnal sains, hingga pemasaran.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Murid belajar sambil bergerak, mulai dari mengumpulkan, mencampur, memantau, hingga mengemas dan memasarkan kompos. Program ini juga inklusif, setiap murid mendapat peran bermakna sesuai potensinya, baik pada kegiatan fisik, pencatatan, maupun pemasaran," jelas Rafi, inisiator di balik program KOALA SI WOLU.
+</blockquote>
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:1.75rem 0;">
+  <div style="flex:1 1 45%;min-width:220px;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786887477/WhatsApp_Image_2026-08-16_at_20.36.46_mscdqj.jpg" alt="Kegiatan Kader KOALA SI WOLU 1" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+  <div style="flex:1 1 45%;min-width:220px;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786887477/WhatsApp_Image_2026-08-16_at_20.36.50_mxyk00.jpg" alt="Kegiatan Kader KOALA SI WOLU 2" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+  <div style="flex:1 1 100%;">
+    <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786887476/WhatsApp_Image_2026-08-16_at_20.36.54_iitl40.jpg" alt="Kegiatan Kader KOALA SI WOLU 3" style="width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  </div>
+</div>
+<p style="margin-top:-1.25rem;font-size:.875rem;color:#666;text-align:center;">Kader KOALA SI WOLU dalam berbagai tahapan kegiatan, mulai dari pengumpulan limbah hingga pengolahan kompos.</p>
+
+<h3>Empat Tahapan Pengolahan Kompos</h3>
+
+<p>Pelaksanaan KOALA SI WOLU mencakup empat tahapan utama dalam satu siklus tahun pelajaran, mulai dari pengumpulan dan pemilahan limbah, pengomposan dengan metode ember tumpuk/takakura disertai pengamatan sains oleh murid, pemanenan dan pengemasan kompos matang, hingga promosi dan penjualan produk kompos kepada warga sekolah dan masyarakat sekitar.</p>
+
+<figure style="display:block;margin:1.75rem auto;width:100%;text-align:center;">
+  <img src="https://res.cloudinary.com/dugvpuniy/image/upload/v1786887164/ChatGPT_Image_16_Agu_2026_20.32.23_smhlaj.png" alt="Infografis tahapan inovasi KOALA SI WOLU" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.08);" />
+  <figcaption style="margin-top:.5rem;font-size:.875rem;color:#666;">Infografis tahapan pelaksanaan inovasi KOALA SI WOLU dari pengumpulan limbah hingga penjualan kompos.</figcaption>
+</figure>
+
+<p><strong>Alur bagi Kader KOALA SI WOLU:</strong></p>
+<ol>
+  <li>Mengumpulkan dan memilah limbah daun kering serta sisa makanan secara terjadwal.</li>
+  <li>Mengolah limbah dengan metode ember tumpuk/takakura serta penambahan dekomposer.</li>
+  <li>Mencatat jurnal pengamatan suhu, kelembapan, warna, dan tekstur kompos setiap minggu.</li>
+  <li>Memanen, mengayak, dan mengemas kompos matang yang siap dimanfaatkan.</li>
+  <li>Mempromosikan dan menjual kompos kepada warga sekolah serta masyarakat sekitar.</li>
+</ol>
+
+<p><strong>Alur bagi Murid Peserta:</strong></p>
+<ol>
+  <li>Bergabung dalam kelompok sesuai peran dan potensi masing-masing, termasuk murid berkebutuhan khusus.</li>
+  <li>Ikut serta dalam kegiatan fisik pengumpulan dan pengolahan limbah organik.</li>
+  <li>Mengisi jurnal pengamatan sains sebagai bagian dari pembelajaran dekomposisi.</li>
+  <li>Belajar dasar kewirausahaan lewat pengemasan, penetapan harga, dan promosi kompos.</li>
+  <li>Mencatat modal, harga jual, dan keuntungan sederhana dari hasil penjualan.</li>
+</ol>
+
+<h3>Dampak Nyata bagi Sekolah dan Lingkungan</h3>
+
+<p>Rafi menyebut, KOALA SI WOLU turut memperkuat program lingkungan hidup (Adiwiyata) sekolah sekaligus menyediakan pupuk alami secara mandiri untuk kebun sekolah, sementara bagi masyarakat sekitar, program ini membuka akses terhadap kompos alami dengan harga terjangkau.</p>
+
+<blockquote style="background-color: #f8f9fa; border-left: 4px solid #0056b3; margin: 20px 0; padding: 15px 20px; font-style: italic; color: #333;">
+  "Program ini memadukan sains, kewirausahaan, dan karakter 7KAIH sekaligus dalam satu siklus kegiatan tahunan. Hasil kompos juga kami manfaatkan untuk kebun sekolah dan dijual ke warga sekitar, jadi ini benar-benar siklus produksi-manfaat yang nyata, bukan sekadar proyek sekolah," kata Rafi.
+</blockquote>
+
+<p>Ia berharap KOALA SI WOLU dapat terus berjalan melalui regenerasi Kader setiap tahun dan menjadi contoh praktik baik pengelolaan sampah organik berbasis sekolah yang bisa direplikasi oleh satuan pendidikan lain di Kota Probolinggo.</p>
+
+<h3>Layanan dan Informasi Lebih Lanjut</h3>
+
+<p>Masyarakat maupun sekolah lain yang ingin mengetahui lebih jauh mengenai inovasi KOALA SI WOLU dapat mengakses informasi resmi SMP Negeri 8 Kota Probolinggo melalui kanal berikut:</p>
+<ul>
+  <li><strong>Website:</strong> smpn8prob.sch.id</li>
+  <li><strong>Alamat Sekolah:</strong> Jl. Salak No. 137, Kelurahan Jrebeng Kidul, Kecamatan Wonoasih, Kota Probolinggo</li>
+  <li><strong>Email:</strong> smpn8.prob@gmail.com</li>
+  <li><strong>Media Sosial:</strong> @smpn8probolinggo</li>
+</ul>
+    `,
   },
 ]
 
